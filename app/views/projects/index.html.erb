@@ -1,0 +1,10 @@
+
+
+<%@projects.each do |project| %>
+  <p><%= project.name %></p>
+<% end %>
+
+<%= simple_form_for([ @employer, @project ]) do |f| %>
+  <%= f.input :name %>
+  <%= f.button :submit %>
+<% end %>
