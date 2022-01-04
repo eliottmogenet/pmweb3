@@ -10,10 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_04_092820) do
+ActiveRecord::Schema.define(version: 2022_01_04_093651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "employers", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "title"
+    t.string "status"
+    t.integer "token_number"
+    t.bigint "project_id"
+    t.bigint "user_id"
+    t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "user_projects", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.bigint "project_id"
+    t.index ["project_id"], name: "index_user_projects_on_project_id"
+    t.index ["user_id"], name: "index_user_projects_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -23,7 +56,11 @@ ActiveRecord::Schema.define(version: 2022_01_04_092820) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.bigint "employer_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["employer_id"], name: "index_users_on_employer_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
