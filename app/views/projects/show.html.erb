@@ -1,18 +1,51 @@
-<h2><%= @project.name %></h2>
 
-<%= simple_form_for([ @employer, @project, @task ]) do |f| %>
-  <%= f.input :title %>
-  <%= f.input :status %>
-  <%= f.input :token_number %>
-  <%= f.button :submit %>
-<% end %>
+<div class="container">
 
-<div id="tasks">
-  <% if @project.tasks.blank? %>
-    Be the first to create a task
-  <% else %>
-    <% @project.tasks.sort.reverse.each do |task| %>
-      <p><%= task.title %></p>
+  <div class="menu">
+    <p>Projects</p>
+    <p>My personnal objectives</p>
+  </div>
+  <hr>
+
+  <h4><b><%= @project.name %></b></h4>
+
+  <div>
+    <% @project.tasks.each do |task| %>
+        <p><%= task.user.first_name if task.user.nil? == false %></p>
     <% end %>
-  <% end %>
+  </div>
+
+  <div class="task-create-button">
+    <%= simple_form_for([ @employer, @project, @task ]) do |f| %>
+      <%= f.input :title, label: false, placeholder: '+ Create a new task', input_html: { autocomplete: 'off' } %>
+      <%= f.button :submit, style: "display: none" %>
+    <% end %>
+  </div>
+
+  <div id="tasks">
+    <% if @project.tasks.blank? %>
+      Be the first to create a task
+    <% else %>
+      <% @project.tasks.sort.reverse.each do |task| %>
+        <div class="task-card">
+          <% if task.user.nil? %>
+            <div class="status-unassigned">
+              <p>Unassigned</p>
+            </div>
+          <% elsif task.status == "claimed" %>
+            <div class="status-done">
+              <p>Done</p>
+            </div>
+          <% else %>
+            <div class="status-ongoing">
+              <p>On going</p>
+            </div>
+          <% end %>
+          <div class="task-title">
+            <p><%= task.title %></p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>

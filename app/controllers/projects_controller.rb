@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
     @employer = Employer.find(params[:employer_id])
     @project = Project.new(project_params)
     @project.employer = @employer
-    @project.user = User.first
+    @project.user = User.first #current_user
     @project.save!
     redirect_to employer_projects_path(@employer)
   end

@@ -1,10 +1,48 @@
 
+<div class="container">
 
-<%@projects.each do |project| %>
-  <p><%= project.name %></p>
-<% end %>
+  <div class="menu">
+    <p>Projects</p>
+    <p>My personnal objectives</p>
+  </div>
+  <hr>
+  <h5><b> <%= @employer.name %> projects </b></h5>
+  <br>
 
-<%= simple_form_for([ @employer, @project ]) do |f| %>
-  <%= f.input :name %>
-  <%= f.button :submit %>
-<% end %>
+  <div class="projects-cards">
+
+    <div class="project-card-create">
+    <%= simple_form_for([ @employer, @project ]) do |f| %>
+      <%= f.input :name, label: false, placeholder: 'Enter a project title', input_html: { autocomplete: 'off' } %>
+      <%= f.submit '+', class: "project-button" %>
+    <% end %>
+    </div>
+
+    <%@projects.sort.reverse.each do |project| %>
+      <%= link_to employer_project_path(@employer, project) do %>
+        <div class="project-card">
+          <p><b><%= project.name %></b></p>
+        </div>
+      <% end %>
+  <% end %>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

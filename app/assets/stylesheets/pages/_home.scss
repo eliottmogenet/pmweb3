@@ -1,1 +1,117 @@
 // Specific CSS for your home-page
+hr {
+  background-color: #687086;
+}
+
+.project-card {
+  border-radius: 20px;
+  height: 220px;
+  background-color: #1F292C;
+  text-align: center;
+  padding-top: 30px;
+}
+
+.project-card-create {
+  width: 265px;
+  border-radius: 20px;
+  height: 220px;
+  background-color: #1F292C;
+  opacity: 50%;
+  text-align: center;
+  padding-top: 30px;
+  margin-bottom: 1rem;
+}
+
+.projects-cards  {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+}
+
+#project_name {
+  text-align: center;
+  background-color: #1F292C;
+  color: white;
+  border: none;
+  resize: none;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.project-button {
+  font-size: 50px;
+  color: white;
+  background-color: #1F292C;
+  border:none;
+}
+
+a { color: inherit; }
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.task-card {
+  background-color: #1F292C;
+  height: 60px;
+  margin-bottom: 1rem;
+  border-radius: 20px;
+  display:flex;
+  justify-content:start;
+  align-items: center;
+  padding-left: 30px;
+}
+
+.status-unassigned {
+  width: 90px;
+  height: 30px;
+  border-radius: 100px;
+  background-color: #D25C5C;
+  text-align: center;
+  line-height: 30px;
+}
+
+.status-unassigned p{
+  color: black;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+.status-ongoing {
+  width: 90px;
+  height: 30px;
+  border-radius: 100px;
+  background-color: #FFDF64;
+  text-align: center;
+  line-height: 30px;
+}
+
+.status-ongoing p{
+  color: black;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+.task-title {
+  width: 60%;
+  height: 30px;
+  margin-left: 20px;
+  line-height: 30px;
+}
+
+#task_title {
+  background-color: #1F292C;
+  opacity: 50%;
+  height: 60px;
+  color: white;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 100px;
+  padding-left: 40px;
+}
