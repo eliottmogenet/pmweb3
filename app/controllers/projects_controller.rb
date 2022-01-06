@@ -16,8 +16,11 @@ class ProjectsController < ApplicationController
     @project = Project.new(project_params)
     @project.employer = @employer
     @project.user = User.first #current_user
-    @project.save!
-    redirect_to employer_projects_path(@employer)
+    if @project.save
+      redirect_to employer_projects_path(@employer)
+    else
+      redirect_to employer_projects_path(@employer)
+    end
   end
 
   private

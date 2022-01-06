@@ -97,8 +97,23 @@ a:hover {
   font-weight: 300;
 }
 
+.status-done {
+  width: 90px;
+  height: 30px;
+  border-radius: 100px;
+  background-color: #00FFCB;
+  text-align: center;
+  line-height: 30px;
+}
+
+.status-done p {
+  color: black;
+  font-size: 10px;
+  font-weight: 300;
+}
+
 .task-title {
-  width: 65%;
+  width: 60%;
   height: 30px;
   margin-left: 20px;
   line-height: 30px;
@@ -126,13 +141,14 @@ a:hover {
 }
 
 .photo-round-small {
-  margin-top: 10px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   text-align: center;
-  line-height : 40px;
+  line-height : 30px;
   background-color: white;
   border-radius: 100%;
+  margin-left: 20px;
+
 }
 
 .project-user {
@@ -167,7 +183,74 @@ a:hover {
   line-height: 60px;
 }
 
+#task_token_number {
+  background-color: #1F292C;
+  color: #687086;
+  border: none;
+  resize: none;
+  outline: none;
+  height: 60px;
+  line-height: 60px;
+  width: 80px;
+  margin-left: 20px;
+}
+
+#task_token_number:focus {
+   border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 .task-edit {
   height: 60px;
   line-height: 60px;
 }
+
+.contributor-token {
+  display: flex;
+  justify-content: start;
+  margin-left: 20px;
+}
+
+#token-number {
+  margin-left: 20px;
+  width: 80px;
+}
+
+#enter {
+  transform: rotate(90deg);
+  height: 40px;
+  font-size: 25px;
+  margin-left: 20px;
+  display: none;
+}
+
+#button-done {
+  background-color: transparent;
+  color: #687086;
+  font-weight: lighter;
+  border: none;
+  resize: none;
+  outline: none;
+  height: 40px;
+  line-height: 40px;
+  padding-bottom: 20px;
+
+}
+
+#button-done:hover{
+  color: white;
+}
+
+#task_status {
+  padding-top: -40px;
+}
+
+#form-claim {
+  display: none;
+}
+
+
+
+
+

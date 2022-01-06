@@ -13,7 +13,8 @@
 
     <div class="project-card-create">
     <%= simple_form_for([ @employer, @project ]) do |f| %>
-      <%= f.input :name, label: false, placeholder: 'Enter a project title', input_html: { autocomplete: 'off' } %>
+      <%= f.error_notification errors: true %>
+      <%= f.input :name, label: false, placeholder: 'Enter a project title', input_html: { autocomplete: 'off' }, required: true, error: "Project name is missing" %>
       <%= f.submit '+', class: "project-button" %>
     <% end %>
     </div>

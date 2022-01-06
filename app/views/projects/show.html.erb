@@ -30,7 +30,8 @@
 
   <div class="task-create-button">
     <%= simple_form_for([ @employer, @project, @task ]) do |f| %>
-      <%= f.input :title, label: false, placeholder: '+ Create a new task', input_html: { autocomplete: 'off' } %>
+      <%= f.input :title, label: false, placeholder: '+ Create a new task', input_html: { autocomplete: 'off' }, :error_html => { :id => "name_error"} %>
+      <%= f.error :name, :id => "name_error" %>
       <%= f.button :submit, style: "display: none" %>
     <% end %>
   </div>
@@ -41,6 +42,18 @@
     <% else %>
       <% @project.tasks.sort.reverse.each do |task| %>
         <div class="task-card">
+          <div class="task-edit">
+            <div class="">
+              <% if task.token_number.nil? %>
+                <%= simple_form_for([ @employer, @project, task ]) do |f| %>
+                  <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off' } %>
+                  <%= f.button :submit, style: "display: none" %>
+              <% end %>
+              <% else %>
+                <p id="token-number"><%= task.token_number %> 🍭</p>
+              <% end %>
+            </div>
+          </div>
           <% if task.user.nil? %>
             <div class="status-unassigned">
               <p>Unassigned</p>
@@ -54,21 +67,31 @@
               <p>On going</p>
             </div>
           <% end %>
+          <% if task.user.nil? %>
+          <% else %>
+            <div class="photo-round-small">
+            <%= cl_image_tag task.user.photo.key, width: 20, style: "border-radius: 100%" %>
+            </div>
+          <% end %>
           <div class="task-title">
             <p><%= task.title %></p>
           </div>
           <div class="task-edit">
             <% if task.user.nil? %>
               <%= simple_form_for([ @employer, @project, task ]) do |f| %>
-                <%= f.association :user, label: false, prompt: 'Assign & Press Enter', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
-                <%= f.button :submit, style: "display: none" %>
+              <%= f.association :user, :as => :collection_select, collection: User.where(employer: @employer), label: false, prompt: 'Assign', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
+              <%= f.button :submit, style: "display: none" %>
               <% end %>
-            <% else %>
-              <div class="photo-round-small">
-                <%= cl_image_tag task.user.photo.key, width: 35, style: "border-radius: 100%" %>
-              </div>
             <% end %>
           </div>
+          <% if task.user.nil? == false && task.status != "claimed" %>
+            <div class="task-edit">
+              <%= simple_form_for([ @employer, @project, task ]) do |f| %>
+              <%= f.input :status, label: false, input_html: {value: 'claimed', hidden: true}, id: "form-claim" %>
+              <%= f.submit 'Mark as done >', id: 'button-done'%>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       <% end %>
     <% end %>

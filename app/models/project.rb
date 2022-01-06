@@ -3,4 +3,6 @@ class Project < ApplicationRecord
   belongs_to :employer
   belongs_to :user
   has_many :users, through: :tasks
+
+  validates :name, presence: true
 end

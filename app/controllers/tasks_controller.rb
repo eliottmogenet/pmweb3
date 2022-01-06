@@ -4,8 +4,11 @@ class TasksController < ApplicationController
     @project = Project.find(params[:project_id])
     @task = Task.new(task_params)
     @task.project = @project
-    @task.save!
-    redirect_to employer_project_path(@employer, @project)
+    if @task.save
+      redirect_to employer_project_path(@employer, @project)
+    else
+      redirect_to employer_project_path(@employer, @project)
+    end
   end
 
   def update
@@ -15,6 +18,16 @@ class TasksController < ApplicationController
     @task.project = @project
     @task.update(task_params)
     redirect_to employer_project_path(@employer, @project)
+  end
+
+  def done
+    @employer = Employer.find(params[:employer_id])
+    @project = Project.find(params[:project_id])
+    @task = Task.find(params[:id])
+    @task.project = @project
+    @task.status = "claimed"
+    @task.update(task_params)
+      redirect_to employer_project_path(@employer, @project)
   end
 
   private
