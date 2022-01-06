@@ -5,6 +5,12 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'open-uri'
+
+Employer.destroy_all
+User.destroy_all
+Project.destroy_all
+Task.destroy_all
 
 p "creating employers"
 
@@ -14,9 +20,11 @@ ledger.save!
 p "creating users"
 
 john =  ledger.users.create(first_name: "John", last_name: "Lafleur", email: "test1@gmail.com", password: "test1@gmail.com")
+john.photo.attach(io: File.open(File.join(Rails.root,'app/assets/images/john.png')), filename: 'john.png')
 john.save!
 
 jack =  ledger.users.create(first_name: "Jack", last_name: "Sully", email: "test2@gmail.com", password: "test2@gmail.com")
+jack.photo.attach(io: File.open(File.join(Rails.root,'app/assets/images/jack.png')), filename: 'jack.png')
 jack.save!
 
 

@@ -98,7 +98,7 @@ a:hover {
 }
 
 .task-title {
-  width: 60%;
+  width: 65%;
   height: 30px;
   margin-left: 20px;
   line-height: 30px;
@@ -114,4 +114,60 @@ a:hover {
   outline: none;
   border-radius: 100px;
   padding-left: 40px;
+}
+
+.photo-round {
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  line-height : 70px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.photo-round-small {
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height : 40px;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.project-user {
+  width: 70px;
+  text-align: center;
+  margin-left: 30px;
+}
+
+.project-user p {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+.project-users {
+  display: flex;
+  justify-content: start;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#manager {
+  margin-left: 0px;
+}
+
+#task_user_id {
+  background-color: #1F292C;
+  color: #687086;
+  border: none;
+  resize: none;
+  outline: none;
+  height: 60px;
+  line-height: 60px;
+}
+
+.task-edit {
+  height: 60px;
+  line-height: 60px;
 }

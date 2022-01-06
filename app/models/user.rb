@@ -6,5 +6,6 @@ class User < ApplicationRecord
   belongs_to :employer
   has_many :tasks
   has_many :projects
+  has_one_attached :photo
   #has_many :projects, through: :user_projects
 end

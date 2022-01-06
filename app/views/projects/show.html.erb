@@ -9,9 +9,22 @@
 
   <h4><b><%= @project.name %></b></h4>
 
-  <div>
-    <% @project.tasks.each do |task| %>
-        <p><%= task.user.first_name if task.user.nil? == false %></p>
+  <div class="project-users">
+      <div class="project-user" id="manager">
+          <div class="photo-round">
+            <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
+          </div>
+          <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
+        </div>
+    <% @project.users.uniq.each do |user| %>
+      <% if user != @project.user %>
+        <div class="project-user">
+          <div class="photo-round">
+            <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+          </div>
+          <p><%= user.first_name + " " %><%= user.last_name %></p>
+        </div>
+      <% end %>
     <% end %>
   </div>
 
@@ -43,6 +56,18 @@
           <% end %>
           <div class="task-title">
             <p><%= task.title %></p>
+          </div>
+          <div class="task-edit">
+            <% if task.user.nil? %>
+              <%= simple_form_for([ @employer, @project, task ]) do |f| %>
+                <%= f.association :user, label: false, prompt: 'Assign & Press Enter', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
+                <%= f.button :submit, style: "display: none" %>
+              <% end %>
+            <% else %>
+              <div class="photo-round-small">
+                <%= cl_image_tag task.user.photo.key, width: 35, style: "border-radius: 100%" %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
