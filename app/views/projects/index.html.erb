@@ -1,12 +1,30 @@
 
 <div class="container">
 
+  <div class="intro">
+    <div class="img-user">
+       <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
+        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
+    </div>
+    <div class="notifications">
+      <p id="bell">🔔</p>
+      <p class="button-invite">+ Invite to workspace</p>
+    </div>
+  </div>
+
   <div class="menu">
-    <p>Projects</p>
-    <p>My personnal objectives</p>
+    <p id="project-item">Projects</p>
   </div>
   <hr>
-  <h5><b> <%= @employer.name %> projects </b></h5>
+    <div class="members-profiles">
+      <h5 id="project-title"><b> <%= @employer.name %> projects </b></h5>
+    <% @employer.users.each do |user| %>
+        <div class="photo-round-small-30">
+          <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
+        </div>
+    <% end %>
+    </div>
+  <p id="members-count"><%= @employer.users.count %> members in the workspace </p>
   <br>
 
   <div class="projects-cards">
@@ -22,7 +40,21 @@
     <%@projects.sort.reverse.each do |project| %>
       <%= link_to employer_project_path(@employer, project) do %>
         <div class="project-card">
-          <p><b><%= project.name %></b></p>
+          <div>
+            <div id="project-name">
+              <p><b><%= project.name %></b></p>
+            </div>
+            <div class="project_users">
+              <% project.users.uniq.first(4).each do |profile| %>
+                <div class="photo-round-small-40">
+                  <%= cl_image_tag profile.photo.key, width: 30, style: "border-radius: 100%"  %>
+                </div>
+              <% end %>
+            </div>
+            <div>
+              <p id="contributors-count"><%= pluralize project.users.uniq.count, 'contributor' %></p>
+            </div>
+          </div>
         </div>
       <% end %>
   <% end %>

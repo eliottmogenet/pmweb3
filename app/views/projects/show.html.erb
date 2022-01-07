@@ -1,18 +1,40 @@
 
 <div class="container">
 
+  <div class="intro">
+    <div class="img-user">
+       <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
+        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
+    </div>
+    <div class="notifications">
+      <p id="bell">🔔</p>
+      <p class="button-invite">+ Invite to workspace</p>
+    </div>
+  </div>
+
+  <%= simple_form_for([ @employer, @project ]) do |f| %>
+      <%= f.input :date, input_html: { class: "datepicker" } %>
+      <%= f.button :submit, style: "display: none" %>
+  <% end %>
+
+  <p id="timer"><%= pluralize @date[:days], "day" %> : <%= pluralize @date[:hours], "hour" %></p>
+
   <div class="menu">
-    <p>Projects</p>
-    <p>My personnal objectives</p>
+    <p id="project-item">Projects</p>
   </div>
   <hr>
 
-  <h4><b><%= @project.name %></b></h4>
+  <h4>
+    <%= link_to employer_projects_path(@employer) do %>
+      <i id="back-arrow" class="fas fa-chevron-left"></i>
+    <% end %>
+  <b><%="  "+ @project.name %></b></h4>
 
   <div class="project-users">
       <div class="project-user" id="manager">
           <div class="photo-round">
             <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
+            <span class="badge-2"><p>👑</span>
           </div>
           <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
         </div>
@@ -21,6 +43,7 @@
         <div class="project-user">
           <div class="photo-round">
             <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+            <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
           </div>
           <p><%= user.first_name + " " %><%= user.last_name %></p>
         </div>
@@ -97,3 +120,32 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  window.initializeClock = function(clockId, dateId) {
+    var getTimeRemaining = function(endtime) {
+        var t = Date.parse(endtime) - (new Date()).getTime();
+        var seconds = Math.floor( (t/1000) % 60 );
+        var minutes = Math.floor( (t/1000/60) % 60);
+        var hours = Math.floor( (t/(1000*60*60)) % 24);
+        var days = Math.floor( t/(1000*60*60*24) );
+        return {
+            'total': t,
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        };
+    }
+
+    var clock = document.getElementById(clockId);
+    var deadline = document.getElementById(dateId).value;
+    var timeinterval = setInterval(function(){
+        var t = getTimeRemaining(deadline);
+        clock.innerHTML = 'days: ' + t.days + '<br>' + 'hours: ' + t.hours + '<br>' + 'minutes: ' + t.minutes + '<br>' + 'seconds: ' + t.seconds;
+        if(t.total<=0){
+            clearInterval(timeinterval);
+        }
+    }, 1000);
+}
+</script>

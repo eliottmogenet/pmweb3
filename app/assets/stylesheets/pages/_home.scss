@@ -9,6 +9,8 @@ hr {
   background-color: #1F292C;
   text-align: center;
   padding-top: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 .project-card-create {
@@ -151,6 +153,31 @@ a:hover {
 
 }
 
+.photo-round-small-40 {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height : 40px;
+  background-color: white;
+  border-radius: 100%;
+  margin-left: -15px;
+
+}
+
+
+.photo-round-small-30 {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height : 30px;
+  background-color: white;
+  border-radius: 100%;
+  margin-left: -10px;
+  opacity: 80%;
+  margin-top: -3px;
+
+}
+
 .project-user {
   width: 70px;
   text-align: center;
@@ -250,7 +277,129 @@ a:hover {
   display: none;
 }
 
+.menu {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: -20px;
+  margin-top: 50px;
+}
 
+#personnal-item {
+  margin-left: 30px;
+  color: #687086;
+}
 
+.img-user {
+  margin-top: 30px;
+  width: 85%;
+}
 
+.badge {
+  position: absolute;
+  margin-left: -1%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background-color: #B45CD2;
+  border-radius: 100%;
+  text-align: center;
+}
 
+.badge-2 {
+  position: absolute;
+  margin-left: -1%;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background-color: white;
+  border-radius: 100%;
+  text-align: center;
+}
+
+.badge p {
+  font-weight: 300;
+  font-size: 15px;
+  margin-top: -3px;
+}
+
+.badge-2 p {
+  font-weight: 300;
+  font-size: 15px;
+  margin-top: -2px;
+  margin-left: 3px;
+}
+
+#back-arrow {
+  color: #687086;
+}
+
+#back-arrow:hover {
+  color: white;
+}
+
+.project_users {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+#project-name {
+  width: 200px;
+}
+
+#project-name p {
+  text-align: center;
+}
+
+#contributors-count {
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.button-invite {
+  color: white;
+  background-color: #60AFFF;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+  height: 44px;
+}
+
+.intro {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.notifications {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#bell {
+  font-size: 22px;
+  line-height: 44px;
+  margin-right: 10px;
+}
+
+#members-count {
+  color: #687086;
+}
+
+.members-profiles {
+  display: flex;
+  justify-content: start;
+}
+
+#project-title {
+  margin-right: 20px;
+}
+
+#timer {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.span-2 {
+  color: #687086;
+}
