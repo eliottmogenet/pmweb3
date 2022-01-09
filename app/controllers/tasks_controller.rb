@@ -17,7 +17,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.project = @project
     @task.update(task_params)
-    redirect_to employer_project_path(@employer, @project)
+    redirect_to employer_project_path(@employer, @project, anchor: "task-#{@task.id}") #if
   end
 
   def done

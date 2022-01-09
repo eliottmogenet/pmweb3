@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   resources :employers do
     resources :projects do
+        member do
+          post 'reset_time', to: "projects#reset_time"
+        end
       resources :tasks do
         member do
           post 'done', to: "tasks#done"

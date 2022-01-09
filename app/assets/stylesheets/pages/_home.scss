@@ -173,7 +173,6 @@ a:hover {
   background-color: white;
   border-radius: 100%;
   margin-left: -10px;
-  opacity: 80%;
   margin-top: -3px;
 
 }
@@ -181,7 +180,7 @@ a:hover {
 .project-user {
   width: 70px;
   text-align: center;
-  margin-left: 30px;
+  margin-left: 50px;
 }
 
 .project-user p {
@@ -228,9 +227,16 @@ a:hover {
   box-shadow: none;
 }
 
+#button-done {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
 .task-edit {
   height: 60px;
   line-height: 60px;
+  display: inline-block;
 }
 
 .contributor-token {
@@ -260,12 +266,27 @@ a:hover {
   resize: none;
   outline: none;
   height: 40px;
-  line-height: 40px;
-  padding-bottom: 20px;
+  line-height: 50px;
+}
+
+#button-done-2 {
+  background-color: transparent;
+  color: #687086;
+  font-weight: lighter;
+  border: none;
+  resize: none;
+  outline: none;
+  height: 40px;
+  line-height: 20px;
+  margin-top: -20px;
 
 }
 
 #button-done:hover{
+  color: white;
+}
+
+#button-done-2:hover{
   color: white;
 }
 
@@ -297,11 +318,11 @@ a:hover {
 .badge {
   position: absolute;
   margin-left: -1%;
-  width: 30px;
+  width: 63px;
   height: 30px;
   line-height: 30px;
-  background-color: #B45CD2;
-  border-radius: 100%;
+  background-color: #CCC9E7;
+  border-radius: 20px;
   text-align: center;
 }
 
@@ -317,9 +338,11 @@ a:hover {
 }
 
 .badge p {
+  color: black;
   font-weight: 300;
   font-size: 15px;
   margin-top: -3px;
+  margin-left: 3px;
 }
 
 .badge-2 p {
@@ -396,10 +419,150 @@ a:hover {
 }
 
 #timer {
-  font-size: 30px;
   font-weight: 700;
 }
 
 .span-2 {
   color: #687086;
 }
+
+#project_date_4i {
+  display: none;
+}
+
+#project_date_5i {
+  display: none;
+}
+
+.datepicker {
+  width: 355px;
+}
+
+#project_date_1i {
+  font-size: 15px;
+  background-color: #1F292C;
+  color: #687086;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+#project_date_2i {
+  font-size: 15px;
+  background-color: #1F292C;
+  color: #687086;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+#project_date_3i {
+  font-size: 15px;
+  background-color: #1F292C;
+  color: #687086;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+#reset-button {
+  background-color: black;
+  border: none;
+  resize: none;
+  outline: none;
+  color: #687086;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+#reset-button:hover {
+  color: white;
+
+}
+
+.set-deadline {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.project-header {
+  display: flex;
+  justify-content: flex-start;
+  height: 80px;
+}
+
+#project-header-title {
+  width: 65%;
+}
+
+.form-horizontal {
+  display: flex;
+  justify-content: flex-start;
+}
+
+#time_set {
+  background-color: #687086;
+  color: white;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 7px;
+  height: 36px;
+  margin-left: 5px;
+}
+
+#task_user_id:hover {
+  cursor: pointer;
+}
+
+#purple-span {
+  color: #CCC9E7;
+}
+
+#contributors-count-title {
+  font-size: 10px;
+}
+
+.carousel {
+  width: 100%;
+}
+
+#first-batch {
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+#second-batch {
+  display: flex;
+  justify-content: flex-start;
+}
+
+#seemore {
+  border: none;
+  resize: none;
+  outline: none;
+  font-size: 10px;
+  color: #687086;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  text-decoration: none;
+  margin-top: -60px;
+}
+
+#seemore:hover {
+  color: white;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: none;
+  resize: none;
+  outline: none;
+  text-decoration: none;
+}
+

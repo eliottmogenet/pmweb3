@@ -4,16 +4,16 @@
   <div class="intro">
     <div class="img-user">
        <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
-        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
+        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
     </div>
     <div class="notifications">
-      <p id="bell">🔔</p>
+      <p id="bell"><i class="far fa-bell"></i></p>
       <p class="button-invite">+ Invite to workspace</p>
     </div>
   </div>
 
   <div class="menu">
-    <p id="project-item">Projects</p>
+
   </div>
   <hr>
     <div class="members-profiles">

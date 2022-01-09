@@ -1,58 +1,101 @@
 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 <div class="container">
 
   <div class="intro">
     <div class="img-user">
        <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
-        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
+        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
     </div>
     <div class="notifications">
-      <p id="bell">🔔</p>
+      <p id="bell"><i class="far fa-bell"></i></p>
       <p class="button-invite">+ Invite to workspace</p>
     </div>
   </div>
 
-  <%= simple_form_for([ @employer, @project ]) do |f| %>
-      <%= f.input :date, input_html: { class: "datepicker" } %>
-      <%= f.button :submit, style: "display: none" %>
-  <% end %>
 
-  <p id="timer"><%= pluralize @date[:days], "day" %> : <%= pluralize @date[:hours], "hour" %></p>
-
-  <div class="menu">
-    <p id="project-item">Projects</p>
-  </div>
   <hr>
 
-  <h4>
-    <%= link_to employer_projects_path(@employer) do %>
-      <i id="back-arrow" class="fas fa-chevron-left"></i>
-    <% end %>
-  <b><%="  "+ @project.name %></b></h4>
-
-  <div class="project-users">
-      <div class="project-user" id="manager">
-          <div class="photo-round">
-            <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
-            <span class="badge-2"><p>👑</span>
-          </div>
-          <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
-        </div>
-    <% @project.users.uniq.each do |user| %>
-      <% if user != @project.user %>
-        <div class="project-user">
-          <div class="photo-round">
-            <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
-            <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p></span>
-          </div>
-          <p><%= user.first_name + " " %><%= user.last_name %></p>
-        </div>
+  <div class="project-header">
+    <h4 id="project-header-title">
+      <%= link_to employer_projects_path(@employer) do %>
+        <i id="back-arrow" class="fas fa-chevron-left"></i>
       <% end %>
+    <b><%="  "+ @project.name %> : <span id="purple-span"><%=@project.tasks.map { |task| task.token_number.to_i }.sum %> 🍪</span></b></h4>
+
+    <div class="set-deadline">
+      <% if @project.date.nil? %>
+          <div class="datepicker">
+            <%= simple_form_for([ @employer, @project ], html: { class: "form-horizontal"}) do |f| %>
+              <%= f.input :date, default: Time.parse('00:00'), label: false, date_separator: '', time_separator: '', datetime_separator: " " %>
+              <%= f.submit 'Start', id: 'time_set' %>
+            <% end %>
+          </div>
+      <% else %>
+
+      <h4 id="timer"> Deadline :
+        <% if @date[:weeks] == 0 %>
+          <%= pluralize @date[:days], "day" %>
+        <% else  %>
+          <%= pluralize (@date[:weeks]*7 + @date[:days]), "day" %>
+        <% end %>
+          : <%= pluralize @date[:hours], "hour" %></h4>
+      <% end %>
+
+    <%= button_to reset_time_employer_project_path(@employer, @project), id: "reset-button" , method: :post do %>
+      <p><i class="fas fa-undo"></i></p>
+    <% end %>
+
+    </div>
+  </div>
+
+  <p id="contributors-count-title">All contributors (<%= @project.users.uniq.count %>)</p>
+    <div id="accordion">
+        <div class="project-users">
+          <div class="project-user" id="manager">
+              <div class="photo-round">
+                <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
+                <span class="badge-2"><p>👑</span>
+              </div>
+              <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
+            </div>
+            <% @project.users.uniq.first(9).each do |user| %>
+              <% if user != @project.user %>
+                <div class="project-user">
+                  <div class="photo-round">
+                    <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+                    <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+                  </div>
+                  <p><%= user.first_name + " " %><%= user.last_name %></p>
+                </div>
+              <% end %>
+          <% end %>
+      </div>
+      <% if @project.users.uniq.count > 9 %>
+        <button id="seemore" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            See more >
+      </button>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <% @project.users.uniq.drop(9).each do |user| %>
+              <% if user != @project.user %>
+                <div class="project-user">
+                  <div class="photo-round">
+                    <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+                    <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+                  </div>
+                  <p><%= user.first_name + " " %><%= user.last_name %></p>
+                </div>
+              <% end %>
+            <% end %>
+      </div>
     <% end %>
   </div>
 
   <div class="task-create-button">
-    <%= simple_form_for([ @employer, @project, @task ]) do |f| %>
+    <%= simple_form_for([ @employer, @project, @task ], remote: true, :authenticity_token => true ) do |f| %>
       <%= f.input :title, label: false, placeholder: '+ Create a new task', input_html: { autocomplete: 'off' }, :error_html => { :id => "name_error"} %>
       <%= f.error :name, :id => "name_error" %>
       <%= f.button :submit, style: "display: none" %>
@@ -64,16 +107,16 @@
       Be the first to create a task
     <% else %>
       <% @project.tasks.sort.reverse.each do |task| %>
-        <div class="task-card">
+        <div class="task-card" id="task-<%= task.id %>">
           <div class="task-edit">
-            <div class="">
+            <div>
               <% if task.token_number.nil? %>
                 <%= simple_form_for([ @employer, @project, task ]) do |f| %>
                   <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off' } %>
-                  <%= f.button :submit, style: "display: none" %>
+                  <%= f.button :submit, style: "display: none;" %>
               <% end %>
               <% else %>
-                <p id="token-number"><%= task.token_number %> 🍭</p>
+                <p id="token-number"><%= task.token_number %> 🍪</p>
               <% end %>
             </div>
           </div>
@@ -99,19 +142,21 @@
           <div class="task-title">
             <p><%= task.title %></p>
           </div>
-          <div class="task-edit">
+          <div class="task-edit" id="task-user-align">
             <% if task.user.nil? %>
-              <%= simple_form_for([ @employer, @project, task ]) do |f| %>
-              <%= f.association :user, :as => :collection_select, collection: User.where(employer: @employer), label: false, prompt: 'Assign', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
-              <%= f.button :submit, style: "display: none" %>
+              <%= simple_form_for([ @employer, @project, task ], html: { class: "form-horizontal"}, remote: true, :authenticity_token => true) do |f| %>
+              <%= f.association :user, :as => :collection_select, collection: User.where(employer: @employer), label: false, prompt: 'Contributor', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
+                <%= f.button :button, id: 'button-done' do %>
+                  + <i class="far fa-user"></i>
+                <% end %>
               <% end %>
             <% end %>
           </div>
           <% if task.user.nil? == false && task.status != "claimed" %>
-            <div class="task-edit">
+            <div>
               <%= simple_form_for([ @employer, @project, task ]) do |f| %>
               <%= f.input :status, label: false, input_html: {value: 'claimed', hidden: true}, id: "form-claim" %>
-              <%= f.submit 'Mark as done >', id: 'button-done'%>
+              <%= f.submit 'Mark as done >', id: 'button-done-2'%>
               <% end %>
             </div>
           <% end %>
@@ -120,32 +165,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-  window.initializeClock = function(clockId, dateId) {
-    var getTimeRemaining = function(endtime) {
-        var t = Date.parse(endtime) - (new Date()).getTime();
-        var seconds = Math.floor( (t/1000) % 60 );
-        var minutes = Math.floor( (t/1000/60) % 60);
-        var hours = Math.floor( (t/(1000*60*60)) % 24);
-        var days = Math.floor( t/(1000*60*60*24) );
-        return {
-            'total': t,
-            'days': days,
-            'hours': hours,
-            'minutes': minutes,
-            'seconds': seconds
-        };
-    }
-
-    var clock = document.getElementById(clockId);
-    var deadline = document.getElementById(dateId).value;
-    var timeinterval = setInterval(function(){
-        var t = getTimeRemaining(deadline);
-        clock.innerHTML = 'days: ' + t.days + '<br>' + 'hours: ' + t.hours + '<br>' + 'minutes: ' + t.minutes + '<br>' + 'seconds: ' + t.seconds;
-        if(t.total<=0){
-            clearInterval(timeinterval);
-        }
-    }, 1000);
-}
-</script>
