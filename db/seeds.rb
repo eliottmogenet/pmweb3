@@ -19,11 +19,10 @@ ledger.save!
 
 p "creating users"
 
-john =  ledger.users.create(first_name: "John", last_name: "Lafleur", email: "test1@gmail.com", password: "test1@gmail.com")
-john.photo.attach(io: File.open(File.join(Rails.root,'app/assets/images/john.png')), filename: 'john.png')
+john =  ledger.users.create(first_name: "John", last_name: "Lafleur", email: "test1@gmail.com", password: "test1@gmail.com", pseudo: 'Fire1')
 john.save!
 
-jack =  ledger.users.create(first_name: "Jack", last_name: "Sully", email: "test2@gmail.com", password: "test2@gmail.com")
+jack =  ledger.users.create(first_name: "Jack", last_name: "Sully", email: "test2@gmail.com", password: "test2@gmail.com", pseudo: 'Fire2')
 jack.photo.attach(io: File.open(File.join(Rails.root,'app/assets/images/jack.png')), filename: 'jack.png')
 jack.save!
 

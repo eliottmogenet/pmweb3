@@ -318,6 +318,7 @@ a:hover {
 .badge {
   position: absolute;
   margin-left: -1%;
+  z-index: 2;
   width: 63px;
   height: 30px;
   line-height: 30px;
@@ -587,3 +588,57 @@ a:hover {
     gap: 5px;
   }
 
+#user_blank {
+  color: white;
+  font-size: 25px;
+  text-align: center;
+}
+
+.profile-background {
+  margin-top: 5px;
+  position: absolute;
+  text-align: center;
+  margin-left: 5px;
+  background-color: #687086;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+}
+
+#badge_blank {
+  margin-left: 5px;
+}
+
+#badge_blank-2 {
+  margin-left: 10px;
+}
+
+#editable-photo:hover {
+  background-color: #C4C4C4;
+  cursor: pointer;
+}
+
+.profile-backgroun-small-30 {
+  text-align: center;
+  background-color: #687086;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+
+.profile-backgroun-small-40 {
+  text-align: center;
+  background-color: #687086;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 100%;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+
+#user_blank-small-40 {
+}

@@ -1,17 +1,27 @@
 
 <div class="container">
 
-  <div class="intro">
+   <div class="intro">
     <div class="img-user">
-       <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
+      <% if current_user.photo.attached? %>
+        <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
         <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+      <% else %>
+          <div class="photo-round">
+            <span id="badge_blank" class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+              <div class="profile-background" id="editable-photo">
+                <i id="user_blank" class="far fa-user"></i>
+              </div>
+          </div>
+      <% end %>
     </div>
     <div class="notifications">
       <p id="bell"><i class="far fa-bell"></i></p>
       <p class="button-invite">+ Invite to workspace</p>
     </div>
-  </div>
 
+    <p><%= link_to "Log out 🚪", destroy_user_session_path, method: :delete %></p>
+  </div>
   <div class="menu">
 
   </div>
@@ -20,7 +30,13 @@
       <h5 id="project-title"><b> <%= @employer.name %> projects </b></h5>
     <% @employer.users.each do |user| %>
         <div class="photo-round-small-30">
-          <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
+          <% if user.photo.attached? %>
+            <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
+          <% else %>
+            <div class="profile-backgroun-small-30">
+              <i id="user_blank-small-30" class="far fa-user"></i>
+            </div>
+          <% end %>
         </div>
     <% end %>
     </div>
@@ -47,7 +63,13 @@
             <div class="project_users">
               <% project.users.uniq.first(4).each do |profile| %>
                 <div class="photo-round-small-40">
-                  <%= cl_image_tag profile.photo.key, width: 30, style: "border-radius: 100%"  %>
+                  <% if profile.photo.attached? %>
+                    <%= cl_image_tag profile.photo.key, width: 30, style: "border-radius: 100%" %>
+                  <% else %>
+                    <div class="profile-backgroun-small-40">
+                      <i id="user_blank-small-40" class="far fa-user"></i>
+                    </div>
+                  <% end %>
                 </div>
               <% end %>
             </div>

@@ -7,8 +7,17 @@
 
   <div class="intro">
     <div class="img-user">
-       <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
+      <% if current_user.photo.attached? %>
+        <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
         <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+      <% else %>
+          <div class="photo-round">
+            <span id="badge_blank" class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+              <div class="profile-background" id="editable-photo">
+                <i id="user_blank" class="far fa-user"></i>
+              </div>
+          </div>
+      <% end %>
     </div>
     <div class="notifications">
       <p id="bell"><i class="far fa-bell"></i></p>
@@ -59,8 +68,15 @@
         <div class="project-users">
           <div class="project-user" id="manager">
               <div class="photo-round">
-                <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
-                <span class="badge-2"><p>👑</span>
+                <% if @project.user.photo.attached? %>
+                  <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
+                  <span class="badge-2"><p>👑</span>
+                <% else %>
+                    <div class="profile-background">
+                      <i id="user_blank" class="far fa-user"></i>
+                    </div>
+                      <span id="badge_blank-2" class="badge-2"><p>👑</span>
+                <% end %>
               </div>
               <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
             </div>
@@ -68,10 +84,21 @@
               <% if user != @project.user %>
                 <div class="project-user">
                   <div class="photo-round">
-                    <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
-                    <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+                    <% if user.photo.attached? %>
+                      <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+                      <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+                    <% else %>
+                      <span id="badge_blank" class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
+                      <div class="profile-background">
+                        <i id="user_blank" class="far fa-user"></i>
+                      </div>
+                    <% end %>
                   </div>
-                  <p><%= user.first_name + " " %><%= user.last_name %></p>
+                  <% if user.pseudo.nil? %>
+                    <p><%= user.first_name + " " %><%= user.last_name %></p>
+                  <% else %>
+                    <p><%= user.pseudo %></p>
+                  <% end %>
                 </div>
               <% end %>
           <% end %>
@@ -85,7 +112,11 @@
               <% if user != @project.user %>
                 <div class="project-user">
                   <div class="photo-round">
-                    <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+                    <% if user.photo.attached? %>
+                      <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
+                    <% else %>
+                      <div><i class="far fa-user"></i></div>
+                    <% end %>
                     <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
                   </div>
                   <p><%= user.first_name + " " %><%= user.last_name %></p>
@@ -138,7 +169,10 @@
           <% if task.user.nil? %>
           <% else %>
             <div class="photo-round-small">
-            <%= cl_image_tag task.user.photo.key, width: 20, style: "border-radius: 100%" %>
+              <% if task.user.photo.attached? %>
+                <%= cl_image_tag task.user.photo.key, width: 20, style: "border-radius: 100%" %>
+              <% else  %>
+              <% end %>
             </div>
           <% end %>
           <div class="task-title">
