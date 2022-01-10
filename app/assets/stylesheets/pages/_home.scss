@@ -566,3 +566,24 @@ a:hover {
   text-decoration: none;
 }
 
+.registration-box {
+  width: 40%;
+  background-color: #1F292C;
+  padding: 50px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+#registration-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ .button-inline {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+  }
+

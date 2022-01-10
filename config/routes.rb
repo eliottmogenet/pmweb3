@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
+  mount ForestLiana::Engine => '/forest'
   devise_for :users
+
+  devise_scope :user do
+   get '/users/sign_out' => 'devise/sessions#destroy'
+  end
+
   root to: 'pages#home'
   resources :employers do
     resources :projects do
@@ -15,3 +21,4 @@ Rails.application.routes.draw do
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
+
