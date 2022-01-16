@@ -8,9 +8,10 @@
 require 'open-uri'
 
 Employer.destroy_all
+Task.destroy_all
 User.destroy_all
 Project.destroy_all
-Task.destroy_all
+ProjectUser.destroy_all
 
 p "creating employers"
 
@@ -58,30 +59,36 @@ eliott =  ledger.users.create(first_name: "Eliott", last_name: "Mogenet", email:
 eliott.photo.attach(io: File.open(File.join(Rails.root,'app/assets/images/eliott.png')), filename: 'eliott.png')
 eliott.save!
 
+p "creating projects and assign a manager/creator"
 
-
-p "creating projects"
-
-project1 = john.projects.create(name: "Redesign website", employer_id: ledger.id)
+project1 = Project.create(name: "Ledger", employer_id: ledger.id, user_id: john.id)
 project1.save!
 
 
-project2 = jack.projects.create(name: "Reach 500 users", employer_id: ledger.id)
+project2 = Project.create(name: "Pianity", employer_id: ledger.id, user_id: jack.id)
 project2.save!
+
+p "creating user_projects and project members by this way"
+
+project_user1 = remy.project_users.create(project_id: project1.id)
+project_user1.save!
+
+project_user2 = eliott.project_users.create(project_id: project1.id)
+project_user2.save!
 
 p "creating tasks"
 
-task1 = project1.tasks.create(title: "Build prototype on Figma", status: "On Going", token_number: "10", user_id: john.id)
+task1 = project1.tasks.create(title: "Build prototype on Figma", status: "On Going", token_number: "10", user_id: john.id, creator_id: eliott.id)
 task1.save!
 
-task2 = project1.tasks.create(title: "Code Backend", status: "On Going", token_number: "10", user_id: jack.id)
+task2 = project1.tasks.create(title: "Code Backend", status: "On Going", token_number: "10", user_id: jack.id, creator_id: justin.id)
 task2.save!
 
 
-task3 = project2.tasks.create(title: "Build growth strategy", status: "On Going", token_number: "10", user_id: john.id)
+task3 = project2.tasks.create(title: "Build growth strategy", status: "On Going", token_number: "10", user_id: john.id, creator_id: remy.id)
 task3.save!
 
-task4 = project2.tasks.create(title: "Create community", status: "On Going", token_number: "10", user_id: jack.id)
+task4 = project2.tasks.create(title: "Create community", status: "On Going", token_number: "10", user_id: jack.id, creator_id: sonia.id)
 task4.save!
 
 p "finished"

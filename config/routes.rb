@@ -7,6 +7,14 @@ Rails.application.routes.draw do
   end
 
   root to: 'pages#home'
+
+  resources :projects do
+    member do
+      post 'reset_time', to: "projects#reset_time"
+    end
+    resources :tasks
+  end
+
   resources :employers do
     resources :projects do
         member do

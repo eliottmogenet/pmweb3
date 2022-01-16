@@ -1,18 +1,25 @@
 class ProjectsController < ApplicationController
-  def index
-    @employer = Employer.find(params[:employer_id])
-    @projects = Project.where(employer_id: @employer)
-    @project = Project.new
-  end
+  has_scope :private_filter, type: :boolean
+  # method index has been comment because index is not display so far
+
+  # def index
+    # @employer = current_user.employer
+      # @projects = Project.where(employer_id: @employer)
+        # @project = Project.new
+    # end
 
   def show
-    @employer = Employer.find(params[:employer_id])
-    @project = Project.find(params[:id])
+    @employer = current_user.employer
+    @project = current_user.projects.first
     @task = Task.new
+      if @project.tasks != nil
+        @assigned_tasks = @project.tasks.where.not('user_id' => nil)
+        #@tasks_by_status = apply_scopes(Task).where(status: @task.status).load
+      end
 
-    if @project.date.nil? == false
-      @date = TimeDifference.between(@project.date, Time.now).in_general
-    end
+      if @project.date.nil? == false
+        @date = TimeDifference.between(@project.date, Time.now).in_general
+      end
   end
 
   def create
@@ -21,25 +28,23 @@ class ProjectsController < ApplicationController
     @project.employer = @employer
     @project.user = current_user
       if @project.save
-        redirect_to employer_projects_path(@employer)
+        redirect_to projects_path
       else
-        redirect_to employer_projects_path(@employer)
+        redirect_to projects_path
       end
   end
 
   def update
-    @employer = Employer.find(params[:employer_id])
     @project = Project.find(params[:id])
     @project.update(project_params)
-    redirect_to employer_project_path(@employer, @project)
+    redirect_to project_tasks_path(@project)
   end
 
   def reset_time
-    @employer = Employer.find(params[:employer_id])
     @project = Project.find(params[:id])
     @project.date = nil
     @project.save!
-    redirect_to employer_project_path(@employer, @project)
+    redirect_to project_tasks_path(@project)
   end
 
   private

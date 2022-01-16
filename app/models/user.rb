@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   belongs_to :employer
   has_many :tasks
-  has_many :projects
+  has_many :project_users
+  has_many :projects, through: :project_users
   has_one_attached :photo
   #has_many :projects, through: :user_projects
 end

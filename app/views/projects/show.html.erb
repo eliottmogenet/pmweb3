@@ -5,131 +5,80 @@
 
 <div class="container">
 
-  <div class="intro">
-    <div class="img-user">
-      <% if current_user.photo.attached? %>
-        <%= cl_image_tag current_user.photo.key, width: 70, style: "border-radius: 100%" %>
-        <span class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
-      <% else %>
-          <div class="photo-round">
-            <span id="badge_blank" class="badge"><p>  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
-              <div class="profile-background" id="editable-photo">
-                <i id="user_blank" class="far fa-user"></i>
-              </div>
+  <div class="puzzle-header">
+    <div>
+      <div class="header1">
+        <h1 id="project-header-title">
+          <b><%="  "+ @project.name %> 's Puzzle : <%= @project.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> / <%=@project.tasks.map { |task| task.token_number.to_i }.sum %> <i class="fas fa-puzzle-piece"></i></b></h1>
+        <div class="img-user">
+        <% if current_user.photo.attached? %>
+          <div class="token_box">
+            <p><%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+              <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p>
+            <% else %>
+            <div class="photo-round">
+              <p><div class="profile-background" id="editable-photo">
+                    <i id="user_blank" class="far fa-user"></i>
+                </div><%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p>
+            </div>
+          <% end %>
           </div>
+        </div>
+      </div>
+    <div>
+        <%= link_to "", "data-toggle" => "modal", 'data-target' => '#membersmodal' do %>
+          <div class="members-profiles">
+          <% @project.users.each do |user| %>
+              <div class="photo-round-small-30">
+                <% if user.photo.attached? %>
+                  <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
+                <% else %>
+                  <div class="profile-backgroun-small-30">
+                    <i id="user_blank-small-30" class="far fa-user"></i>
+                  </div>
+                <% end %>
+              </div>
+          <% end %>
+        </div>
       <% end %>
-    </div>
-    <div class="notifications">
-      <p id="bell"><i class="far fa-bell"></i></p>
-      <p class="button-invite">+ Invite to workspace</p>
+
+
+
     </div>
 
-    <p><%= link_to "Log out 🚪", destroy_user_session_path, method: :delete %></p>
+
   </div>
 
 
   <hr>
 
-  <div class="project-header">
-    <h4 id="project-header-title">
-      <%= link_to employer_projects_path(@employer) do %>
-        <i id="back-arrow" class="fas fa-chevron-left"></i>
-      <% end %>
-    <b><%="  "+ @project.name %> : <span id="purple-span"><%=@project.tasks.map { |task| task.token_number.to_i }.sum %> 🍪</span></b></h4>
-
-    <div class="set-deadline">
-      <% if @project.date.nil? %>
-          <div class="datepicker">
-            <%= simple_form_for([ @employer, @project ], html: { class: "form-horizontal"}) do |f| %>
-              <%= f.input :date, default: Time.parse('00:00'), label: false, date_separator: '', time_separator: '', datetime_separator: " " %>
-              <%= f.submit 'Start', id: 'time_set' %>
-            <% end %>
-          </div>
-      <% else %>
-
-      <h4 id="timer"> Deadline :
-        <% if @date[:weeks] == 0 %>
-          <%= pluralize @date[:days], "day" %>
-        <% else  %>
-          <%= pluralize (@date[:weeks]*7 + @date[:days]), "day" %>
-        <% end %>
-          : <%= pluralize @date[:hours], "hour" %></h4>
-      <% end %>
-
-    <%= button_to reset_time_employer_project_path(@employer, @project), id: "reset-button" , method: :post do %>
-      <p><i class="fas fa-undo"></i></p>
+  <div class="filters">
+    <%= link_to project_path(@project, private_filter: true) do %>
+      <div class="filter">
+        <p>#All pieces</p>
+      </div>
     <% end %>
-
+    <div class="filter">
+      <p>#Private</p>
+    </div>
+    <div class="filter">
+      <p>#Assigned to me </p>
+    </div>
+    <div class="filter">
+      <p>#Unassigned</p>
+    </div>
+    <div class="filter">
+      <p>#On going</p>
+    </div>
+    <div class="filter">
+      <p>#Done</p>
     </div>
   </div>
 
-  <p id="contributors-count-title">All contributors (<%= @project.users.uniq.count %>)</p>
-    <div id="accordion">
-        <div class="project-users">
-          <div class="project-user" id="manager">
-              <div class="photo-round">
-                <% if @project.user.photo.attached? %>
-                  <%= cl_image_tag @project.user.photo.key, width: 60, style: "border-radius: 100%" %>
-                  <span class="badge-2"><p>👑</span>
-                <% else %>
-                    <div class="profile-background">
-                      <i id="user_blank" class="far fa-user"></i>
-                    </div>
-                      <span id="badge_blank-2" class="badge-2"><p>👑</span>
-                <% end %>
-              </div>
-              <p><%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
-            </div>
-            <% @project.users.uniq.first(9).each do |user| %>
-              <% if user != @project.user %>
-                <div class="project-user">
-                  <div class="photo-round">
-                    <% if user.photo.attached? %>
-                      <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
-                      <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
-                    <% else %>
-                      <span id="badge_blank" class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
-                      <div class="profile-background">
-                        <i id="user_blank" class="far fa-user"></i>
-                      </div>
-                    <% end %>
-                  </div>
-                  <% if user.pseudo.nil? %>
-                    <p><%= user.first_name + " " %><%= user.last_name %></p>
-                  <% else %>
-                    <p><%= user.pseudo %></p>
-                  <% end %>
-                </div>
-              <% end %>
-          <% end %>
-      </div>
-      <% if @project.users.uniq.count > 9 %>
-        <button id="seemore" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            See more >
-      </button>
-      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-          <% @project.users.uniq.drop(9).each do |user| %>
-              <% if user != @project.user %>
-                <div class="project-user">
-                  <div class="photo-round">
-                    <% if user.photo.attached? %>
-                      <%= cl_image_tag user.photo.key, width: 60, style: "border-radius: 100%" %>
-                    <% else %>
-                      <div><i class="far fa-user"></i></div>
-                    <% end %>
-                    <span class="badge"><p>  <%= user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> 🍪</p></span>
-                  </div>
-                  <p><%= user.first_name + " " %><%= user.last_name %></p>
-                </div>
-              <% end %>
-            <% end %>
-      </div>
-    <% end %>
-  </div>
 
   <div class="task-create-button">
-    <%= simple_form_for([ @employer, @project, @task ], remote: true, :authenticity_token => true ) do |f| %>
-      <%= f.input :title, label: false, placeholder: '+ Create a new task', input_html: { autocomplete: 'off' }, :error_html => { :id => "name_error"} %>
+    <%= simple_form_for([ @project, @task ], remote: true, :authenticity_token => true ) do |f| %>
+      <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off' }, :error_html => { :id => "name_error"} %>
       <%= f.error :name, :id => "name_error" %>
       <%= f.button :submit, style: "display: none" %>
     <% end %>
@@ -144,7 +93,7 @@
           <div class="task-edit">
             <div>
               <% if task.token_number.nil? %>
-                <%= simple_form_for([ @employer, @project, task ]) do |f| %>
+                <%= simple_form_for([ @project, task ]) do |f| %>
                   <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off' } %>
                   <%= f.button :submit, style: "display: none;" %>
               <% end %>
@@ -153,7 +102,11 @@
               <% end %>
             </div>
           </div>
-          <% if task.user.nil? %>
+          <% if task.confidentiality == "Private" && task.user.nil? %>
+            <div class="confidentiality-private">
+              <p>Private</p>
+            </div>
+          <% elsif task.confidentiality == "Public" && task.user.nil? %>
             <div class="status-unassigned">
               <p>Unassigned</p>
             </div>
@@ -178,8 +131,18 @@
           <div class="task-title">
             <p><%= task.title %></p>
           </div>
+          <div class="task-topic">
+            <%if task.topic.nil? %>
+              <%= simple_form_for([ @project, task ]) do |f| %>
+                  <%= f.input :topic, label: false, placeholder: '#topic', input_html: { autocomplete: 'off' } %>
+                  <%= f.button :submit, style: "display: none;" %>
+                <% end %>
+              <% else %>
+                <p>#<%= task.topic %></p>
+          <% end %>
+          </div>
           <div class="task-edit" id="task-user-align">
-            <% if task.user.nil? %>
+            <% if task.confidentiality != "Private"%>
               <%= simple_form_for([ @employer, @project, task ], html: { class: "form-horizontal"}, remote: true, :authenticity_token => true) do |f| %>
               <%= f.association :user, :as => :collection_select, collection: User.where(employer: @employer), label: false, prompt: 'Contributor', :label_method => lambda { |user| "#{user.first_name} #{user.last_name}" } %>
                 <%= f.button :button, id: 'button-done' do %>
@@ -190,7 +153,7 @@
           </div>
           <% if task.user.nil? == false && task.status != "claimed" %>
             <div>
-              <%= simple_form_for([ @employer, @project, task ]) do |f| %>
+              <%= simple_form_for([ @project, task ]) do |f| %>
               <%= f.input :status, label: false, input_html: {value: 'claimed', hidden: true}, id: "form-claim" %>
               <%= f.submit 'Mark as done >', id: 'button-done-2'%>
               <% end %>
@@ -199,5 +162,29 @@
         </div>
       <% end %>
     <% end %>
+</div>
+
+<div class="modal fade" id="membersmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+
+
+
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
+
+</div>
+
+
+
+
+
+

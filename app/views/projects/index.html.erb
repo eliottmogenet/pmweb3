@@ -1,4 +1,5 @@
 
+
 <div class="container">
 
    <div class="intro">
@@ -27,7 +28,7 @@
   </div>
   <hr>
     <div class="members-profiles">
-      <h5 id="project-title"><b> <%= @employer.name %> projects </b></h5>
+      <h5 id="project-title"><b> <%= @employer.name %> team puzzles </b></h5>
     <% @employer.users.each do |user| %>
         <div class="photo-round-small-30">
           <% if user.photo.attached? %>
@@ -40,7 +41,7 @@
         </div>
     <% end %>
     </div>
-  <p id="members-count"><%= @employer.users.count %> members in the workspace </p>
+  <p id="members-count"><%= @employer.users.count %> members in my team workspace </p>
   <br>
 
   <div class="projects-cards">
@@ -54,17 +55,17 @@
     </div>
 
     <%@projects.sort.reverse.each do |project| %>
-      <%= link_to employer_project_path(@employer, project) do %>
+      <%= link_to project_path(project) do %>
         <div class="project-card">
           <div>
             <div id="project-name">
               <p><b><%= project.name %></b></p>
             </div>
             <div class="project_users">
-              <% project.users.uniq.first(4).each do |profile| %>
+              <% project.tasks.where.not('user_id' => nil).uniq { |f| [ f.user_id] }.first(4).each do |task| %>
                 <div class="photo-round-small-40">
-                  <% if profile.photo.attached? %>
-                    <%= cl_image_tag profile.photo.key, width: 30, style: "border-radius: 100%" %>
+                  <% if task.user.photo.attached? %>
+                    <%= cl_image_tag task.user.photo.key, width: 30, style: "border-radius: 100%" %>
                   <% else %>
                     <div class="profile-backgroun-small-40">
                       <i id="user_blank-small-40" class="far fa-user"></i>
@@ -74,14 +75,13 @@
               <% end %>
             </div>
             <div>
-              <p id="contributors-count"><%= pluralize project.users.uniq.count, 'contributor' %></p>
+              <p id="contributors-count"><%= pluralize project.tasks.where.not('user_id' => nil).uniq { |f| [ f.user_id] }.uniq.count, 'contributor' %></p>
             </div>
           </div>
         </div>
       <% end %>
   <% end %>
   </div>
-
 </div>
 
 
