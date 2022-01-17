@@ -8,7 +8,7 @@
             <%= f.button :submit, style: "display: none;" %>
         <% end %>
         <% else %>
-          <p id="token-number"><%= task.token_number %><%= cl_image_tag("puzzle-piece-solid_28_s8rwtd", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+          <p id="token-number"><%= task.token_number %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
         <% end %>
       </div>
     </div>
@@ -71,7 +71,7 @@
           <div class="modal-content" id="description">
             <div class="modal-header" id="description-header">
               <h2 class="modal-title" id="exampleModalLabel">
-                <%= task.token_number %><%= cl_image_tag("puzzle-piece-solid_28_s8rwtd", :width => 40, style: "padding-bottom: 15px; margin-left: 10px;") %> <%= task.title %></h2>
+                <%= task.token_number %><%= image_tag("piece.png", :width => 40, style: "padding-bottom: 15px; margin-left: 10px;") %> <%= task.title %></h2>
             </div>
             <div class="modal-body" id="description-body">
               <div class="task-creator">
