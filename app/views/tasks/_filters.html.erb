@@ -1,0 +1,33 @@
+<%= form_tag project_tasks_path(project), method: :get, 'data-filter-target': 'form' do %>
+  <div class="tag-item">
+    <%= check_box_tag :all, "true", params[:all] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
+    <%= label_tag :all, "#All pieces" %>
+  </div>
+  <div class="tag-item">
+    <%= check_box_tag :is_private, "true", params[:is_private] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+    <%= label_tag :is_private, "#Private" %>
+  </div>
+  <div class="tag-item">
+    <%= check_box_tag :assigned_to_me, current_user.id, params[:assigned_to_me] == current_user.id.to_s, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+    <%= label_tag :assigned_to_me, "#Assigned to me" %>
+  </div>
+  <div class="tag-item">
+    <%= check_box_tag :unassigned, "true", params[:unassigned] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+    <%= label_tag :unassigned, "#Unassigned" %>
+  </div>
+  <div class="tag-item">
+    <%= check_box_tag :ongoing, "true", params[:ongoing] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+    <%= label_tag :ongoing, "#Ongoing" %>
+  </div>
+  <div class="tag-item">
+    <%= check_box_tag :done, "true", params[:done] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+    <%= label_tag :done, "#Done" %>
+  </div>
+
+  <% topics.each do |topic| %>
+    <div class="tag-item">
+      <%= radio_button_tag :by_topic, topic, params[:by_topic] == topic, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+      <%= label_tag "by_topic_#{topic}", "##{topic}" %>
+    </div>
+  <% end %>
+<% end %>

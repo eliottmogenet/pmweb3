@@ -12,4 +12,16 @@ class Task < ApplicationRecord
   scope :by_topic, ->(topic) { where(topic: topic) }
   scope :ongoing, -> { where(status: "ongoing") }
   scope :done, -> { where(status: "claimed") }
+
+  def private?
+    confidentiality == "Private"
+  end
+
+  def public?
+    confidentiality == "Public"
+  end
+
+  def ongoing?
+    status == "ongoing"
+  end
 end

@@ -24,20 +24,65 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
     @task.project = @project
     @task.creator = current_user
-    @task.confidentiality = "Private" #when a user create a task, it's private
+    @task.confidentiality = "Private"
+
     if @task.save
-      redirect_to project_tasks_path(@project)
-    else
-      redirect_to project_tasks_path(@project)
-    end
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project) }
+        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
+      end
+    end      
   end
 
   def update
-    @project = Project.find(params[:project_id])
     @task = Task.find(params[:id])
-    @task.project = @project
-    @task.update(task_params)
-    redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}")
+    @project = @task.project
+
+    if @task.update(task_params)
+      @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?)
+      
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.json do 
+          render json: {
+            partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
+            filters: render_to_string(partial: "tasks/filters", locals: {project: @project, topics: @topics}, formats: [:html]),
+            total: @project.tasks.pluck(:token_number).map(&:to_i).sum, 
+          }.to_json
+        end
+      end
+    end
+  end
+
+  def mark_as_public
+    @task = Task.find(params[:id])
+    @project = @task.project
+    
+    if @task.update(confidentiality: "Public")
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
+      end
+    end
+  end
+
+  def mark_as_done
+    @task = Task.find(params[:id])
+    @project = @task.project
+    
+    if @task.update(status: "claimed")
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        # format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
+        format.json do 
+          render json: {
+            partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
+            subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+            usertotal: current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum
+          }.to_json
+        end
+      end
+    end
   end
 
   private

@@ -1,29 +1,48 @@
-<div class="container">
+<div class="container" data-controller="tasks">
   <div class="puzzle-header">
     <div>
       <div class="header1">
         <%= image_tag("logo.png", :width => 30, height: 46) %>
-          <h1 id="project-header-title">
-            <b id="text-low"><%="  "+ @project.name %> 's Puzzle : <%= @project.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %> / <%=@project.tasks.map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 40, style: "padding-bottom: 10px; margin-left: 10px;") %></b></h1>
-          <div class="img-user">
-          <% if current_user.photo.attached? %>
-            <div class="token_box">
-              <p><%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
-                <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-              <% else %>
+        <h1 id="project-header-title">
+          <b id="text-low">
+            <%= @project.name %> 's Puzzle : 
+            <span id="tokenSubTotal"> 
+              <%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %> 
+            </span> 
+            / 
+            <span id="tokenTotal">
+              <%= @project.tasks.pluck(:token_number).map(&:to_i).sum %>
+            </span> 
+            <%= image_tag("piece.png", :width => 40, style: "padding-bottom: 10px; margin-left: 10px;") %>    
+          </b>
+        </h1>
+        <div class="img-user">
+          <div class="token_box">
+            <% if current_user.photo.attached? %>
+              <p>
+                <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+                <span id="tokenUserTotal">
+                  <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+                </span>
+                <%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+              </p>
+            <% else %>
               <div class="photo-round">
-                <p><div class="profile-background" id="editable-photo">
-                      <i id="user_blank" class="far fa-user"></i>
-                  </div><%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %></p>
+                <p>
+                  <div class="profile-background" id="editable-photo">
+                    <i id="user_blank" class="far fa-user"></i>
+                  </div>
+                  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %>
+                </p>
               </div>
-          <% end %>
+            <% end %>
           </div>
         </div>
       </div>
       <div id="header2">
         <%= link_to "", "data-toggle" => "modal", 'data-target' => '#membersmodal' do %>
           <div class="members-profiles">
-          <% @project.users.each do |user| %>
+            <% @project.users.each do |user| %>
               <div class="photo-round-small-30">
                 <% if user.photo.attached? %>
                   <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
@@ -33,152 +52,118 @@
                   </div>
                 <% end %>
               </div>
-          <% end %>
+            <% end %>
+          </div>
+        <% end %>
+        <div class="token_box" id="share">
+          <p>Share Puzzle <i class="fas fa-link"></i></p>
         </div>
-      <% end %>
-      <div class="token_box" id="share">
-        <p>  Share Puzzle    <i class="fas fa-link"></i></p>
       </div>
     </div>
   </div>
-</div>
 
-<hr id="separation1">
+  <hr id="separation1">
 
-<!-- Filters with links_to and params for filtering the view -->
-<div data-controller="filter">
-  <div class="filters">
-    <%= form_tag project_tasks_path(@project), method: :get, 'data-filter-target': 'form' do %>
-      <div class="tag-item">
-        <%= check_box_tag :all, "true", params[:all] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
-        <%= label_tag :all, "#All pieces" %>
-      </div>
-      <div class="tag-item">
-        <%= check_box_tag :is_private, "true", params[:is_private] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-        <%= label_tag :is_private, "#Private" %>
-      </div>
-      <div class="tag-item">
-        <%= check_box_tag :assigned_to_me, current_user.id, params[:assigned_to_me] == current_user.id.to_s, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-        <%= label_tag :assigned_to_me, "#Assigned to me" %>
-      </div>
-      <div class="tag-item">
-        <%= check_box_tag :unassigned, "true", params[:unassigned] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-        <%= label_tag :unassigned, "#Unassigned" %>
-      </div>
-      <div class="tag-item">
-        <%= check_box_tag :ongoing, "true", params[:ongoing] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-        <%= label_tag :ongoing, "#Ongoing" %>
-      </div>
-      <div class="tag-item">
-        <%= check_box_tag :done, "true", params[:done] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-        <%= label_tag :done, "#Done" %>
-      </div>
+  <!-- Filters with links_to and params for filtering the view -->
+  <div data-controller="filter">
+    <div class="filters" id="filtersContainer">
+      <%= render "tasks/filters", project: @project, topics: @topics %>
+    </div>
 
-      <% @topics.each do |topic| %>
-        <div class="tag-item">
-          <%= check_box_tag :by_topic, topic, params[:by_topic] == topic, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-          <%= label_tag :by_topic, "##{topic}" %>
+    <div class="task-create-button">
+      <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+        <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+      <% end %>
+    </div>
+
+    <!-- Start of the index of the tasks @filtered_tasks -->
+
+
+    <div id="tasks"> <!-- Div with all the tasks -->
+      <% if @project.tasks.empty? %>
+        Be the first to create a task
+      <% else %>
+        <div data-filter-target="list" data-tasks-target="list">
+          <%= render "tasks/list", tasks: @tasks %>
         </div>
       <% end %>
-    <% end %>
+    </div>
   </div>
+  <!-- End of the list of tasks-->
 
-  <div class="task-create-button">
-    <%= simple_form_for([ @project, @task ], remote: true, :authenticity_token => true ) do |f| %>
-      <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off' }, :error_html => { :id => "name_error"} %>
-        <%= f.error :name, :id => "name_error" %>
-      <%= f.button :submit, style: "display: none" %>
-    <% end %>
-  </div>
-
-  <!-- Start of the index of the tasks @filtered_tasks -->
-
-
-  <div id="tasks"> <!-- Div with all the tasks -->
-    <% if @project.tasks.empty? %>
-      Be the first to create a task
-    <% else %>
-      <div data-filter-target="list">
-        <%= render "tasks/list", tasks: @tasks %>
-      </div>
-    <% end %>
-  </div>
-</div>
-<!-- End of the list of tasks-->
-
-<!-- Modal for project members -->
-<div class="modal fade" id="membersmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="member-header">
-          <h5 class="modal-title"><%= @project.name %> 's Puzzle members </h5>
-          <p><%= @project.users.count %> members in the puzzle</p>
+  <!-- Modal for project members -->
+  <div class="modal fade" id="membersmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="member-header">
+            <h5 class="modal-title"><%= @project.name %> 's Puzzle members </h5>
+            <p><%= @project.users.count %> members in the puzzle</p>
+          </div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-      </div>
-      <div>
-          <div class="member-line">
-            <div class="photo-round-small-40">
-              <% if @project.user.photo.attached?  %>
-                <p><%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
-              <% else %>
-                <div class="photo-round-small-40">
-                  <div class="profile-background" id="editable-photo">
-                      <i id="user_blank-small-40" class="far fa-user"></i>
+        <div>
+            <div class="member-line">
+              <div class="photo-round-small-40">
+                <% if @project.user.photo.attached?  %>
+                  <p><%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
+                <% else %>
+                  <div class="photo-round-small-40">
+                    <div class="profile-background" id="editable-photo">
+                        <i id="user_blank-small-40" class="far fa-user"></i>
+                    </div>
                   </div>
-                </div>
+                <% end %>
+              </div>
+              <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+              <% if @project.user.pseudo.nil? %>
+                <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
+              <% else %>
+                <p id="name">@<%= @project.user.pseudo %></p>
               <% end %>
-            </div>
-            <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-            <% if @project.user.pseudo.nil? %>
-              <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
-            <% else %>
-              <p id="name">@<%= @project.user.pseudo %></p>
-            <% end %>
-            <div class="filter" id="member-state">
-              <p>Puzzle Master 👑</p>
-            </div>
+              <div class="filter" id="member-state">
+                <p>Puzzle Master 👑</p>
+              </div>
+          </div>
         </div>
-      </div>
-       <% @project.users.each do |member| %>
-        <% if member != @project.user %>
-                <div class="project-users">
-                    <% if member.photo.attached? %>
-                      <div class="member-line">
-                        <div class="photo-round-small-40">
-                          <p><%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
-                        </div>
-                        <% else %>
-                            <div class="photo-round-small-40">
-                            <div class="profile-background" id="editable-photo">
-                            <i id="user_blank-small-40" class="far fa-user"></i>
-                            </div>
+         <% @project.users.each do |member| %>
+          <% if member != @project.user %>
+                  <div class="project-users">
+                      <% if member.photo.attached? %>
+                        <div class="member-line">
+                          <div class="photo-round-small-40">
+                            <p><%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
                           </div>
-                        <% end %>
-                        <p><%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-                          <% if member.pseudo.nil? %>
-                            <p id="name">@<%= member.first_name + " " %><%= member.last_name %></p>
                           <% else %>
-                            <p id="name">@<%= member.pseudo %></p>
-                          <% end %>
-                          <% if member.tasks.nil?  %>
-                            <div class="filter" id="member-state">
-                              <p>Member 👤</p>
-                            </div>
-                          <% else %>
-                            <div class="filter" id="member-state">
-                              <p>Contributor 🔥</p>
+                              <div class="photo-round-small-40">
+                              <div class="profile-background" id="editable-photo">
+                              <i id="user_blank-small-40" class="far fa-user"></i>
+                              </div>
                             </div>
                           <% end %>
-                        </div>
-                    <% end %>
-                </div>
-            <% end %>
-      </div>
+                          <p><%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+                            <% if member.pseudo.nil? %>
+                              <p id="name">@<%= member.first_name + " " %><%= member.last_name %></p>
+                            <% else %>
+                              <p id="name">@<%= member.pseudo %></p>
+                            <% end %>
+                            <% if member.tasks.nil?  %>
+                              <div class="filter" id="member-state">
+                                <p>Member 👤</p>
+                              </div>
+                            <% else %>
+                              <div class="filter" id="member-state">
+                                <p>Contributor 🔥</p>
+                              </div>
+                            <% end %>
+                          </div>
+                      <% end %>
+                  </div>
+              <% end %>
+        </div>
+    </div>
   </div>
 </div>
-
 <!-- End of container -->

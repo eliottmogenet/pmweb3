@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     resources :tasks
   end
 
+  resources :tasks, only: [] do
+    member do
+      patch :mark_as_public
+      patch :mark_as_done
+    end
+  end
   resources :employers do
     resources :projects do
         member do
