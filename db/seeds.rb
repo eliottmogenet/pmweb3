@@ -78,17 +78,17 @@ project_user2.save!
 
 p "creating tasks"
 
-task1 = project1.tasks.create(title: "Build prototype on Figma", status: "On Going", token_number: "10", user_id: john.id, creator_id: eliott.id)
+task1 = project1.tasks.create(title: "Build prototype on Figma", token_number: "10", creator_id: eliott.id, confidentiality: "Private" )
 task1.save!
 
-task2 = project1.tasks.create(title: "Code Backend", status: "On Going", token_number: "10", user_id: jack.id, creator_id: justin.id)
+task2 = project1.tasks.create(title: "Code Backend", status: "ongoing", token_number: "10", user_id: jack.id, creator_id: justin.id, confidentiality: "Public")
 task2.save!
 
 
-task3 = project2.tasks.create(title: "Build growth strategy", status: "On Going", token_number: "10", user_id: john.id, creator_id: remy.id)
+task3 = project2.tasks.create(title: "Build growth strategy", status: "ongoing", token_number: "10", user_id: john.id, creator_id: remy.id, confidentiality: "Public")
 task3.save!
 
-task4 = project2.tasks.create(title: "Create community", status: "On Going", token_number: "10", user_id: jack.id, creator_id: sonia.id)
+task4 = project2.tasks.create(title: "Create community", status: "ongoing", token_number: "10", user_id: jack.id, creator_id: sonia.id, confidentiality: "Public")
 task4.save!
 
 p "finished"
