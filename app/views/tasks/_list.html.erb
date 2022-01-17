@@ -1,0 +1,155 @@
+<% @tasks.sort.reverse.each do |task| %>
+  <div class="task-card" id="task-<%= task.id %>"> <!-- Start of task-card div -->
+    <div class="task-edit"> <!-- Div for token number form or display -->
+      <div>
+        <% if task.token_number.nil? %>
+          <%= simple_form_for([ @project, task ]) do |f| %>
+            <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off' } %>
+            <%= f.button :submit, style: "display: none;" %>
+        <% end %>
+        <% else %>
+          <p id="token-number"><%= task.token_number %><%= cl_image_tag("puzzle-piece-solid_28_s8rwtd", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+        <% end %>
+      </div>
+    </div>
+
+    <% if task.confidentiality == "Private" && task.user.nil? %> <!-- "Status" pastille of the task -->
+      <div class="confidentiality-private">
+        <p>Private</p>
+      </div>
+    <% elsif task.confidentiality == "Public" && task.user.nil? %>
+      <div class="status-unassigned">
+        <p>Unassigned</p>
+      </div>
+    <% elsif task.status == "claimed" %>
+      <div class="status-done">
+        <p>Done</p>
+      </div>
+    <% else %>
+      <div class="status-ongoing">
+        <p>On going</p>
+      </div>
+    <% end %>
+
+    <div class="task_assign_title">
+      <% if task.user.nil? %><!-- Photo of the user when assigned -->
+      <% else %>
+        <div class="photo-round-small">
+          <% if task.user.photo.attached? %>
+            <%= cl_image_tag task.user.photo.key, width: 20, style: "border-radius: 100%" %>
+          <% else  %>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="task-title"><!-- Task title div -->
+        <p><%= task.title %></p>
+      </div>
+    </div>
+
+    <div class="task-topic"><!-- Task topic div form if task topic.nil? -->
+      <%if task.topic.nil? %>
+        <%= simple_form_for([ @project, task ]) do |f| %>
+            <%= f.input :topic, label: false, placeholder: '#topic', input_html: { autocomplete: 'off' } %>
+            <%= f.button :submit, style: "display: none;" %>
+          <% end %>
+        <% else %>
+          <p><%= task.topic %></p>
+      <% end %>
+    </div>
+
+
+      <div class="comment"> <!-- Commment icon to open Modal task description -->
+        <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
+          <i class="far fa-comment"></i>
+        </a>
+      </div>
+
+      <!-- Modal task description : modal should not be here but it was easy and quick inside the iteration -->
+
+      <div id="description-<%= task.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" id="description-dialog">
+          <div class="modal-content" id="description">
+            <div class="modal-header" id="description-header">
+              <h2 class="modal-title" id="exampleModalLabel">
+                <%= task.token_number %><%= cl_image_tag("puzzle-piece-solid_28_s8rwtd", :width => 40, style: "padding-bottom: 15px; margin-left: 10px;") %> <%= task.title %></h2>
+            </div>
+            <div class="modal-body" id="description-body">
+              <div class="task-creator">
+                <p>Created by @<%= task.creator.first_name %><%= task.creator.last_name %>  <%= time_ago_in_words(task.created_at)%> ago </p>
+                <% if task.topic.nil? %><!-- Form to assign topic or to display topic -->
+                  <p>No #topic yet </p>
+                <% else %>
+                  <p style="color: white">#<%= task.topic  %></p>
+                <% end %>
+                <% if task.user_id.nil? && task.confidentiality  == "Public" %>
+                  <%= simple_form_for([ @project, task ], html: { class: "form-horizontal"}, remote: true, :authenticity_token => true) do |f| %>
+                    <%= f.input :status, label: false, input_html: {value: 'ongoing', hidden: true}, style: "display: none" %>
+                    <%= f.association :user, :as => :collection_select, collection: @project.users, label: false, prompt: 'Contributor', :label_method => lambda { |user| "@#{user.first_name} #{user.last_name}" } %>
+                      <%= f.button :button, id: 'button-done' do %>
+                        + <i class="far fa-user"></i>
+                      <% end %>
+                    <% end %>
+                <% elsif task.confidentiality  == "Private" %><!-- Button to make task public "Public" is pre-enter when submit" -->
+                  <%= simple_form_for([ @project, task ]) do |f| %>
+                    <%= f.input :confidentiality, label: false, input_html: {value: 'Public', hidden: true} %>
+                      <%= button_tag type: 'submit', class: "button-postfix", id: 'button-done' do %>
+                        <p>Make public   <i class="fas fa-eye"></i></p>
+                      <% end %>
+                  <% end %>
+                <% else %>
+                  <p>Assigned to @<%= task.user.first_name %><%= task.user.first_name %></p>
+                <% end %>
+              <hr>
+            </div>
+            <% if task.description.nil? %><!-- Form to enter description -->
+              <%= simple_form_for([ @project, task ]) do |f| %>
+                <%= f.input :description, label: false, placeholder: 'Add description to the piece...'%>
+                <%= f.button :submit %>
+            <% end %>
+            <% else %>
+              <p><%= task.description %></p>
+            <% end %>
+            <hr>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Task time -->
+
+    <% if task.confidentiality == "Private" %><!-- Step 1: Form for publishing the task to public  -->
+      <div class="task-edit" id="task-user-align">
+        <%= simple_form_for([ @project, task ]) do |f| %>
+          <%= f.input :confidentiality, label: false, input_html: {value: 'Public', hidden: true} %>
+            <%= button_tag type: 'submit', class: "button-postfix" do %>
+              <p>Make public   <i class="fas fa-eye"></i></p>
+            <% end %>
+        <% end %>
+      </div>
+    <% elsif task.confidentiality == "Public" && task.user.nil? %><!-- Step 2: Form for assigning a contributor the new public task -->
+       <div class="task-edit" id="task-user-align">
+          <%= simple_form_for([ @employer, @project, task ], html: { class: "form-horizontal"}, remote: true, :authenticity_token => true) do |f| %>
+            <%= f.input :status, label: false, input_html: {value: 'ongoing', hidden: true}, style: "display: none" %>
+            <%= f.association :user, :as => :collection_select, collection: @project.users, label: false, prompt: 'Contributor', :label_method => lambda { |user| "@#{user.first_name} #{user.last_name}" } %>
+              <%= f.button :button, id: 'button-done' do %>
+                + <i class="far fa-user"></i>
+              <% end %>
+          <% end %>
+        </div>
+
+    <% elsif task.status == "ongoing" %><!-- Step 3: Form for marking the task as done  -->
+      <div class="task-edit" id="task-user-align">
+        <%= simple_form_for([ @project, task ]) do |f| %>
+          <%= f.input :status, label: false, input_html: {value: 'claimed', hidden: true}, id: "form-claim" %>
+          <%= f.submit 'Mark as done >', id: 'button-done-2'%>
+        <% end %>
+      </div>
+    <% else %><!-- Step 4: When everything is done : nothing to display anymore -->
+    <% end %>
+  </div>
+<% end %>

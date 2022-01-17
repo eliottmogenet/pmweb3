@@ -1,23 +1,21 @@
 class TasksController < ApplicationController
+  has_scope :is_private, type: :boolean
+  has_scope :assigned_to_me
+  has_scope :unassigned, type: :boolean
+  has_scope :by_topic
+  has_scope :ongoing, type: :boolean
+  has_scope :done, type: :boolean
 
   def index
     @employer = current_user.employer
     @project = current_user.projects.first
     @task = Task.new
-    @filtered_tasks = @project.tasks
+    @tasks = apply_scopes(Task).all
+    @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?)
 
-#params for filters
-
-    if params[:status]
-      @filtered_tasks = @project.tasks.where(:status => params[:status])
-    elsif params[:confidentiality]
-      @filtered_tasks = @project.tasks.where(:confidentiality => params[:confidentiality])
-    elsif params[:user_id]
-      @filtered_tasks = @project.tasks.where(:user_id => params[:user_id])
-    elsif params[:topic]
-      @filtered_tasks = @project.tasks.where(:topic => params[:topic])
-    else
-      @project.tasks = Task.all
+    respond_to do |format|
+      format.html
+      format.text { render partial: "tasks/list", locals: { tasks: @tasks }, formats: [:html] }
     end
   end
 
