@@ -13,10 +13,10 @@ User.destroy_all
 Project.destroy_all
 ProjectUser.destroy_all
 
-#p "creating employers"
+p "creating employers"
 
-#ledger = Employer.new(name: "Ledger")
-#ledger.save!
+ledger = Employer.new(name: "Ledger")
+ledger.save!
 
 p "creating users"
 
