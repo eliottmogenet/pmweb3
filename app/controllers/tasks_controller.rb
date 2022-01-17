@@ -7,7 +7,7 @@ class TasksController < ApplicationController
   has_scope :done, type: :boolean
 
   def index
-    @employer = current_user.employer
+    # @employer = current_user.employer
     @project = current_user.projects.first
     @task = Task.new
     @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }

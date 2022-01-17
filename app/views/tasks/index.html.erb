@@ -18,24 +18,19 @@
         </h1>
         <div class="img-user">
           <div class="token_box">
-            <% if current_user.photo.attached? %>
-              <p>
+            <p>
+              <% if current_user.photo.attached? %>
                 <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
-                <span id="tokenUserTotal">
-                  <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+              <% else %>
+                <span class="profile-background" id="editable-photo">
+                  <i id="user_blank" class="far fa-user"></i>
                 </span>
-                <%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
-              </p>
-            <% else %>
-              <div class="photo-round">
-                <p>
-                  <div class="profile-background" id="editable-photo">
-                    <i id="user_blank" class="far fa-user"></i>
-                  </div>
-                  <%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %>
-                </p>
-              </div>
-            <% end %>
+              <% end %>
+              <span id="tokenUserTotal">
+                <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+              </span>
+              <%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+            </p>
           </div>
         </div>
       </div>
@@ -55,7 +50,7 @@
             <% end %>
           </div>
         <% end %>
-        <div class="token_box" id="share">
+        <div class="token_box" id="share" data-url="<%= join_project_url(@project.uuid) %>" data-toggle="tooltip" data-placement="left">
           <p>Share Puzzle <i class="fas fa-link"></i></p>
         </div>
       </div>

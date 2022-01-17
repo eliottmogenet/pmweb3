@@ -1,5 +1,8 @@
 class ProjectsController < ApplicationController
   has_scope :private_filter, type: :boolean
+  skip_before_action :authenticate_user!, only: [:join]
+  before_action :set_project_by_uuid, only: [:join]
+  before_action :verify_authenticated_user!, only: [:join]
   # method index has been comment because index is not display so far
 
   # def index
@@ -47,9 +50,27 @@ class ProjectsController < ApplicationController
     redirect_to project_tasks_path(@project)
   end
 
+  def join
+    if user_signed_in? && current_user.projects.include?(@project)
+      flash[:notice] = "You already joined #{@project.name}'s Puzzle"
+      redirect_to project_tasks_path(@project)
+    else
+      flash[:alert] = "You cannot join two projects (yet)..."
+      redirect_to project_tasks_path(current_user.projects.first)      
+    end
+  end
+
   private
 
   def project_params
     params.require(:project).permit(:name, :date)
+  end
+
+  def set_project_by_uuid
+    @project = Project.find_by(uuid: params[:uuid])
+  end
+
+  def verify_authenticated_user!
+    redirect_to new_user_registration_path(project_uuid: @project.uuid) unless user_signed_in?
   end
 end
