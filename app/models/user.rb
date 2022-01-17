@@ -8,5 +8,4 @@ class User < ApplicationRecord
   has_many :project_users
   has_many :projects, through: :project_users
   has_one_attached :photo
-  #has_many :projects, through: :user_projects
 end

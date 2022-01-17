@@ -3,60 +3,7 @@ hr {
   background-color: #687086;
 }
 
-.project-card {
-  border-radius: 20px;
-  height: 220px;
-  background-color: #1F292C;
-  text-align: center;
-  padding-top: 30px;
-  display: flex;
-  justify-content: center;
-}
-
-.project-card-create {
-  width: 265px;
-  border-radius: 20px;
-  height: 220px;
-  background-color: #1F292C;
-  opacity: 50%;
-  text-align: center;
-  padding-top: 30px;
-  margin-bottom: 1rem;
-}
-
-.projects-cards  {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 1rem;
-}
-
-#project_name {
-  text-align: center;
-  background-color: #1F292C;
-  color: white;
-  border: none;
-  resize: none;
-  outline: none;
-}
-
-.form-control:focus {
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.project-button {
-  font-size: 50px;
-  color: white;
-  background-color: #1F292C;
-  border:none;
-}
-
-a { color: inherit; }
-a:hover {
-  color: inherit;
-  text-decoration: none;
-}
+/* CSS */
 
 .task-card {
   background-color: #1F292C;
@@ -87,6 +34,8 @@ a:hover {
   font-size: 10px;
   font-weight: 300;
 }
+
+/* vignettes status */
 
 .status-unassigned {
   width: 90px;
@@ -133,6 +82,15 @@ a:hover {
   font-weight: 300;
 }
 
+/* task_title */
+
+.task_assign_title {
+  width: 450px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
 .task-title {
   height: 30px;
   margin-left: 20px;
@@ -151,12 +109,8 @@ a:hover {
   padding-left: 40px;
 }
 
-.task_assign_title {
-  width: 450px;
-  display: flex;
-  justify-content: flex-start;
-  margin-left: 20px;
-}
+/* Users photos & div around */
+
 
 .photo-round {
   width: 70px;
@@ -166,6 +120,7 @@ a:hover {
   background-color: white;
   border-radius: 100%;
 }
+
 
 .photo-round-small {
   width: 30px;
@@ -185,8 +140,6 @@ a:hover {
   background-color: white;
   border-radius: 100%;
   margin-right: 10px;
-
-
 }
 
 
@@ -201,6 +154,8 @@ a:hover {
   margin-top: -3px;
 
 }
+
+
 
 .project-user {
   width: 70px;
@@ -223,6 +178,8 @@ a:hover {
 #manager {
   margin-left: 0px;
 }
+
+/* Simple_form fields to colorize for hiding them : class & id can exist in the same name */
 
 #task_user_id {
   background-color: #1F292C;
@@ -296,7 +253,6 @@ a:hover {
   height: 50px;
   line-height: 50px;
 }
-
 
 
 .task-edit {
@@ -377,9 +333,8 @@ a:hover {
   color: #687086;
 }
 
-.img-user {
+/* Not useful anymore
 
-}
 
 .badge {
   position: absolute;
@@ -393,6 +348,7 @@ a:hover {
   text-align: center;
 }
 
+
 .badge-2 {
   position: absolute;
   margin-left: -1%;
@@ -403,6 +359,7 @@ a:hover {
   border-radius: 100%;
   text-align: center;
 }
+
 
 .badge p {
   color: black;
@@ -426,6 +383,7 @@ a:hover {
 #back-arrow:hover {
   color: white;
 }
+*/
 
 .project_users {
   display: flex;
@@ -488,6 +446,8 @@ a:hover {
 #project-title {
   margin-right: 20px;
 }
+
+/* Datepicker not useful yet
 
 #timer {
   font-weight: 700;
@@ -558,6 +518,8 @@ a:hover {
   display: flex;
   justify-content: flex-start;
 }
+
+*/
 
 .project-header {
   display: flex;
@@ -746,6 +708,8 @@ a:hover {
   justify-content: flex-start;
 }
 
+/* Filter design */
+
 .filters {
   display: flex;
   justify-content: flex-start;
@@ -928,3 +892,59 @@ hr {
   margin-top: 20px;
 }
 
+/* CSS for the project index  */
+
+.project-card {
+  border-radius: 20px;
+  height: 220px;
+  background-color: #1F292C;
+  text-align: center;
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.project-card-create {
+  width: 265px;
+  border-radius: 20px;
+  height: 220px;
+  background-color: #1F292C;
+  opacity: 50%;
+  text-align: center;
+  padding-top: 30px;
+  margin-bottom: 1rem;
+}
+
+.projects-cards  {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+}
+
+#project_name {
+  text-align: center;
+  background-color: #1F292C;
+  color: white;
+  border: none;
+  resize: none;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.project-button {
+  font-size: 50px;
+  color: white;
+  background-color: #1F292C;
+  border:none;
+}
+
+a { color: inherit; }
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}

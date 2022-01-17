@@ -1,11 +1,12 @@
 class TasksController < ApplicationController
-  has_scope :unassigned, type: :boolean
 
   def index
     @employer = current_user.employer
     @project = current_user.projects.first
     @task = Task.new
     @filtered_tasks = @project.tasks
+
+#params for filters
 
     if params[:status]
       @filtered_tasks = @project.tasks.where(:status => params[:status])
@@ -18,27 +19,14 @@ class TasksController < ApplicationController
     else
       @project.tasks = Task.all
     end
-
-      #if @project.tasks != nil
-        #@tasks = @project.tasks
-        #@assigned_tasks = @project.tasks.where.not('user_id' => nil)
-        #@tasks_by_status = apply_scopes(Task).where(status: @task.status).load
-      #end
-
-
-      if @project.date.nil? == false
-        @date = TimeDifference.between(@project.date, Time.now).in_general
-      end
   end
 
-
   def create
-    #@employer = Employer.find(params[:employer_id])
     @project = Project.find(params[:project_id])
     @task = Task.new(task_params)
     @task.project = @project
     @task.creator = current_user
-    @task.confidentiality = "Private"
+    @task.confidentiality = "Private" #when a user create a task, it's private
     if @task.save
       redirect_to project_tasks_path(@project)
     else
@@ -47,20 +35,12 @@ class TasksController < ApplicationController
   end
 
   def update
-    #@employer = Employer.find(params[:employer_id])
     @project = Project.find(params[:project_id])
     @task = Task.find(params[:id])
     @task.project = @project
     @task.update(task_params)
     redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}")
   end
-
-  def show
-    @task = Task.find(params[:id])
-    @project = @task.project
-  end
-
-
 
   private
 
