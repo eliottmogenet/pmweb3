@@ -83,6 +83,10 @@
     <% end %>
   </div>
 
+  <% if current_user.has_notifications_for(task) %>
+    <span class="notification-bubble middle-right-bubble"></span>
+  <% end %>
+
   <%= f.submit class: "d-none" %>
 <% end %>
 

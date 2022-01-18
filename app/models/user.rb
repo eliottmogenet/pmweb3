@@ -7,7 +7,16 @@ class User < ApplicationRecord
   has_many :tasks
   has_many :project_users
   has_many :projects, through: :project_users
+  has_many :notifications, as: :recipient
   has_one_attached :photo
+
+  def has_notifications_for(task)
+    notifications.map(&:to_notification).find { |notif| notif.unread? && notif.params[:task] == task } if notifications.any?
+  end
+
+  def has_topic_notifications_for(topic)
+    notifications.map(&:to_notification).find { |notif| notif.unread? && !notif.params[:task].private? && notif.params[:task].topic == topic } if notifications.any?
+  end
 
   def full_name
     if pseudo.present?

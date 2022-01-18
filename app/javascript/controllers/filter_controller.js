@@ -10,10 +10,10 @@ export default class extends Controller {
     this.inputTargets.forEach((input) => {
       input.checked = false
     })
-    fetch(url, { headers: { 'Accept': 'text/plain' } })
-      .then(response => response.text())
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(response => response.json())
       .then((data) => {
-        this.listTarget.innerHTML = data;
+        this.listTarget.innerHTML = data.partial;
         window.history.pushState('', '', '?')
       })
   }
@@ -31,10 +31,11 @@ export default class extends Controller {
 
     const url = `${this.formTarget.action}${query}`
     console.log(url)
-    fetch(url, { headers: { 'Accept': 'text/plain' } })
-      .then(response => response.text())
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(response => response.json())
       .then((data) => {
-        this.listTarget.innerHTML = data;
+        this.listTarget.innerHTML = data.partial;
+        this.formTarget.outerHTML = data.filters;
         window.history.pushState('', '', query)
       })
   }

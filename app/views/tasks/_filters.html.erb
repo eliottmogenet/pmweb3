@@ -25,9 +25,12 @@
   </div>
 
   <% topics.each do |topic| %>
-    <div class="tag-item">
+    <div class="tag-item tag-topic">
       <%= radio_button_tag :by_topic, topic, params[:by_topic] == topic, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
       <%= label_tag "by_topic_#{topic}", "##{topic}" %>
+      <% if current_user.has_topic_notifications_for(topic) %>
+        <span class="notification-bubble top-right-bubble"></span>
+      <% end %>
     </div>
   <% end %>
 <% end %>

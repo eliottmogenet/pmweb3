@@ -13,6 +13,8 @@ class Task < ApplicationRecord
   scope :ongoing, -> { where(status: "ongoing") }
   scope :done, -> { where(status: "claimed") }
 
+  after_create_commit :notify_project_members
+
   def private?
     confidentiality == "Private"
   end
@@ -23,5 +25,11 @@ class Task < ApplicationRecord
 
   def ongoing?
     status == "ongoing"
+  end
+
+  private
+
+  def notify_project_members
+    NewTaskNotification.with(task: self).deliver(self.project.all_users_except(self.creator))
   end
 end

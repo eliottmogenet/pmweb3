@@ -12,10 +12,22 @@ class TasksController < ApplicationController
     @task = Task.new
     @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }
     @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?)
+    @notifications = current_user.notifications
+
+    if params[:by_topic].present?
+      @notifications.each do |notif|
+        notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic == params[:by_topic]
+      end
+    end
 
     respond_to do |format|
       format.html
-      format.text { render partial: "tasks/list", locals: { tasks: @tasks }, formats: [:html] }
+      format.json do 
+        render json: {
+          partial: render_to_string(partial: "tasks/list", locals: {tasks: @tasks}, formats: [:html]),
+          filters: render_to_string(partial: "tasks/filters", locals: {project: @project, topics: @topics}, formats: [:html]),
+        }.to_json
+      end
     end
   end
 
