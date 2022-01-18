@@ -11,7 +11,7 @@ class TasksController < ApplicationController
     @project = current_user.projects.first
     @task = Task.new
     @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }
-    @topics = @project.public_tasks.pluck(:topic).uniq.reject(&:blank?).sort
+    @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
     @notifications = current_user.notifications
 
     if params[:by_topic].present?
@@ -55,6 +55,8 @@ class TasksController < ApplicationController
         @project,
         {
           update: true,
+          current_user_id: current_user.id,
+          private: @task.private?,
           id: @task.id,
           partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
           topic: @task.topic,
@@ -80,6 +82,7 @@ class TasksController < ApplicationController
         @project,
         {
           create: true,
+          current_user_id: current_user.id,
           id: @task.id,
           partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
           topic: @task.topic,
@@ -107,6 +110,7 @@ class TasksController < ApplicationController
         {
           update: true,
           mark_as_done: true,
+          current_user_id: current_user.id,
           id: @task.id,
           partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
           subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
