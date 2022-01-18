@@ -5,6 +5,10 @@ class Project < ApplicationRecord
   has_many :project_users
   has_many :users, through: :project_users
 
+  def public_or_own_tasks(user)
+    [tasks.where(confidentiality: "Public"), tasks.where(creator: user)].flatten.uniq
+  end
+
   def public_tasks
     tasks.where(confidentiality: "Public")
   end

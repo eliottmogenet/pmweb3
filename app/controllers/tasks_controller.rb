@@ -11,7 +11,7 @@ class TasksController < ApplicationController
     @project = current_user.projects.first
     @task = Task.new
     @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }
-    @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
+    @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
     @notifications = current_user.notifications
 
     if params[:by_topic].present?
