@@ -11,7 +11,7 @@ class TasksController < ApplicationController
     @project = current_user.projects.first
     @task = Task.new
     @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }
-    @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?)
+    @topics = @project.public_tasks.pluck(:topic).uniq.reject(&:blank?).sort
     @notifications = current_user.notifications
 
     if params[:by_topic].present?
@@ -51,17 +51,22 @@ class TasksController < ApplicationController
     @project = @task.project
 
     if @task.update(task_params)
-      @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?)
-      
+      ProjectChannel.broadcast_to(
+        @project,
+        {
+          update: true,
+          id: @task.id,
+          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
+          topic: @task.topic,
+          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic, notify: true}, formats: [:html]),
+          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
+        }
+      )
+
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json do 
-          render json: {
-            partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
-            filters: render_to_string(partial: "tasks/filters", locals: {project: @project, topics: @topics}, formats: [:html]),
-            total: @project.tasks.pluck(:token_number).map(&:to_i).sum, 
-          }.to_json
-        end
+        format.json { render json: { success: true }.to_json }
       end
     end
   end
@@ -71,9 +76,21 @@ class TasksController < ApplicationController
     @project = @task.project
     
     if @task.update(confidentiality: "Public")
+      ProjectChannel.broadcast_to(
+        @project,
+        {
+          create: true,
+          id: @task.id,
+          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
+          topic: @task.topic,
+          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic}, formats: [:html]),
+          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
+        }
+      )
+
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
+        format.text 
       end
     end
   end
@@ -83,16 +100,25 @@ class TasksController < ApplicationController
     @project = @task.project
     
     if @task.update(status: "claimed")
+      @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
+
+      ProjectChannel.broadcast_to(
+        @project,
+        {
+          update: true,
+          mark_as_done: true,
+          id: @task.id,
+          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
+          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum,
+          user_id: @task.user_id,
+          usertotal: @task.user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum
+        }
+      )
+
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        # format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
-        format.json do 
-          render json: {
-            partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
-            subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
-            usertotal: current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum
-          }.to_json
-        end
+        format.json { render json: { success: true }.to_json }
       end
     end
   end

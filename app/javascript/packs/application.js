@@ -25,11 +25,13 @@ require("channels")
 import "bootstrap";
 
 // Internal imports, e.g:
-// import { initSelect2 } from '../components/init_select2';
+import { initProjectCable } from '../channels/project_channel';
 
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
+  initProjectCable();
+  
   const shareBtn = document.getElementById("share")
   shareBtn.addEventListener("click", (event) => {
     let text = event.currentTarget.dataset.url;

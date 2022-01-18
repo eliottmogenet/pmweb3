@@ -83,7 +83,7 @@
     <% end %>
   </div>
 
-  <% if current_user.has_notifications_for(task) %>
+  <% if current_user.has_notifications_for(task) || (defined?(notify) && notify) %>
     <span class="notification-bubble middle-right-bubble"></span>
   <% end %>
 

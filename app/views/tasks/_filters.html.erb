@@ -1,4 +1,4 @@
-<%= form_tag project_tasks_path(project), method: :get, 'data-filter-target': 'form' do %>
+<%= form_tag project_tasks_path(project), method: :get, 'data-filter-target': 'form', id: "filtersContainer" do %>
   <div class="tag-item">
     <%= check_box_tag :all, "true", params[:all] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
     <%= label_tag :all, "#All pieces" %>
@@ -25,12 +25,6 @@
   </div>
 
   <% topics.each do |topic| %>
-    <div class="tag-item tag-topic">
-      <%= radio_button_tag :by_topic, topic, params[:by_topic] == topic, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-      <%= label_tag "by_topic_#{topic}", "##{topic}" %>
-      <% if current_user.has_topic_notifications_for(topic) %>
-        <span class="notification-bubble top-right-bubble"></span>
-      <% end %>
-    </div>
+    <%= render "tasks/topic_filter", topic: topic %>
   <% end %>
 <% end %>

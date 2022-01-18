@@ -5,6 +5,10 @@ class Project < ApplicationRecord
   has_many :project_users
   has_many :users, through: :project_users
 
+  def public_tasks
+    tasks.where(confidentiality: "Public")
+  end
+
   def all_users_except(user)
     users.where.not(id: user.id)
   end

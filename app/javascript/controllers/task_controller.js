@@ -16,9 +16,9 @@ export default class extends Controller {
     })
       .then(response => response.json())
       .then((data) => {
-        this.cardTarget.outerHTML = data.partial
-        document.getElementById("tokenTotal").innerHTML = parseInt(data.total)
-        document.getElementById("filtersContainer").innerHTML = data.filters
+        // this.cardTarget.outerHTML = data.partial
+        // document.getElementById("tokenTotal").innerHTML = parseInt(data.total)
+        // document.getElementById("filtersContainer").innerHTML = data.filters
       })
   }
 
@@ -33,7 +33,7 @@ export default class extends Controller {
     })
       .then(response => response.text())
       .then((data) => {
-        this.cardTarget.outerHTML = data
+        // this.cardTarget.outerHTML = data
       })
   }
 
@@ -48,9 +48,9 @@ export default class extends Controller {
     })
       .then(response => response.json())
       .then((data) => {
-        this.cardTarget.outerHTML = data.partial
-        document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
-        document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
+        // this.cardTarget.outerHTML = data.partial
+        // document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
+        // document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
       })    
   }
 }

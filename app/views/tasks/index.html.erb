@@ -7,11 +7,11 @@
           <b id="text-low">
             <%= @project.name %> 's Puzzle : 
             <span id="tokenSubTotal"> 
-              <%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %> 
+              <%= @project.public_tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %> 
             </span> 
             / 
             <span id="tokenTotal">
-              <%= @project.tasks.pluck(:token_number).map(&:to_i).sum %>
+              <%= @project.public_tasks.pluck(:token_number).map(&:to_i).sum %>
             </span> 
             <%= image_tag("piece.png", :width => 40, style: "padding-bottom: 10px; margin-left: 10px;") %>    
           </b>
@@ -26,7 +26,7 @@
                   <i id="user_blank" class="far fa-user"></i>
                 </span>
               <% end %>
-              <span id="tokenUserTotal">
+              <span id="tokenUserTotal" data-id="<%= current_user.id %>">
                 <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
               </span>
               <%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
@@ -61,7 +61,7 @@
 
   <!-- Filters with links_to and params for filtering the view -->
   <div data-controller="filter">
-    <div class="filters" id="filtersContainer">
+    <div class="filters">
       <%= render "tasks/filters", project: @project, topics: @topics %>
     </div>
 
@@ -74,13 +74,11 @@
     <!-- Start of the index of the tasks @filtered_tasks -->
 
 
-    <div id="tasks"> <!-- Div with all the tasks -->
+    <div id="tasks" data-project-id="<%= @project.id %>" data-filter-target="list" data-tasks-target="list" > <!-- Div with all the tasks -->
       <% if @project.tasks.empty? %>
         Be the first to create a task
       <% else %>
-        <div data-filter-target="list" data-tasks-target="list">
-          <%= render "tasks/list", tasks: @tasks %>
-        </div>
+        <%= render "tasks/list", tasks: @tasks %>
       <% end %>
     </div>
   </div>
@@ -95,69 +93,69 @@
             <h5 class="modal-title"><%= @project.name %> 's Puzzle members </h5>
             <p><%= @project.users.count %> members in the puzzle</p>
           </div>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div>
-            <div class="member-line">
-              <div class="photo-round-small-40">
-                <% if @project.user.photo.attached?  %>
-                  <p><%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
-                <% else %>
-                  <div class="photo-round-small-40">
-                    <div class="profile-background" id="editable-photo">
-                        <i id="user_blank-small-40" class="far fa-user"></i>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-              <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-              <% if @project.user.pseudo.nil? %>
-                <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
+          <div class="member-line">
+            <div class="photo-round-small-40">
+              <% if @project.user.photo.attached?  %>
+                <p><%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
               <% else %>
-                <p id="name">@<%= @project.user.pseudo %></p>
-              <% end %>
-              <div class="filter" id="member-state">
-                <p>Puzzle Master 👑</p>
-              </div>
-          </div>
-        </div>
-         <% @project.users.each do |member| %>
-          <% if member != @project.user %>
-                  <div class="project-users">
-                      <% if member.photo.attached? %>
-                        <div class="member-line">
-                          <div class="photo-round-small-40">
-                            <p><%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
-                          </div>
-                          <% else %>
-                              <div class="photo-round-small-40">
-                              <div class="profile-background" id="editable-photo">
-                              <i id="user_blank-small-40" class="far fa-user"></i>
-                              </div>
-                            </div>
-                          <% end %>
-                          <p><%= current_user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-                            <% if member.pseudo.nil? %>
-                              <p id="name">@<%= member.first_name + " " %><%= member.last_name %></p>
-                            <% else %>
-                              <p id="name">@<%= member.pseudo %></p>
-                            <% end %>
-                            <% if member.tasks.nil?  %>
-                              <div class="filter" id="member-state">
-                                <p>Member 👤</p>
-                              </div>
-                            <% else %>
-                              <div class="filter" id="member-state">
-                                <p>Contributor 🔥</p>
-                              </div>
-                            <% end %>
-                          </div>
-                      <% end %>
+                <div class="photo-round-small-40">
+                  <div class="profile-background" id="editable-photo">
+                      <i id="user_blank-small-40" class="far fa-user"></i>
                   </div>
+                </div>
               <% end %>
+            </div>
+            <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+            <% if @project.user.pseudo.nil? %>
+              <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
+            <% else %>
+              <p id="name">@<%= @project.user.pseudo %></p>
+            <% end %>
+            <div class="filter" id="member-state">
+              <p>Puzzle Master 👑</p>
+            </div>
+          </div>
+          <% @project.users.each do |member| %>
+            <% if member != @project.user %>
+              <div class="project-users">
+                <div class="member-line">
+                  <% if member.photo.attached? %>
+                    <div class="photo-round-small-40">
+                      <p><%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
+                    </div>
+                  <% else %>
+                    <div class="photo-round-small-40">
+                      <div class="profile-background" id="editable-photo">
+                        <i id="user_blank-small-40" class="far fa-user"></i>
+                      </div>
+                    </div>
+                  <% end %>
+                  <p><%= member.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+                  <% if member.pseudo.nil? %>
+                    <p id="name">@<%= member.first_name + " " %><%= member.last_name %></p>
+                  <% else %>
+                    <p id="name">@<%= member.pseudo %></p>
+                  <% end %>
+                  <% if member.tasks.nil?  %>
+                    <div class="filter" id="member-state">
+                      <p>Member 👤</p>
+                    </div>
+                  <% else %>
+                    <div class="filter" id="member-state">
+                      <p>Contributor 🔥</p>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
         </div>
+      </div>
     </div>
   </div>
 </div>
