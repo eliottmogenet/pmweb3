@@ -13,6 +13,7 @@ class RegistrationsController < Devise::RegistrationsController
 
     if resource.persisted?
     	resource.project_users.create(project: @project)
+      UserMailer.with(user: resource, project: @project).welcome.deliver_now
       if resource.active_for_authentication?
         flash[:notice] = "Welcome! You have signed up and joined #{@project.name}'s Puzzle successfully."
         sign_up(resource_name, resource)
