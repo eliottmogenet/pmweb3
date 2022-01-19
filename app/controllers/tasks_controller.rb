@@ -66,9 +66,11 @@ class TasksController < ApplicationController
         }
       )
 
+      UserMailer.with(user: @task.user, task: @task, assigner: current_user).assigned_to_task.deliver_now if task_params[:user_id].present?
+
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json { render json: { success: true }.to_json }
+        format.json { render json: { success: true, id: @task.id }.to_json }
       end
     end
   end

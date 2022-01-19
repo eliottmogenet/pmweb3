@@ -2,11 +2,12 @@ import { Controller } from "stimulus";
 import { fetchWithToken } from "../utils/fetch_with_token";
 
 export default class extends Controller {
-  static targets = ['form', 'card'];
+  static targets = ['form', 'card', 'modal'];
 
   submit(event) {
     event.preventDefault();
 
+    $(`#description-${this.formTarget.dataset.taskId}`).modal('hide')
     console.log("Hello")
     const url = this.formTarget.action
     fetch(url, {
@@ -16,6 +17,7 @@ export default class extends Controller {
     })
       .then(response => response.json())
       .then((data) => {
+        console.log(data.id)
         // this.cardTarget.outerHTML = data.partial
         // document.getElementById("tokenTotal").innerHTML = parseInt(data.total)
         // document.getElementById("filtersContainer").innerHTML = data.filters

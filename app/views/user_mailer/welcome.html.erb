@@ -1,5 +1,7 @@
-<p>Hi <%= @user.email %>,</p>
+<p>Hello <%= @user.first_name.present? ? @user.first_name : @user.pseudo %>,</p> 
 
-<p>Welcome to Get Puzzle ! You have succesfully joined <%= @project.name %>'s Puzzle.</p>
+<p>Welcome to Puzzle, the most efficient tool to collaborate with your team, freelancers or community. Your mission : get the Puzzle complete together!</p>
 
-<p>See ya!</p>
+<p><%= link_to "Enter #{@project.name} Puzzle", project_tasks_url(@project) %></p>
+
+<p>The Puzzle Team</p>
