@@ -10,6 +10,14 @@ class User < ApplicationRecord
   has_many :notifications, as: :recipient
   has_one_attached :photo
 
+  validate :has_pseudo_or_name
+
+  def has_pseudo_or_name
+    if pseudo.blank? && (first_name.blank? && last_name.blank?)
+      errors.add(:pseudo, "and name can't be both blank")
+    end
+  end
+
   def has_notifications_for(task)
     notifications.map(&:to_notification).find { |notif| notif.unread? && notif.params[:task] == task } if notifications.any?
   end

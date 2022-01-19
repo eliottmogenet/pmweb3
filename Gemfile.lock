@@ -202,6 +202,11 @@ GEM
       webfinger (>= 1.0.1)
     orm_adapter (0.5.0)
     pg (1.2.3)
+    postmark (1.21.3)
+      json
+    postmark-rails (0.21.0)
+      actionmailer (>= 3.0.0)
+      postmark (>= 1.21.3, < 2.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -365,6 +370,7 @@ DEPENDENCIES
   listen (~> 3.2)
   noticed (~> 1.5)
   pg (>= 0.18, < 2.0)
+  postmark-rails
   pry-byebug
   pry-rails
   puma (~> 4.1)

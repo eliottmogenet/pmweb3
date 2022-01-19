@@ -4,7 +4,6 @@ export default class extends Controller {
   static targets = ['createForm', 'list', 'input'];
 
   submit(event) {
-    console.log("Hello")
     event.preventDefault();
 
     const url = this.createFormTarget.action
