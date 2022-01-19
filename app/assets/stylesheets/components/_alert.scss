@@ -4,3 +4,29 @@
   right: 16px;
   z-index: 1000;
 }
+.error {
+  color: red;
+  font-size: 14px;
+}
+.edit_task {
+  position: relative;
+}
+.tag-topic {
+  position: relative;
+}
+.notification-bubble {
+  width: 10px;
+  height: 10px;
+  background-color: $purple;
+  border-radius: 50%;
+  position: absolute;
+}
+.middle-right-bubble {
+  right: 20px;
+  top: 50%;
+  margin-top: -5px;
+}
+.top-right-bubble {
+  right: 10px;
+  top: 0px;
+}

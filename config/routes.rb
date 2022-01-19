@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   mount ForestLiana::Engine => '/forest'
-  devise_for :users
+  devise_for :users, controllers: {registrations: "registrations"}
 
   devise_scope :user do
    get '/users/sign_out' => 'devise/sessions#destroy'
@@ -15,6 +15,14 @@ Rails.application.routes.draw do
     resources :tasks
   end
 
+  get "/projects/:uuid/join", to: "projects#join", as: :join_project
+
+  resources :tasks, only: [] do
+    member do
+      patch :mark_as_public
+      patch :mark_as_done
+    end
+  end
   resources :employers do
     resources :projects do
         member do

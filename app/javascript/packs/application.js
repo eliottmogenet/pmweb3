@@ -25,9 +25,31 @@ require("channels")
 import "bootstrap";
 
 // Internal imports, e.g:
-// import { initSelect2 } from '../components/init_select2';
+import { initProjectCable } from '../channels/project_channel';
 
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
+  initProjectCable();
+  
+  const shareBtn = document.getElementById("share")
+  shareBtn.addEventListener("click", (event) => {
+    let text = event.currentTarget.dataset.url;
+    navigator.clipboard.writeText(text)
+      .then(() => {
+
+        $('[data-toggle="tooltip"]').tooltip('dispose')
+        $('[data-toggle="tooltip"]').tooltip({ title: "Copied to clipboard!" })
+        $('[data-toggle="tooltip"]').tooltip('show')
+      })
+      .catch(err => {
+        alert('Error in copying text: ', err);
+      });
+  })
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip({title: "Copy link to clipboard"})
+  })
 });
+
+import "controllers"

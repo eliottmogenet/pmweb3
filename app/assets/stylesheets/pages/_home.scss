@@ -5,6 +5,7 @@ hr {
 
 /* CSS */
 
+.d-none { display: none !important; }
 .task-card {
   background-color: #1F292C;
   height: 50px;
@@ -632,13 +633,11 @@ hr {
 }
 
 .profile-background {
-  margin-top: 5px;
-  position: absolute;
   text-align: center;
   margin-left: 5px;
   background-color: #687086;
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
   border-radius: 100%;
 }
 
@@ -740,6 +739,57 @@ hr {
   cursor: pointer;
 }
 
+.filter.active {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.tag-item {
+  display: inline-block;
+}
+
+.tag-selector {
+  position: absolute;
+  transform: scale(0);
+}
+
+.tag-selector + label {
+  // display: inline-block;
+  // font-size: 0.7rem;
+  // border-radius: 50rem;
+  // padding: 0.1rem 0.5rem;
+  // background-color: #ECEAFF;
+  // color: #7E73FF;
+  // border: 1px solid #7E73FF;
+  // margin-right: 0.6rem;
+  // margin-bottom: 0.4rem;
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 30px;
+  margin-right: 10px;
+  background-color: #1F292C;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+.tag-selector + label:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.tag-selector:checked + label {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
 .modal-content {
   background-color: #1F292C;
   border-radius: 10px;
@@ -814,7 +864,7 @@ hr {
 
 #task_description {
   background-color: #1F292C;
-  color: #687086;
+  color: white;
   border: none;
   resize: none;
   outline: none;

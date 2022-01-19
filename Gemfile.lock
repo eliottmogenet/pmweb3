@@ -103,6 +103,9 @@ GEM
     erubi (1.10.0)
     execjs (2.7.0)
     ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     font-awesome-sass (5.15.1)
       sassc (>= 1.11)
     forest_liana (7.4.5)
@@ -128,9 +131,15 @@ GEM
     has_scope (0.8.0)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
+    http (5.0.4)
+      addressable (~> 2.8)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      llhttp-ffi (~> 0.4.0)
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
+    http-form_data (2.3.0)
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
@@ -147,9 +156,16 @@ GEM
       aes_key_wrap
       bindata
     jwt (2.3.0)
+    launchy (2.5.0)
+      addressable (~> 2.7)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
     loofah (2.13.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -171,6 +187,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.0-x86_64-linux)
       racc (~> 1.4)
+    noticed (1.5.7)
+      http (>= 4.0.0)
+      rails (>= 5.2.0)
     openid_connect (1.3.0)
       activemodel
       attr_required (>= 1.0.0)
@@ -183,6 +202,11 @@ GEM
       webfinger (>= 1.0.1)
     orm_adapter (0.5.0)
     pg (1.2.3)
+    postmark (1.21.3)
+      json
+    postmark-rails (0.21.0)
+      actionmailer (>= 3.0.0)
+      postmark (>= 1.21.3, < 2.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -342,8 +366,11 @@ DEPENDENCIES
   forest_liana
   has_scope
   jbuilder (~> 2.7)
+  letter_opener
   listen (~> 3.2)
+  noticed (~> 1.5)
   pg (>= 0.18, < 2.0)
+  postmark-rails
   pry-byebug
   pry-rails
   puma (~> 4.1)
