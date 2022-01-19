@@ -31,7 +31,7 @@ document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
   initProjectCable();
-  
+
   const shareBtn = document.getElementById("share")
   shareBtn.addEventListener("click", (event) => {
     let text = event.currentTarget.dataset.url;
@@ -53,3 +53,13 @@ document.addEventListener('turbolinks:load', () => {
 });
 
 import "controllers"
+
+
+
+
+
+
+
+
+
+

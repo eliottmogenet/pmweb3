@@ -55,8 +55,7 @@ justin =  ledger.users.create(first_name: "Justin", last_name: "Vogel", email: "
 justin.photo.attach(io: File.open(File.join(Rails.root,'db/fixtures/justin.png')), filename: 'justin.png')
 justin.save!
 
-eliott =  ledger.users.create(first_name: "Eliott", last_name: "Mogenet", email: "test10@gmail.com", password: "test10@gmail.com")
-eliott.photo.attach(io: File.open(File.join(Rails.root,'db/fixtures/eliott.png')), filename: 'eliott.png')
+eliott =  ledger.users.create(first_name: "Eliott", last_name: "Mogenet", email: "eliott.mogenet@gmail.com", password: "eliott.mogenet@gmail.com")
 eliott.save!
 
 p "creating projects and assign a manager/creator"

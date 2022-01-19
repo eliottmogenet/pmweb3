@@ -35,6 +35,9 @@
           <% if task.user.photo.attached? %>
             <%= cl_image_tag task.user.photo.key, width: 20, style: "border-radius: 100%" %>
           <% else  %>
+             <div class="profile-backgroun-small-30">
+                <i id="user_blank-small-30" class="far fa-user"></i>
+              </div>
           <% end %>
         </div>
       <% end %>
@@ -45,7 +48,7 @@
 
     <div class="task-topic"><!-- Task topic div form if task topic.nil? -->
       <% if task.topic.present? %>
-        <p><%= task.topic %></p>
+        <p id="topic-p">#<%= task.topic %></p>
       <% else %>
         <%= f.input :topic, label: false, placeholder: '#topic', input_html: { autocomplete: 'off' } %>
       <% end %>
@@ -54,7 +57,7 @@
 
     <div class="comment"> <!-- Commment icon to open Modal task description -->
       <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
-        <i class="far fa-comment"></i>
+        <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
       </a>
     </div>
 
@@ -80,7 +83,12 @@
         </span>
       </div>
     <% else %><!-- Step 4: When everything is done : nothing to display anymore -->
+      <div class="task-edit" id="task-user-align">
+      </div>
     <% end %>
+    <div class="time-ago">
+      <p><%= time_ago_in_words(task.created_at)%></p>
+    </div>
   </div>
 
   <span id="bubble-<%= task.id %>" class="notification-bubble middle-right-bubble <%= 'd-none' unless current_user.has_notifications_for(task) %>"></span>
@@ -100,14 +108,20 @@
         </div>
         <div class="modal-body" id="description-body">
           <div class="task-creator">
-            <p>Created by @<%= task.creator.first_name %><%= task.creator.last_name %>  <%= time_ago_in_words(task.created_at)%> ago </p>
+            <% if task.creator.pseudo.nil? %>
+              <p>Created by @<%= task.creator.first_name %><%= task.creator.last_name %>  <%= time_ago_in_words(task.created_at)%></p>
+            <% else %>
+                <p>Created by @<%= task.creator.pseudo %>  <%= time_ago_in_words(task.created_at)%></p>
+            <% end %>
             <% if task.topic.nil? %><!-- Form to assign topic or to display topic -->
               <p>No #topic yet </p>
             <% else %>
               <p style="color: white">#<%= task.topic  %></p>
             <% end %>
-            <% if task.user.present? %>
-              <p>Assigned to @<%= task.user.first_name %><%= task.user.first_name %></p>
+            <% if task.user.present? && task.user.pseudo.nil? %>
+              <p>Assigned to @<%= task.user.first_name %><%= task.user.last_name %></p>
+            <% elsif task.user.present? && task.user.pseudo == nil %>
+              <p>Assigned to @<%= task.user.pseudo %></p>
             <% else %>
               <p>Not assigned yet</p>
             <% end %>
@@ -117,18 +131,18 @@
             <%= ff.input :description, label: false, placeholder: 'Add description to the piece...'%>
             <%#= ff.button :submit %>
         <% else %>
-          <p><%= task.description %></p>
+          <p id="description-p"><%= task.description %></p>
         <% end %>
-        <hr>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" id="share3" data-dismiss="modal">Close</button>
           <% if task.description.nil? %>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="token_box" id="share2">+ Add description</button>
           <% end %>
         </div>
       </div>
     </div>
   <% end %>
 </div>
+
