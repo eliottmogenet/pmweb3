@@ -24,7 +24,7 @@ gem 'time_difference'
 gem 'forest_liana'
 gem 'has_scope'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
