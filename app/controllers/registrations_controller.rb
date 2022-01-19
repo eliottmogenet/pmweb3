@@ -30,7 +30,21 @@ class RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def update
-    super
+  def edit
+    @user = current_user
   end
-end 
+
+  def update
+    @user = current_user
+    @project = current_user.projects.first
+    @user.update(user_params)
+    redirect_to project_tasks_path(@project)
+  end
+
+  private
+
+  def user_params
+      params.require(:user).permit(:name, :email, :password, :pseudo, :photo,
+                                   :password_confirmation)
+  end
+end

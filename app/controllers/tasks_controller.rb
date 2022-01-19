@@ -22,7 +22,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json do 
+      format.json do
         render json: {
           partial: render_to_string(partial: "tasks/list", locals: {tasks: @tasks}, formats: [:html]),
           filters: render_to_string(partial: "tasks/filters", locals: {project: @project, topics: @topics}, formats: [:html]),
@@ -43,7 +43,7 @@ class TasksController < ApplicationController
         format.html { redirect_to project_tasks_path(@project) }
         format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
       end
-    end      
+    end
   end
 
   def update
@@ -78,7 +78,7 @@ class TasksController < ApplicationController
   def mark_as_public
     @task = Task.find(params[:id])
     @project = @task.project
-    
+
     if @task.update(confidentiality: "Public")
       ProjectChannel.broadcast_to(
         @project,
@@ -95,7 +95,7 @@ class TasksController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text 
+        format.text
       end
     end
   end
@@ -103,7 +103,7 @@ class TasksController < ApplicationController
   def mark_as_done
     @task = Task.find(params[:id])
     @project = @task.project
-    
+
     if @task.update(status: "claimed")
       @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
 

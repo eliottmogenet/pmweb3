@@ -1,3 +1,7 @@
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+
 <div class="container" data-controller="tasks" id="mainContainer" data-user-id="<%= current_user.id %>">
   <div class="puzzle-header">
     <div>
@@ -5,15 +9,15 @@
         <%= image_tag("logo.png", :width => 30, height: 46) %>
         <h1 id="project-header-title">
           <b id="text-low">
-            <%= @project.name %> 's Puzzle : 
-            <span id="tokenSubTotal"> 
-              <%= @project.public_tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %> 
-            </span> 
-            / 
+            <%= @project.name %> 's Puzzle :
+            <span id="tokenSubTotal">
+              <%= @project.public_tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+            </span>
+            /
             <span id="tokenTotal">
               <%= @project.public_tasks.pluck(:token_number).map(&:to_i).sum %>
-            </span> 
-            <%= image_tag("piece.png", :width => 40, style: "padding-bottom: 10px; margin-left: 10px;") %>    
+            </span>
+            <%= image_tag("piece.png", :width => 40, style: "padding-bottom: 10px; margin-left: 10px;") %>
           </b>
         </h1>
         <div class="img-user">
@@ -22,15 +26,22 @@
               <% if current_user.photo.attached? %>
                 <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
               <% else %>
-                <span class="profile-background" id="editable-photo">
-                  <i id="user_blank" class="far fa-user"></i>
-                </span>
+                  <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
               <% end %>
               <span id="tokenUserTotal" data-id="<%= current_user.id %>">
                 <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
               </span>
               <%= image_tag("piece-title.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
             </p>
+            <div class="nav-item dropdown">
+              <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <%= link_to "Connect your wallet (soon 🔒)", "", class: "dropdown-item" %>
+                  <%= link_to "Puzzle token marketplace (soon 🔒)", "", class: "dropdown-item" %>
+                  <%= link_to "Explore Puzzles (soon 🔒)", "", class: "dropdown-item" %>
+                  <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+              </div>
+          </div>
           </div>
         </div>
       </div>
@@ -99,9 +110,11 @@
         </div>
         <div>
           <div class="member-line">
-            <div class="photo-round-small-40">
+
               <% if @project.user.photo.attached?  %>
-                <p><%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
+                <div class="photo-round-small-40">
+                <%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
+                </div>
               <% else %>
                 <div class="photo-round-small-40">
                   <div class="profile-background" id="editable-photo">
@@ -109,7 +122,6 @@
                   </div>
                 </div>
               <% end %>
-            </div>
             <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
             <% if @project.user.pseudo.nil? %>
               <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
@@ -126,14 +138,12 @@
                 <div class="member-line">
                   <% if member.photo.attached? %>
                     <div class="photo-round-small-40">
-                      <p><%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
+                      <%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
                     </div>
                   <% else %>
-                    <div class="photo-round-small-40">
                       <div class="profile-background" id="editable-photo">
                         <i id="user_blank-small-40" class="far fa-user"></i>
                       </div>
-                    </div>
                   <% end %>
                   <p><%= member.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
                   <% if member.pseudo.nil? %>
@@ -158,5 +168,19 @@
       </div>
     </div>
   </div>
+<!-- End of container -->
+  <div class="modal fade" id="photo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Change your photo</h5>
+        </div>
+        <div class="modal-body">
+          <%= render template: "devise/registrations/edit" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 <!-- End of container -->
