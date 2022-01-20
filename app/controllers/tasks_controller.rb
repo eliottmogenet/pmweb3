@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  has_scope :project_tasks, type: :boolean
   has_scope :is_private, type: :boolean
   has_scope :assigned_to_me
   has_scope :unassigned, type: :boolean
@@ -10,7 +11,7 @@ class TasksController < ApplicationController
     # @employer = current_user.employer
     @project = current_user.projects.first
     @task = Task.new
-    @tasks = apply_scopes(Task).all.reject { |task| task.private? && task.creator != current_user }
+    @tasks = apply_scopes(@project.tasks).all.reject { |task| task.private? && task.creator != current_user }
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
     @notifications = current_user.notifications
 

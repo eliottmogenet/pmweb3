@@ -75,6 +75,9 @@ project_user1.save!
 project_user2 = eliott.project_users.create(project_id: project1.id)
 project_user2.save!
 
+project_user3 = jack.project_users.create(project_id: project2.id)
+project_user3.save!
+
 p "creating tasks"
 
 task1 = project1.tasks.create(title: "Build prototype on Figma", token_number: "10", creator_id: eliott.id, confidentiality: "Private" )

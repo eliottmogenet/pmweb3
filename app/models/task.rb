@@ -6,6 +6,7 @@ class Task < ApplicationRecord
   validates :title, presence: true
   validates_length_of :title, :maximum => 100, :message => "Task title is too long"
 
+  scope :project_tasks, ->(project_id) { where(project_id: project_id) }
   scope :is_private, -> { where(confidentiality: "Private") }
   scope :assigned_to_me, ->(user_id) { where(user_id: user_id) }
   scope :unassigned, -> { where(user_id: nil) }
