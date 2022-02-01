@@ -10,6 +10,24 @@ class ProjectsController < ApplicationController
       # @projects = Project.where(employer_id: @employer)
         # @project = Project.new
     # end
+  def new
+    @project = Project.new
+  end
+
+  def create
+    @project = Project.new(project_params)
+    @project.user = current_user
+    @project.save
+    if @project.save
+      redirect_to edit_project_path(@project)
+    else
+      redirect_to new_project_path
+    end
+  end
+
+  def edit
+    @project = Project.find(params[:id])
+  end
 
   def show
     @employer = current_user.employer
@@ -25,17 +43,17 @@ class ProjectsController < ApplicationController
       end
   end
 
-  def create
-    @employer = Employer.find(params[:employer_id])
-    @project = Project.new(project_params)
-    @project.employer = @employer
-    @project.user = current_user
-      if @project.save
-        redirect_to projects_path
-      else
-        redirect_to projects_path
-      end
-  end
+  #def create
+    #@employer = Employer.find(params[:employer_id])
+    #@project = Project.new(project_params)
+    #@project.employer = @employer
+    #@project.user = current_user
+      #if @project.save
+        #redirect_to projects_path
+      #else
+        #redirect_to projects_path
+      #end
+  #end
 
   def update
     @project = Project.find(params[:id])
@@ -50,20 +68,33 @@ class ProjectsController < ApplicationController
     redirect_to project_tasks_path(@project)
   end
 
+  def join_puzzle
+    @project =  Project.find(params[:id])
+    @project_user = ProjectUser.new
+    @project_user.project = @project
+    @project_user.user = current_user
+    @project_user.save
+    redirect_to project_tasks_path(@project)
+  end
+
   def join
     if user_signed_in? && current_user.projects.include?(@project)
       flash[:notice] = "You already joined #{@project.name}'s Puzzle"
       redirect_to project_tasks_path(@project)
     else
       flash[:alert] = "You cannot join two projects (yet)..."
-      redirect_to project_tasks_path(current_user.projects.first)      
+      redirect_to project_tasks_path(current_user.projects.first)
     end
   end
 
   private
 
   def project_params
-    params.require(:project).permit(:name, :date)
+    params.require(:project).permit(:name, :date, :user_id, :description, :txt_color, :date, :uui)
+  end
+
+  def project_users_params
+    params.require(:project_user).permit(:user_id, :project_id)
   end
 
   def set_project_by_uuid

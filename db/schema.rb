@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_064030) do
+ActiveRecord::Schema.define(version: 2022_01_31_183347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,10 +68,10 @@ ActiveRecord::Schema.define(version: 2022_01_18_064030) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.bigint "user_id"
-    t.bigint "employer_id"
     t.datetime "date"
     t.string "uuid"
-    t.index ["employer_id"], name: "index_projects_on_employer_id"
+    t.string "txt_color", default: "#B45CD2"
+    t.string "description"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -87,9 +87,25 @@ ActiveRecord::Schema.define(version: 2022_01_18_064030) do
     t.string "confidentiality"
     t.string "topic"
     t.text "description"
+    t.bigint "topic_id"
     t.index ["creator_id"], name: "index_tasks_on_creator_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
+    t.index ["topic_id"], name: "index_tasks_on_topic_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "topics", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+    t.text "rules"
+    t.text "description"
+    t.boolean "can_create_task"
+    t.boolean "can_assign_task"
+    t.boolean "can_vote"
+    t.bigint "project_id"
+    t.datetime "date"
+    t.index ["project_id"], name: "index_topics_on_project_id"
   end
 
   create_table "user_projects", force: :cascade do |t|

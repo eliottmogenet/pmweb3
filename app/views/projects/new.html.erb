@@ -1,0 +1,23 @@
+<div class="body-onboarding">
+  <div class="page-header">
+  </div>
+
+  <div class="container" data-controller="tasks" id="mainContainer2">
+    <div class="puzzle-header">
+      <p>0/3 piece unlocked (complete the onboarding to win)</p>
+    </div>
+      <hr id="separation1">
+    <div class="project-description">
+      <div class="project-detail">
+        <h1 class="onboarding-title" id="project-header-title-2">Create your Puzzle</h1>
+        <%= simple_form_for @project do |f| %>
+          <%= f.input :name, label: false, placeholder: 'What’s your Puzzle name ?*', input_html: { autocomplete: 'off' }, required: true, error: "Project name is missing", style: "border-radius: 50px" %>
+          <%= f.input :description, label: false, placeholder: 'Describe your Puzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true, error: "description is missing" %>
+      </div>
+    </div>
+    <%= f.submit 'Unlock 2/3 pieces', class: "button-type", id: "button-project"%>
+    <% end %>
+  </div>
+
+</div>
+

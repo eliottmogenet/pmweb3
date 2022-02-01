@@ -1,53 +1,90 @@
-<div class="container" id="registration-container">
-  <div class="registration-box">
-    <h3>Join <%= @project.name %>'s Puzzle </h3>
-    <div class="d-flex justify-content-center text-center my-3">
-      <% @project.users.first(5).each do |user| %>
-        <div class="photo-round-small-30">
-          <% if user.photo.attached? %>
-            <%= cl_image_tag user.photo.key, width: 20, style: "border-radius: 100%"  %>
-          <% else %>
-            <div class="profile-backgroun-small-30">
-              <i id="user_blank-small-30" class="far fa-user"></i>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
+<div class="body-onboarding">
+  <% if @project.present? %>
+  <% else %>
+    <div class="page-header">
     </div>
+  <% end %>
 
-    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= f.error_notification %>
-
-      <div class="form-inputs">
-        <div class="button-inline">
-          <%= f.input :first_name, label: false, placeholder: 'First name' %>
-          <%= f.input :last_name, label: false, placeholder: 'Last name' %>
-        </div>
-        <%= f.input :pseudo, label: false, placeholder: 'Pseudo' %>
-        <%= f.input :email,
-                    label: false, placeholder: 'Email',
-                    required: true,
-                    autofocus: true,
-                    input_html: { autocomplete: "email" }%>
-        <%= f.input :password,
-                    label: false,
-                    placeholder: 'Password',
-                    required: true,
-                    hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length),
-                    input_html: { autocomplete: "new-password" } %>
-        <%= f.input :password_confirmation,
-                    placeholder: 'Password confirmation',
-                    label: false,
-                    required: true,
-                    input_html: { autocomplete: "new-password" } %>
-
-        <input type="hidden" name="project_uuid" value="<%= params[:project_uuid] %>">
+  <div class="container" data-controller="tasks" id="mainContainer2">
+   <% if @project.present? %>
+    <% else %>
+      <div class="puzzle-header">
+        <p>0/3 piece unlocked (complete the onboarding to win)</p>
       </div>
-
-      <div class="form-actions">
-        <%= f.button :submit, "Join workspace" %>
-      </div>
+      <hr id="separation1">
     <% end %>
-    <%= render "devise/shared/links" %>
+    <div class="project-description">
+      <div class="project-detail">
+        <% if @project.present? %>
+           <h1 class="onboarding-title" id="project-header-title-2">Join <%= @project.name %> Puzzle</h1>
+        <% else %>
+            <h1 class="onboarding-title" id="project-header-title-2">Become the Puzzle master</h1>
+        <% end %>
+
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" id="pills-contact-tab" data-toggle="pill" href="#pills-discord" role="tab" aria-controls="pills-discord" aria-selected="false">Discord</a>
+          </li>
+          <li>
+            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-email" role="tab" aria-controls="pills-email" aria-selected="false">Email</a>
+          </li>
+        </ul>
+
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-discord" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div id="discord-signup">
+                <button class="button-type">Sign-up with Discord <i class="fab fa-discord"></i></button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
+                <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                <%= f.error_notification %>
+
+                <div class="form-inputs">
+                  <%= f.input :pseudo, label: false, placeholder: 'Pseudo*'%>
+                  <%= f.input :email,
+                              label: false, placeholder: 'Email*',
+                              required: true,
+                              autofocus: true,
+                              input_html: { autocomplete: 'off'}%>
+                  <%= f.input :password,
+                              label: false,
+                              placeholder: 'Password*',
+                              required: true,
+                              input_html: { autocomplete: 'off'} %>
+                  <div>
+                    <p>Connect Wallet (soon)</p>
+                  </div>
+                </div>
+
+                <% if @project.present? %>
+                  <div class="form-actions">
+                    <%= f.button :submit, "Join", class: "button-type" %>
+                  </div>
+                <% else %>
+                  <div class="form-actions">
+                    <%= f.button :submit, "Unlock 1/3 piece", class: "button-type" %>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            <% if @project.present? %>
+             <%= link_to 'Log-in', new_user_session_path %>
+            <% end %>
+          </div>
+      </div>
+    </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+

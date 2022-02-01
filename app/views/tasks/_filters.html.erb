@@ -1,16 +1,18 @@
 <%= form_tag project_tasks_path(project), method: :get, 'data-filter-target': 'form', id: "filtersContainer" do %>
   <div class="tag-item">
     <%= check_box_tag :project_tasks, "true", params[:project_tasks] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
-    <%= label_tag :project_tasks, "#All pieces" %>
+    <%= label_tag :project_tasks, "#Puzzle" %>
   </div>
-  <div class="tag-item">
-    <%= check_box_tag :is_private, "true", params[:is_private] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-    <%= label_tag :is_private, "#Private" %>
-  </div>
-  <div class="tag-item">
-    <%= check_box_tag :assigned_to_me, current_user.id, params[:assigned_to_me] == current_user.id.to_s, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-    <%= label_tag :assigned_to_me, "#Assigned to me" %>
-  </div>
+
+  <% if current_user.present? %>
+    <div class="tag-item">
+      <%= check_box_tag :assigned_to_me, current_user.id, params[:assigned_to_me] == current_user.id.to_s, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+      <%= label_tag :assigned_to_me, "#Assigned to me" %>
+    </div>
+  <% end %>
+
+<!-- Check_box_tag => transform in select tag for filtering -->
+
   <div class="tag-item">
     <%= check_box_tag :unassigned, "true", params[:unassigned] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
     <%= label_tag :unassigned, "#Unassigned" %>
@@ -24,7 +26,7 @@
     <%= label_tag :done, "#Done" %>
   </div>
 
-  <% topics.each do |topic| %>
+  <% @project.topics.uniq.each do |topic| %>
     <%= render "tasks/topic_filter", topic: topic %>
   <% end %>
 <% end %>

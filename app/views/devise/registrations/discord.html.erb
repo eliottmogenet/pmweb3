@@ -1,0 +1,29 @@
+<div class="body-onboarding">
+  <% if @project.present? %>
+  <% else %>
+    <div class="page-header">
+    </div>
+  <% end %>
+
+  <div class="container" data-controller="tasks" id="mainContainer2">
+   <% if @project.present? %>
+    <% else %>
+      <div class="puzzle-header">
+        <p>0/3 piece unlocked (complete the onboarding to win)</p>
+      </div>
+      <hr id="separation1">
+    <% end %>
+    <div class="project-description">
+      <div class="project-detail">
+        <% if @project.present? %>
+           <h1 class="onboarding-title" id="project-header-title">Join <%= @project.name %> Puzzle</h1>
+        <% else %>
+            <h1 class="onboarding-title" id="project-header-title">Become the Puzzle master</h1>
+        <% end %>
+          <h1 class="onboarding-title" id="project-header-title">Become the Puzzle master</h1>
+            <button class="button-type">Connect Discord   <i class="fab fa-discord"></i></button>
+          <p id="no_discord">I don't have Discord ></p>
+      </div>
+    </div>
+  </div>
+</div>

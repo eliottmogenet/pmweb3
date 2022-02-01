@@ -9,16 +9,25 @@ class TasksController < ApplicationController
 
   def index
     # @employer = current_user.employer
-    @project = current_user.projects.first
+    @project = Project.find(params[:project_id])
     @task = Task.new
     @tasks = apply_scopes(@project.tasks).all.reject { |task| task.private? && task.creator != current_user }
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
-    @notifications = current_user.notifications
+    @topic = Topic.new
+    if current_user.nil? == false
+      @notifications = current_user.notifications
+    end
 
     if params[:by_topic].present?
+      @topic_selected = Topic.find(params[:by_topic])
       @notifications.each do |notif|
         notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic == params[:by_topic]
       end
+
+      if @topic_selected.date.nil? == false
+        @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
+      end
+
     end
 
     respond_to do |format|
@@ -38,6 +47,12 @@ class TasksController < ApplicationController
     @task.project = @project
     @task.creator = current_user
     @task.confidentiality = "Private"
+    if @project.users.exclude?(@task.creator)
+      @project_user = ProjectUser.new
+      @project_user.project = @project
+      @project_user.user = current_user
+      @project_user.save
+    end
 
     if @task.save
       respond_to do |format|
@@ -133,6 +148,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :status, :token_number, :user_id, :creator_id, :confidentiality, :description, :topic)
+    params.require(:task).permit(:title, :status, :token_number, :user_id, :creator_id, :confidentiality, :description, :topic_id)
   end
 end

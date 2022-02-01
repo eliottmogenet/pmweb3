@@ -2,6 +2,8 @@ class Task < ApplicationRecord
   belongs_to :project
   belongs_to :user, optional: true
   belongs_to :creator, class_name: "User"
+  belongs_to :topic, optional: true
+  #belongs_to :project, through: :topic
 
   validates :title, presence: true
   validates_length_of :title, :maximum => 100, :message => "Task title is too long"
@@ -10,7 +12,7 @@ class Task < ApplicationRecord
   scope :is_private, -> { where(confidentiality: "Private") }
   scope :assigned_to_me, ->(user_id) { where(user_id: user_id) }
   scope :unassigned, -> { where(user_id: nil) }
-  scope :by_topic, ->(topic) { where(topic: topic) }
+  scope :by_topic, ->(topic_id) { where(topic_id: topic_id) }
   scope :ongoing, -> { where(status: "ongoing") }
   scope :done, -> { where(status: "claimed") }
 

@@ -1,8 +1,9 @@
 class Project < ApplicationRecord
-  belongs_to :employer
+  #belongs_to :employer
   belongs_to :user
 
   has_many :tasks
+  has_many :topics
   has_many :project_users
   has_many :users, through: :project_users
 

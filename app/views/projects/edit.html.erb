@@ -1,0 +1,21 @@
+<div class="body-onboarding">
+  <div class="page-header">
+  </div>
+
+  <div class="container" data-controller="tasks" id="mainContainer2">
+    <div class="puzzle-header">
+      <p>2/3 pieces unlocked</p>
+    </div>
+      <hr id="separation1">
+    <div class="project-description">
+      <div class="project-detail">
+        <h1 class="onboarding-title" id="project-header-title-2">Customize your Puzzle</h1>
+        <%= simple_form_for @project do |f| %>
+          <%= f.input :txt_color, as: :color, label: false, placeholder: 'What’s your Puzzle color?*' %>
+      </div>
+    </div>
+      <%= f.submit 'Unlock 3/3 pieces', class: "button-type", id: "button-project"%>
+    <% end %>
+  </div>
+
+</div>

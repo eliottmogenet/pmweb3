@@ -11,8 +11,10 @@ Rails.application.routes.draw do
   resources :projects do
     member do
       post 'reset_time', to: "projects#reset_time"
+      post 'join_puzzle', to: "projects#join_puzzle"
     end
     resources :tasks
+    resources :topics
   end
 
   get "/projects/:uuid/join", to: "projects#join", as: :join_project
@@ -23,18 +25,18 @@ Rails.application.routes.draw do
       patch :mark_as_done
     end
   end
-  resources :employers do
-    resources :projects do
-        member do
-          post 'reset_time', to: "projects#reset_time"
-        end
-      resources :tasks do
-        member do
-          post 'done', to: "tasks#done"
-        end
-      end
-    end
-  end
+  #resources :employers do
+    #resources :projects do
+        #member do
+          #post 'reset_time', to: "projects#reset_time"
+        #end
+      #resources :tasks do
+        #member do
+          #post 'done', to: "tasks#done"
+        #end
+      #end
+    #end
+  #end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
 
