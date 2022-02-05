@@ -9,7 +9,16 @@
         <% elsif task.token_number.present? %>
           <p id="token-number"><%= task.token_number %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
         <% elsif task.topic.present? && task.topic.can_vote == true %>
-          <p id="token-number">Vote<p>
+          <p id="token-number"><%= task.votes.count %>
+              <span id="vote-button" class="button-postfix" data-action="click->task#vote">
+                <i class="fas fa-sort-up"></i>
+              </span>
+          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p>
+        <% elsif task.topic.present? && task.topic.can_vote == true && task.votes.include?(user_id: current_user) %>
+          <p id="token-number"><%= task.votes.count %>
+          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p>
         <% else %>
             <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off'} %>
         <% end %>

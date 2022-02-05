@@ -145,6 +145,19 @@ class TasksController < ApplicationController
     end
   end
 
+  def vote
+    #To complete with AJAX method
+    @task = Task.find(params[:id])
+    @project = @task.project
+
+    @vote = Vote.new
+    @vote.task = @task
+    @vote.user = current_user
+    @vote.save
+  end
+
+
+
   private
 
   def task_params

@@ -3,6 +3,7 @@ class Task < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :creator, class_name: "User"
   belongs_to :topic, optional: true
+  has_many :votes
   #belongs_to :project, through: :topic
 
   validates :title, presence: true

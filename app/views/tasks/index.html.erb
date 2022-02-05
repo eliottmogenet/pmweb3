@@ -4,6 +4,9 @@
 <body>
 
 <div class="page-header"><!-- Header above the container %>-->
+
+  <button class="enableEthereumButton">Enable Ethereum</button>
+
   <button class="button-type">
     Request access to my Puzzle
   </button>
@@ -285,5 +288,15 @@
   </div>
 </div>
 </body>
+
+
+<script>
+  const ethereumButton = document.querySelector('.enableEthereumButton');
+
+ethereumButton.addEventListener('click', () => {
+  //Will Start the metamask extension
+  ethereum.request({ method: 'eth_requestAccounts' });
+});
+</script>
 
 <!-- End of container -->

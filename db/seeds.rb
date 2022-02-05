@@ -86,8 +86,6 @@ topic2 = project1.topics.create(name: "Event" , description: "It's the event top
 topic2.save!
 
 
-
-
 p "creating tasks"
 
 task1 = project1.tasks.create(title: "Build prototype on Figma", token_number: "10", creator_id: eliott.id, confidentiality: "Private", topic_id: topic1.id )
@@ -102,5 +100,11 @@ task3.save!
 
 task4 = project1.tasks.create(title: "Create community", status: "ongoing", token_number: "10", user_id: jack.id, creator_id: sonia.id, confidentiality: "Public", topic_id: topic2.id)
 task4.save!
+
+p "create tasks"
+
+vote1 = task1.votes.create(user_id: eliott.id)
+vote1.save!
+
 
 p "finished"
