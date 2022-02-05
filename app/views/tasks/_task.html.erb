@@ -97,7 +97,7 @@
                     </div>
                 <% else %>
                 <% end %>
-              <% elsif task.ongoing? %><!-- Step 3: Form for marking the task as done  -->
+              <% elsif task.ongoing? && current_user == task.user %><!-- Step 3: Form for marking the task as done  -->
               <div class="task-edit" id="task-user-align">
                 <span class="button-postfix" data-action="click->task#markAsDone">
                   <p>Mark as done ></p>

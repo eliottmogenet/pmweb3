@@ -4,13 +4,36 @@
 <body>
 
 <div class="page-header"><!-- Header above the container %>-->
-
-  <button class="enableEthereumButton">Enable Ethereum</button>
-
-  <button class="button-type">
-    Request access to my Puzzle
-  </button>
-
+    <div id="firs-separation" class="col-7">
+      <div id="token_box">
+        <p>
+          <% if current_user.photo.attached? %>
+            <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+          <% else %>
+            <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
+          <% end %>
+            <span id="tokenUserTotal" data-id="<%= current_user.id %>">
+              <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+            </span>
+        </p>
+          <div class="nav-item dropdown">
+            <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+          </div>
+        </div>
+        |
+        <p>
+          <button class="enableEthereumButton">Connect Wallet</button>
+          <span class="showAccount"></span>
+        </p>
+      </div>
+    </div>
+      <div id="request" class="col-5">
+        <button class="button-type">
+          Request access to my Puzzle
+        </button>
+      </div>
 </div>
 
 <div class="container" data-controller="tasks" id="mainContainer" data-user-id="<%= @project.id %>"> <!-- Change from <%= current_user %> to <%= @project.id %>-->
@@ -82,11 +105,11 @@
         <% elsif  @topic_selected.date.nil? && @project.user != current_user %>
           <p>No time limit here</p>
         <% else %>
-          <div>
-            <p>Before deadline</p>
+          <div class="reset-deadline">
+            <p>Before deadline
             <% if current_user == @project.user %>
-                <%= button_to reset_time_project_path(@project), id: "reset-button" , method: :post do %>
-                  <p><i class="fas fa-undo"></i></p>
+                <%= link_to reset_time_project_path(@project), id: "reset-button" , method: :post do %>
+                  <i class="fas fa-undo"></i></p>
               <% end %>
             <% end %>
         </div>
@@ -101,7 +124,9 @@
   <div data-controller="filter">
     <div class="filters">
       <%= render "tasks/filters", project: @project, topics: @topics %>
-        <p data-toggle="modal" data-target="#topic-modal">+Create subpuzzle</p>
+        <% if current_user = @project.user %>
+            <p id="button-spuzzle" data-toggle="modal" data-target="#topic-modal">+Create subpuzzle</p>
+        <% end %>
     </div>
 
     <% if params[:by_topic].present?%> <!-- Rules div -->
@@ -291,12 +316,19 @@
 
 
 <script>
-  const ethereumButton = document.querySelector('.enableEthereumButton');
+const ethereumButton = document.querySelector('.enableEthereumButton');
+const showAccount = document.querySelector('.showAccount');
 
-ethereumButton.addEventListener('click', () => {
-  //Will Start the metamask extension
-  ethereum.request({ method: 'eth_requestAccounts' });
+ethereumButton.addEventListener('click', (event) => {
+  event.currentTarget.classList.toggle("hide-wallet");
+  getAccount();
 });
+
+async function getAccount() {
+  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  const account = accounts[0];
+  showAccount.innerHTML = account;
+}
 </script>
 
 <!-- End of container -->
