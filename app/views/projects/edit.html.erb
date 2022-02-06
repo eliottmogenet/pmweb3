@@ -1,21 +1,48 @@
 <div class="body-onboarding">
   <div class="page-header">
+    <div id="firs-separation" class="col-7">
+      <% if user_signed_in? %>
+        <div id="token_box">
+          <p>
+            <% if current_user.photo.attached? %>
+              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+            <% else %>
+              <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
+            <% end %>
+              <span id="tokenUserTotal" data-id="<%= current_user.id %>">
+                <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+              </span>
+          </p>
+            <div class="nav-item dropdown">
+              <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+            </div>
+          </div>
+      </div>
+      <% end %>
+    </div>
+      <div id="request" class="col-5">
+      </div>
   </div>
 
   <div class="container" data-controller="tasks" id="mainContainer2">
-    <div class="puzzle-header">
-      <p>2/3 pieces unlocked</p>
+    <div id="onbord-puzzle" class="puzzle-header">
+      <%= image_tag("piece-title.png", :width => 40, style: "margin-left: 10px; margin-bottom: 10px") %>
+      <%= image_tag("piece-title.png", :width => 40, style: "margin-left: 10px; margin-bottom: 10px") %>
+      <p>1/2 piece unlocked</p>
     </div>
       <hr id="separation1">
     <div class="project-description">
       <div class="project-detail">
         <h1 class="onboarding-title" id="project-header-title-2">Customize your Puzzle</h1>
         <%= simple_form_for @project do |f| %>
-          <%= f.input :txt_color, as: :color, label: false, placeholder: 'What’s your Puzzle color?*' %>
+        <%= f.input :txt_color, id: "project-color", :label => 'What’s your Puzzle color?*', :collection =>{'<div class="colorbox" style="background-color: #B45CD2;"></div>'.html_safe => '#B45CD2', '<div class="colorbox" style="background-color: #456BDE;"></div>'.html_safe => '#456BDE', '<div class="colorbox" style="background-color: #186152;"></div>'.html_safe => '#186152', '<div class="colorbox" style="background-color: #D25C5C"></div>'.html_safe => '#D25C5C', '<div class="colorbox" style="background-color: #FDC045"></div>'.html_safe => '#FDC045'}, as: :radio_buttons %>
+        <%= f.input :background, as: :file, :label  =>  'What’s your workspace background?*' %>
       </div>
     </div>
-      <%= f.submit 'Unlock 3/3 pieces', class: "button-type", id: "button-project"%>
+      <%= f.submit 'Unlock 2/2 pieces', class: "button-type", id: "button-project"%>
     <% end %>
   </div>
-
 </div>
+

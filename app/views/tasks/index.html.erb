@@ -5,29 +5,33 @@
 
 <div class="page-header"><!-- Header above the container %>-->
     <div id="firs-separation" class="col-7">
-      <div id="token_box">
-        <p>
-          <% if current_user.photo.attached? %>
-            <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
-          <% else %>
-            <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
-          <% end %>
-            <span id="tokenUserTotal" data-id="<%= current_user.id %>">
-              <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
-            </span>
-        </p>
-          <div class="nav-item dropdown">
-            <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+      <% if user_signed_in? %>
+        <div id="token_box">
+          <p>
+            <% if current_user.photo.attached? %>
+              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+            <% else %>
+              <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
+            <% end %>
+              <span id="tokenUserTotal" data-id="<%= current_user.id %>">
+                <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
+              </span>
+          </p>
+            <div class="nav-item dropdown">
+              <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+            </div>
           </div>
-        </div>
-        |
-        <p>
-          <button class="enableEthereumButton">Connect Wallet</button>
-          <span class="showAccount"></span>
-        </p>
+          |
+          <p>
+            <button class="enableEthereumButton">Connect Wallet</button>
+            <span class="showAccount"></span>
+          </p>
       </div>
+      <% else %>
+        Login
+      <% end %>
     </div>
       <div id="request" class="col-5">
         <button class="button-type">

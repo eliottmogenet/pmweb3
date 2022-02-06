@@ -17,6 +17,11 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(project_params)
     @project.user = current_user
+    @project_user = ProjectUser.new
+    @project_user.project = @project
+    @project_user.user = current_user
+    @project_user.save
+
     @project.save
     if @project.save
       redirect_to edit_project_path(@project)
