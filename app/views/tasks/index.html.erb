@@ -9,7 +9,7 @@
         <div id="token_box">
           <p>
             <% if current_user.photo.attached? %>
-              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%; margin-bottom: 10px;" %>
             <% else %>
               <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
             <% end %>
@@ -33,11 +33,17 @@
         Login
       <% end %>
     </div>
-      <div id="request" class="col-5">
+    <div id="request" class="col-5">
+      <% if current_user == @project.user %>
+        <button class="button-type">
+            Share <%= @project.name %> Puzzle 🔗
+        </button>
+      <% else %>
         <button class="button-type">
           Request access to my Puzzle
         </button>
-      </div>
+      <% end %>
+    </div>
 </div>
 
 <div class="container" data-controller="tasks" id="mainContainer" data-user-id="<%= @project.id %>"> <!-- Change from <%= current_user %> to <%= @project.id %>-->
@@ -61,9 +67,7 @@
         </h1>
         <% if @topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
           <% if user_signed_in? && @project.users.include?(current_user) %>
-            <button class="button-type">
-              Share Puzzle 🔗
-            </button>
+            Member
           <% elsif user_signed_in? && @project.users.exclude?(current_user) %>
             <%= link_to "Join '@project.name' Puzzle", join_puzzle_project_path(@project), method: :post, class: "button-type" %>
           <% else %>
@@ -282,6 +286,58 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content" id="subpuzzle-create">
         <div class="modal-header">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-contact-tab" data-toggle="pill" href="#pills-templates" role="tab" aria-controls="pills-templates" aria-selected="false">Templates</a>
+            </li>
+            <li>
+              <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-custom" role="tab" aria-controls="pills-custom" aria-selected="false">Custom</a>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-body">
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-templates" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="templates">
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="create_topic">
+                <%= simple_form_for([@project, @topic]) do |f| %>
+                 <%= f.input :name,  label: false, placeholder: 'Name*', input_html: { autocomplete: 'off' }, required: true %>
+                 <%= f.input :description, label: false, placeholder: 'Describe the goal of the subpuzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true %>
+                 <div>
+                  <%= f.input :rules, label: false, placeholder: 'Describe the rules step by step*', input_html: { autocomplete: 'off' }, required: true %>
+                 </div>
+                <hr>
+                <p>⚙️ Authorize everyone to :</p>
+                  <div class="custom-control custom-switch">
+                     <%= f.check_box :can_create_task, class: "custom-control-input", id: "customSwitch1"  %>
+                      <label class="custom-control-label" for="customSwitch1">Create new tasks</label>
+                  </div>
+                  <div class="custom-control custom-switch">
+                     <%= f.check_box :can_assign_task, class: "custom-control-input", id: "customSwitch2"  %>
+                      <label class="custom-control-label" for="customSwitch2">Assign someone to a task</label>
+                   </div>
+                <hr>
+                <p>💰 Rewards</p>
+                 <div class="custom-control custom-switch">
+                    <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
+                    <label class="custom-control-label" for="customSwitch3">By vote only</label>
+                 </div>
+                 <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle" %>
+              <%end%>
+            </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="topic-edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" id="subpuzzle-create">
+        <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add a Subpuzzle</h5>
         </div>
         <div class="modal-body">
@@ -315,6 +371,14 @@
       </div>
     </div>
   </div>
+
+
+
+
+
+
+
+
 </div>
 </body>
 

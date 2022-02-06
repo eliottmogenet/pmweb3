@@ -150,10 +150,8 @@
             <% else %>
               <p style="color: white">#<%= task.topic.name  %></p>
             <% end %>
-            <% if task.user.present? && task.user.pseudo.nil? %>
-              <p>Assigned to @<%= task.user.first_name %><%= task.user.last_name %></p>
-            <% elsif task.user.present? && task.user.pseudo == nil %>
-              <p>Assigned to @<%= task.user.pseudo %></p>
+            <% if task.user.present? %>
+              <p style="color: white">Assigned to @<%= task.user.pseudo %></p>
             <% else %>
               <p>Not assigned yet</p>
             <% end %>
