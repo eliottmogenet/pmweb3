@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       patch :mark_as_public
       patch :mark_as_done
       patch :vote
+      patch :archive
     end
   end
   #resources :employers do
