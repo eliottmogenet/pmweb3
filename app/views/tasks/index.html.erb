@@ -128,7 +128,7 @@
   <div data-controller="filter">
     <div class="filters">
       <%= render "tasks/filters", project: @project, topics: @topics %>
-        <% if current_user = @project.user %>
+        <% if current_user == @project.user %>
             <p id="button-spuzzle" data-toggle="modal" data-target="#topic-modal">+Create subpuzzle</p>
         <% end %>
     </div>
@@ -143,21 +143,22 @@
       </div>
     <% end %>
 
-  <% if params[:project_tasks] == "true"%>  <!-- Task create conditions & div -->
-
-    <% else %>
-
-    <% if params[:by_topic].present? && @topic_selected.can_create_task == false && current_user != @project.user %>
-      <div class="task-create-button">
-        <p>Your are not allow to create a task 🔒 </p>
-      </div>
-    <% else %>
-      <div class="task-create-button">
-        <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
-          <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+    <% if params[:by_topic].present? %>
+        <% if @topic_selected.can_create_task == true %>
+          <div class="task-create-button">
+            <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+              <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+            <% end %>
+          </div>
+          <% elsif current_user == @project.users.first %>
+            <div class="task-create-button">
+              <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+                <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+              <% end %>
+          </div>
         <% end %>
-      </div>
-    <% end %>
+  <% end %>
+
 
     <!-- Start of the index of the tasks @filtered_tasks -->
 
@@ -168,7 +169,6 @@
           <%= render "tasks/list", tasks: @tasks %>
         <% end %>
       </div>
-    <% end %>
   </div>
 
   <!-- End of the list of tasks-->

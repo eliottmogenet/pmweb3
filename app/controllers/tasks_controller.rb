@@ -157,6 +157,13 @@ class TasksController < ApplicationController
     @vote.save
   end
 
+  def archive
+    #To complete with AJAX method
+    @task = Task.find(params[:id])
+    @task.status = "archive"
+    @task.save
+  end
+
 
 
   private

@@ -96,6 +96,8 @@
                       <%= f.association :user, collection: @project.users, label: false, prompt: 'Contributor', label_method: :full_name, input_html: { "data-action": "change->task#submit" } %>
                     </div>
                 <% else %>
+                    <div class="task-edit" id="task-user-align">
+                    </div>
                 <% end %>
               <% elsif task.ongoing? && current_user == task.user %><!-- Step 3: Form for marking the task as done  -->
               <div class="task-edit" id="task-user-align">
@@ -110,9 +112,15 @@
   <% end %>
 
     <div class="time-ago">
-      <p><%= time_ago_in_words(task.created_at)%></p>
+      <% if current_user == task.creator || @project.user %>
+        <i class="fas fa-times"></i>
+      <% end %>
+      <!--<p><%= time_ago_in_words(task.created_at)%></p>-->
     </div>
   </div>
+
+  <!-- Notification -->
+
   <% if current_user.present? %>
       <span id="bubble-<%= task.id %>" class="notification-bubble middle-right-bubble <%= 'd-none' unless current_user.has_notifications_for(task) %>"></span>
   <% end %>
