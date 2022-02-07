@@ -3,8 +3,11 @@ class TopicsController < ApplicationController
     @project = Project.find(params[:project_id])
     @topic = Topic.new(topic_params)
     @topic.project = @project
+
+    authorize @topic
+
     @topic.save!
-    redirect_to project_tasks_path(@project) #+topic scope selected
+    redirect_to project_tasks_path(@project, by_topic: @topic.id) #+topic scope selected
   end
 
   def update

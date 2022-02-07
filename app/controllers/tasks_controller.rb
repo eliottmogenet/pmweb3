@@ -8,11 +8,15 @@ class TasksController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-    @task = Task.new
-    @tasks = apply_scopes(@project.tasks).reject { |task| (task.private? && task.creator != current_user) || task.archived? }.sort_by(&:token_number).reverse
+    @task = Task.new(project: @project)
+
+    @task.topic = Topic.find(params[:by_topic]) if params[:by_topic]
+    
+    @tasks = apply_scopes(policy_scope(@project.tasks)).reject { |task| (task.private? && task.creator != current_user) || task.archived? }.sort_by {|task| [task.token_number, task.created_at]}.reverse
 
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
     @topic = Topic.new
+
     if current_user.nil? == false
       @notifications = current_user.notifications
     end
@@ -26,7 +30,6 @@ class TasksController < ApplicationController
       if @topic_selected.date.nil? == false
         @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
       end
-
     end
 
     respond_to do |format|
@@ -43,9 +46,12 @@ class TasksController < ApplicationController
   def create
     @project = Project.find(params[:project_id])
     @task = Task.new(task_params)
+
     @task.project = @project
     @task.creator = current_user
     @task.confidentiality = "Private"
+
+    authorize @task
 
     if @project.users.exclude?(@task.creator)
       @project_user = ProjectUser.new
@@ -66,27 +72,16 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
+    authorize @task
+
     if @task.update(task_params)
-      ProjectChannel.broadcast_to(
-        @project,
-        {
-          update: true,
-          current_user_id: current_user.id,
-          private: @task.private?,
-          id: @task.id,
-          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-          topic: @task.topic,
-          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic, notify: true}, formats: [:html]),
-          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
-          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
-        }
-      )
+      broadcast_changes
 
       UserMailer.with(user: @task.user, task: @task, assigner: current_user).assigned_to_task.deliver_now if task_params[:user_id].present?
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json { render json: { success: true, id: @task.id }.to_json }
+        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
       end
     end
   end
@@ -95,23 +90,14 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
+    authorize @task
+
     if @task.update(confidentiality: "Public")
-      ProjectChannel.broadcast_to(
-        @project,
-        {
-          create: true,
-          current_user_id: current_user.id,
-          id: @task.id,
-          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-          topic: @task.topic,
-          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic}, formats: [:html]),
-          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
-        }
-      )
+      broadcast_changes
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text
+        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
       end
     end
   end
@@ -120,27 +106,15 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
+    authorize @task
+
     if @task.update(status: "claimed")
       @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
-
-      ProjectChannel.broadcast_to(
-        @project,
-        {
-          update: true,
-          mark_as_done: true,
-          current_user_id: current_user.id,
-          id: @task.id,
-          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
-          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum,
-          user_id: @task.user_id,
-          usertotal: @task.user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum
-        }
-      )
+      broadcast_changes
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json { render json: { success: true }.to_json }
+        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
       end
     end
   end
@@ -154,6 +128,7 @@ class TasksController < ApplicationController
       task: @task,
       user: current_user
     )
+
     if @vote.save
       @task.token_number += 1
       @task.save
@@ -167,9 +142,6 @@ class TasksController < ApplicationController
           current_user_id: current_user.id,
           id: @task.id,
           partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
-          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum,
-          user_id: @task.user_id,
         }
       )
 
@@ -181,35 +153,30 @@ class TasksController < ApplicationController
   end
 
   def archive
-    #To complete with AJAX method
     @task = Task.find(params[:id])
     @project = @task.project
-    if @task.update(status: "archive")
-      ProjectChannel.broadcast_to(
-        @project,
-        {
-          archive: true,
-          current_user_id: current_user.id,
-          private: @task.private?,
-          id: @task.id,
-          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-          topic: @task.topic,
-          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic, notify: true}, formats: [:html]),
-          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
-          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
-        }
-      )
 
-      UserMailer.with(user: @task.user, task: @task, assigner: current_user).assigned_to_task.deliver_now if task_params[:user_id].present?
+    if @task.update(status: "archive")
+      broadcast_changes
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json { render json: { success: true, id: @task.id }.to_json }
+        format.text
       end
     end
   end
 
   private
+
+  def broadcast_changes
+    ProjectChannel.broadcast_to(@project,
+      { 
+        update: true,
+        user_id: current_user.id,
+        partial: render_to_string(partial: "shared/flashes", locals: {alert: "outdated"}, formats: [:html])
+      }
+    )
+  end
 
   def task_params
     params.require(:task).permit(:title, :status, :token_number, :user_id, :creator_id, :confidentiality, :description, :topic_id)

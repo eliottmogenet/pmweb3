@@ -8,19 +8,15 @@ export default class extends Controller {
     event.preventDefault();
 
     $(`#description-${this.formTarget.dataset.taskId}`).modal('hide')
-    console.log("Hello")
     const url = this.formTarget.action
     fetch(url, {
       method: 'PATCH',
-      headers: { 'Accept': 'application/json' },
+      headers: { 'Accept': 'text/plain' },
       body: new FormData(this.formTarget)
     })
-      .then(response => response.json())
+      .then(response => response.text())
       .then((data) => {
-        console.log(data.id)
-        // this.cardTarget.outerHTML = data.partial
-        // document.getElementById("tokenTotal").innerHTML = parseInt(data.total)
-        // document.getElementById("filtersContainer").innerHTML = data.filters
+        this.cardTarget.outerHTML = data
       })
   }
 
@@ -35,7 +31,7 @@ export default class extends Controller {
     })
       .then(response => response.text())
       .then((data) => {
-        // this.cardTarget.outerHTML = data
+        this.cardTarget.outerHTML = data
       })
   }
 
@@ -46,13 +42,11 @@ export default class extends Controller {
     const url = `/tasks/${id}/mark_as_done`
     fetchWithToken(url, {
       method: 'PATCH',
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Accept': 'text/plain' }
     })
-      .then(response => response.json())
+      .then(response => response.text())
       .then((data) => {
-        // this.cardTarget.outerHTML = data.partial
-        // document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
-        // document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
+        this.cardTarget.outerHTML = data
       })    
   }
 
@@ -63,13 +57,11 @@ export default class extends Controller {
     const url = `/tasks/${id}/vote`
     fetchWithToken(url, {
       method: 'PATCH',
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Accept': 'text/plain' }
     })
-      .then(response => response.json())
+      .then(response => response.text())
       .then((data) => {
-        // this.cardTarget.outerHTML = data.partial
-        // document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
-        // document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
+        this.cardTarget.outerHTML = data
       })    
   }
 
@@ -80,13 +72,11 @@ export default class extends Controller {
     const url = `/tasks/${id}/archive`
     fetchWithToken(url, {
       method: 'PATCH',
-      headers: { 'Accept': 'application/json' }
+      headers: { 'Accept': 'text/plain' }
     })
-      .then(response => response.json())
+      .then(response => response.text())
       .then((data) => {
-        // this.cardTarget.outerHTML = data.partial
-        // document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
-        // document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
+        this.cardTarget.outerHTML = ""
       })    
   }
 }

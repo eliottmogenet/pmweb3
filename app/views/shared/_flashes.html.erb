@@ -6,7 +6,11 @@
     </button>
   </div>
 <% end %>
-<% if alert %>
+<% if alert && alert == "outdated" %>
+  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
+    Changes have been made by a collaborator. Please refresh the page to see the changes.
+  </div>
+<% elsif alert %>
   <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
     <%= alert %>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

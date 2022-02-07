@@ -42,6 +42,8 @@ gem 'postmark-rails'
 gem 'omniauth-discord'
 gem 'omniauth-rails_csrf_protection'
 
+gem 'pundit'
+
 group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
