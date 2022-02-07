@@ -12,7 +12,7 @@
         <% else %>
             <h1 class="onboarding-title" id="project-header-title-2">Log-in to Puzzle</h1>
         <% end %>
-          <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <%= f.error_notification %>
 
           <div class="form-inputs">
