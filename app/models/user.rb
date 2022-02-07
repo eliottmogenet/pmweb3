@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   # belongs_to :employer
   has_many :tasks
+  has_many :votes
   has_many :project_users
   has_many :projects, through: :project_users
   has_many :notifications, as: :recipient

@@ -9,7 +9,16 @@
         <% elsif task.token_number.present? %>
           <p id="token-number"><%= task.token_number %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
         <% elsif task.topic.present? && task.topic.can_vote == true %>
-          <p id="token-number">Vote<p>
+          <p id="token-number"><%= task.votes.count %>
+              <span id="vote-button" class="button-postfix" data-action="click->task#vote">
+                <i class="fas fa-sort-up"></i>
+              </span>
+          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p>
+        <% elsif task.topic.present? && task.topic.can_vote == true && task.votes.include?(user_id: current_user) %>
+          <p id="token-number"><%= task.votes.count %>
+          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p>
         <% else %>
             <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off'} %>
         <% end %>
@@ -87,8 +96,10 @@
                       <%= f.association :user, collection: @project.users, label: false, prompt: 'Contributor', label_method: :full_name, input_html: { "data-action": "change->task#submit" } %>
                     </div>
                 <% else %>
+                    <div class="task-edit" id="task-user-align">
+                    </div>
                 <% end %>
-              <% elsif task.ongoing? %><!-- Step 3: Form for marking the task as done  -->
+              <% elsif task.ongoing? && current_user == task.user %><!-- Step 3: Form for marking the task as done  -->
               <div class="task-edit" id="task-user-align">
                 <span class="button-postfix" data-action="click->task#markAsDone">
                   <p>Mark as done ></p>
@@ -101,9 +112,15 @@
   <% end %>
 
     <div class="time-ago">
-      <p><%= time_ago_in_words(task.created_at)%></p>
+      <% if current_user == task.creator || @project.user %>
+        <i class="fas fa-times"></i>
+      <% end %>
+      <!--<p><%= time_ago_in_words(task.created_at)%></p>-->
     </div>
   </div>
+
+  <!-- Notification -->
+
   <% if current_user.present? %>
       <span id="bubble-<%= task.id %>" class="notification-bubble middle-right-bubble <%= 'd-none' unless current_user.has_notifications_for(task) %>"></span>
   <% end %>
@@ -133,10 +150,8 @@
             <% else %>
               <p style="color: white">#<%= task.topic.name  %></p>
             <% end %>
-            <% if task.user.present? && task.user.pseudo.nil? %>
-              <p>Assigned to @<%= task.user.first_name %><%= task.user.last_name %></p>
-            <% elsif task.user.present? && task.user.pseudo == nil %>
-              <p>Assigned to @<%= task.user.pseudo %></p>
+            <% if task.user.present? %>
+              <p style="color: white">Assigned to @<%= task.user.pseudo %></p>
             <% else %>
               <p>Not assigned yet</p>
             <% end %>

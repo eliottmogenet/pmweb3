@@ -6,6 +6,9 @@ class Project < ApplicationRecord
   has_many :topics
   has_many :project_users
   has_many :users, through: :project_users
+  has_one_attached :logo
+  has_one_attached :background
+
 
   after_create :set_uuid
 
