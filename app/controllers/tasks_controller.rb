@@ -7,10 +7,9 @@ class TasksController < ApplicationController
   has_scope :done, type: :boolean
 
   def index
-    # @employer = current_user.employer
     @project = Project.find(params[:project_id])
     @task = Task.new
-    @tasks = apply_scopes(@project.tasks).all.reject { |task| task.private? && task.creator != current_user }
+    @tasks = apply_scopes(@project.tasks).reject { |task| (task.private? && task.creator != current_user) || task.archived? }.sort_by(&:token_number).reverse
 
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
     @topic = Topic.new
@@ -189,7 +188,7 @@ class TasksController < ApplicationController
       ProjectChannel.broadcast_to(
         @project,
         {
-          update: true,
+          archive: true,
           current_user_id: current_user.id,
           private: @task.private?,
           id: @task.id,

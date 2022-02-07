@@ -51,6 +51,10 @@ const initProjectCable = () => {
               tokenContainer.innerText = parseInt(tokenContainer.innerText) + 1
             }
           }
+        } else if (data.archive) {
+          if (taskContainer) {
+            taskContainer.parentElement.outerHTML = ""
+          }
         }
 
         // TOPICS
