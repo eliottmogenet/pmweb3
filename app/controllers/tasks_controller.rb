@@ -48,6 +48,7 @@ class TasksController < ApplicationController
     @task.project = @project
     @task.creator = current_user
     @task.confidentiality = "Private"
+
     if @project.users.exclude?(@task.creator)
       @project_user = ProjectUser.new
       @project_user.project = @project
@@ -160,11 +161,31 @@ class TasksController < ApplicationController
   def archive
     #To complete with AJAX method
     @task = Task.find(params[:id])
-    @task.status = "archive"
-    @task.save
+    @project = @task.project
+    if @task.update(status: "archive")
+      ProjectChannel.broadcast_to(
+        @project,
+        {
+          update: true,
+          current_user_id: current_user.id,
+          private: @task.private?,
+          id: @task.id,
+          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
+          topic: @task.topic,
+          new_filter: render_to_string(partial: "tasks/topic_filter", locals: {topic: @task.topic, notify: true}, formats: [:html]),
+          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum
+        }
+      )
+
+      UserMailer.with(user: @task.user, task: @task, assigner: current_user).assigned_to_task.deliver_now if task_params[:user_id].present?
+
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.json { render json: { success: true, id: @task.id }.to_json }
+      end
+    end
   end
-
-
 
   private
 

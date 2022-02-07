@@ -11,21 +11,6 @@
     </div>
   <% end %>
 
-<!-- Check_box_tag => transform in select tag for filtering -->
-
-  <div class="tag-item">
-    <%= check_box_tag :unassigned, "true", params[:unassigned] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-    <%= label_tag :unassigned, "#Unassigned" %>
-  </div>
-  <div class="tag-item">
-    <%= check_box_tag :ongoing, "true", params[:ongoing] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-    <%= label_tag :ongoing, "#Ongoing" %>
-  </div>
-  <div class="tag-item">
-    <%= check_box_tag :done, "true", params[:done] == "true", class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
-    <%= label_tag :done, "#Done" %>
-  </div>
-
   <% @project.topics.uniq.each do |topic| %>
     <%= render "tasks/topic_filter", topic: topic %>
   <% end %>

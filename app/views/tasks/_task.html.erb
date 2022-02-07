@@ -29,6 +29,10 @@
       <div class="confidentiality-private">
         <p>Private</p>
       </div>
+    <% elsif task.archived? %>
+      <div class="confidentiality-private">
+        <p>Archived</p>
+      </div>
     <% elsif task.confidentiality == "Public" && task.user.nil?%>
       <div class="status-unassigned">
         <p>Unassigned</p>
@@ -79,41 +83,42 @@
     </div>
 
     <!-- Task time -->
-    <% if task.topic.present? == false %>
-
-    <% else %>
+    <% if task.topic.present? %>
       <% if task.private? %>
-            <!-- Step 1: Form for publishing the task to public  -->
-              <div class="task-edit" id="task-user-align">
-                <span class="button-postfix" data-action="click->task#makePublic">
-                  <p>Make public <i class="fas fa-eye"></i></p>
-                </span>
-              </div>
-          <% elsif task.public? && task.user.nil? %>             <!-- Step 2: Check right to assign contributor  -->
-            <% if task.topic.can_assign_task == true || current_user == @project.user %>
-                <div class="task-edit" id="task-user-align">
-                  <%= f.input :status, label: false, input_html: {value: 'ongoing', hidden: true}, style: "display: none" %>
-                  <%= f.association :user, collection: @project.users, label: false, prompt: 'Contributor', label_method: :full_name, input_html: { "data-action": "change->task#submit" } %>
-                </div>
-            <% else %>
-                <div class="task-edit" id="task-user-align">
-                </div>
-            <% end %>
-          <% elsif task.ongoing? && current_user == task.user %><!-- Step 3: Form for marking the task as done  -->
+        <!-- Step 1: Form for publishing the task to public  -->
+        <div class="task-edit" id="task-user-align">
+          <span class="button-postfix" data-action="click->task#makePublic">
+            <p>Make public <i class="fas fa-eye"></i></p>
+          </span>
+        </div>
+      <% elsif task.public? && task.user.nil? %>             <!-- Step 2: Check right to assign contributor  -->
+        <% if task.topic.can_assign_task == true || current_user == @project.user %>
           <div class="task-edit" id="task-user-align">
-            <span class="button-postfix" data-action="click->task#markAsDone">
-              <p>Mark as done ></p>
-            </span>
+            <%= f.input :status, label: false, input_html: {value: 'ongoing', hidden: true}, style: "display: none" %>
+            <%= f.association :user, collection: @project.users, label: false, prompt: 'Contributor', label_method: :full_name, input_html: { "data-action": "change->task#submit" } %>
           </div>
-        <% else %><!-- Step 4: When everything is done : nothing to display anymore -->
+        <% else %>
           <div class="task-edit" id="task-user-align">
           </div>
+        <% end %>
+      <% elsif task.ongoing? && current_user == task.user %><!-- Step 3: Form for marking the task as done  -->
+        <div class="task-edit" id="task-user-align">
+          <span class="button-postfix" data-action="click->task#markAsDone">
+            <p>Mark as done ></p>
+          </span>
+        </div>
+      <% else %><!-- Step 4: When everything is done : nothing to display anymore -->
+        <div class="task-edit" id="task-user-align">
+        </div>
+      <% end %>
+    <% else %>
     <% end %>
-<% end %>
 
     <div class="time-ago">
-      <% if current_user == task.creator || @project.user %>
-        <i class="fas fa-times"></i>
+      <% if !task.archived? && (current_user == task.creator || @project.user) %>
+        <span class="button-postfix" data-action="click->task#archive">
+          <i class="fas fa-times"></i>
+        </span>
       <% end %>
       <!--<p><%= time_ago_in_words(task.created_at)%></p>-->
     </div>

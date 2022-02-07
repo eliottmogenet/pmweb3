@@ -1108,8 +1108,10 @@ a:hover {
 }
 
 body {
-  background-image: url(background.png);
-  background-size: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100%;
 }
 
@@ -1241,7 +1243,7 @@ body {
 
 }
 
-#user_password {
+#user_password, #user_password_confirmation {
  border: none;
  background-color: #1F292C;
  color: white;

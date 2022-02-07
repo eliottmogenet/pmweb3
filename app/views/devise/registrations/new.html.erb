@@ -26,8 +26,10 @@
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-discord" role="tabpanel" aria-labelledby="pills-home-tab">
               <div id="discord-signup">
-                <button class="button-type">Sign-up with Discord <i class="fab fa-discord"></i></button>
-                </div>
+                <%= link_to "/users/auth/discord", method: :post, class: "button-type", style: "background-color: #{@project&.txt_color}" do %>
+                  Sign-up with Discord <i class="fab fa-discord"></i>
+                <% end %>
+              </div>
             </div>
             <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
                 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -45,15 +47,20 @@
                               placeholder: 'Password*',
                               required: true,
                               input_html: { autocomplete: 'off'} %>
+                  <%= f.input :password_confirmation,
+                              label: false,
+                              placeholder: 'Password confirmation*',
+                              required: true,
+                              input_html: { autocomplete: 'off'} %>
                 </div>
 
                 <% if @project.present? %>
                   <div class="form-actions">
-                    <%= f.button :submit, "Join", class: "button-type" %>
+                    <%= f.button :submit, "Join", class: "button-type", style: "background-color: #{@project&.txt_color};" %>
                   </div>
                 <% else %>
                   <div class="form-actions">
-                    <%= f.button :submit, "Create account", class: "button-type" %>
+                    <%= f.button :submit, "Create account", class: "button-type", style: "background-color: #{@project&.txt_color};" %>
                   </div>
                 <% end %>
               <% end %>

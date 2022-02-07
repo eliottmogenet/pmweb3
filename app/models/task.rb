@@ -31,6 +31,10 @@ class Task < ApplicationRecord
     status == "ongoing"
   end
 
+  def archived?
+    status == "archive"
+  end
+
   private
 
   def notify_project_members

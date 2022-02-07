@@ -1,8 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
-<body>
-
 <div class="page-header"><!-- Header above the container %>-->
     <div id="firs-separation" class="col-7">
       <% if user_signed_in? %>
@@ -35,11 +33,11 @@
     </div>
     <div id="request" class="col-5">
       <% if current_user == @project.user %>
-        <button class="button-type">
+        <button class="button-type" style="background-color: <%= @project.txt_color %>;">
             Share <%= @project.name %> Puzzle 🔗
         </button>
       <% else %>
-        <button class="button-type">
+        <button class="button-type" style="background-color: <%= @project.txt_color %>;">
           Request access to my Puzzle
         </button>
       <% end %>
@@ -54,7 +52,7 @@
           <b id="text-low">
             <% if params[:by_topic].present?%><!-- Condition on #topic title %>-->
               <%= @project.name %>
-                <span>
+                <span style="color: <%= @project.txt_color %>">
                   #<%= @topic_selected.name %>
                 </span>
             <% else %>
@@ -69,9 +67,9 @@
           <% if user_signed_in? && @project.users.include?(current_user) %>
             Member
           <% elsif user_signed_in? && @project.users.exclude?(current_user) %>
-            <%= link_to "Join '@project.name' Puzzle", join_puzzle_project_path(@project), method: :post, class: "button-type" %>
+            <%= link_to "Join #{@project.name} Puzzle", join_puzzle_project_path(@project), method: :post, class: "button-type", style: "background-color: #{@project.txt_color}" %>
           <% else %>
-            <button type="button" class="button-type" data-toggle="modal" data-target="#login-modal">
+            <button type="button" class="button-type" style="background-color: <%= @project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
               Join <%= @project.name %> Puzzle
             </button>
           <% end %>
@@ -81,7 +79,7 @@
                   <div class="datepicker">
                         <%= simple_form_for([@project, @topic_selected], html: { class: "form-horizontal"}) do |f| %>
                           <%= f.input :date, default: Time.parse('00:00'), label: false, date_separator: '', time_separator: '', datetime_separator: " " %>
-                          <%= f.submit 'Start', id: 'time_set' %>
+                          <%= f.submit 'Start', id: 'time_set', style: "background-color: #{@project.txt_color}" %>
                         <% end %>
                   </div>
               <% elsif @topic_selected.date.nil? && @project.user != current_user %>
@@ -132,47 +130,20 @@
   <div data-controller="filter">
     <div class="filters">
       <%= render "tasks/filters", project: @project, topics: @topics %>
-        <% if current_user == @project.user %>
-            <p id="button-spuzzle" data-toggle="modal" data-target="#topic-modal">+Create subpuzzle</p>
-        <% end %>
+      <% if current_user == @project.user %>
+        <p id="button-spuzzle" data-toggle="modal" data-target="#topic-modal">+Create subpuzzle</p>
+      <% end %>
     </div>
-
-    <% if params[:by_topic].present?%> <!-- Rules div -->
-      <div class="rules-description">
-        <h2>Rules</h2>
-          <p><%= @topic_selected.rules %></p>
-            <button type="button" class="button-type">
-              Got it 👌
-            </button>
-      </div>
-    <% end %>
-
-    <% if params[:by_topic].present? %>
-        <% if @topic_selected.can_create_task == true %>
-          <div class="task-create-button">
-            <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
-              <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
-            <% end %>
-          </div>
-          <% elsif current_user == @project.users.first %>
-            <div class="task-create-button">
-              <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
-                <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
-              <% end %>
-          </div>
-        <% end %>
-  <% end %>
-
 
     <!-- Start of the index of the tasks @filtered_tasks -->
 
-      <div id="tasks" data-project-id="<%= @project.id %>" data-filter-target="list" data-tasks-target="list" > <!-- Div with all the tasks --> 
-        <% if @project.tasks.empty? %>
-          Be the first to create a task
-        <% else %>
-          <%= render "tasks/list", tasks: @tasks %>
-        <% end %>
-      </div>
+    <div id="tasks" data-project-id="<%= @project.id %>" data-filter-target="list"> <!-- Div with all the tasks --> 
+      <% if @project.tasks.empty? %>
+        Be the first to create a task
+      <% else %>
+        <%= render "tasks/list", tasks: @tasks %>
+      <% end %>
+    </div>
   </div>
 
   <!-- End of the list of tasks-->
@@ -325,7 +296,7 @@
                     <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
                     <label class="custom-control-label" for="customSwitch3">By vote only</label>
                  </div>
-                 <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle" %>
+                 <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}" %>
               <%end%>
             </div>
            </div>
@@ -364,24 +335,14 @@
                   <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
                   <label class="custom-control-label" for="customSwitch3">By vote only</label>
                </div>
-               <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle" %>
+               <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}"  %>
             <%end%>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
-
 </div>
-</body>
-
 
 <script>
 const ethereumButton = document.querySelector('.enableEthereumButton');

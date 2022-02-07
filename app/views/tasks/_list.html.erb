@@ -1,7 +1,36 @@
-<% @tasks.sort.reverse.each do |task| %>
-  <%= render "tasks/task", task: task %>
+<% if params[:by_topic].present?%> <!-- Rules div -->
+  <div class="rules-description">
+    <h2>Rules</h2>
+    <p><%= @topic_selected.rules %></p>
+    <button type="button" class="button-type" style="background-color: <%= @project.txt_color %>;">
+      Got it 👌
+    </button>
+  </div>
 <% end %>
 
+<% if params[:by_topic].present? %>
+  <% if @topic_selected.can_create_task == true %>
+    <div class="task-create-button">
+      <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+        <%= f.input :topic_id, as: :hidden, input_html: { value: @topic_selected.id } %>
+        <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+      <% end %>
+    </div>
+  <% elsif current_user == @project.users.first %>
+    <div class="task-create-button">
+      <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+        <%= f.input :topic_id, as: :hidden, input_html: { value: @topic_selected.id } %>
+        <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<div data-tasks-target="list">
+  <% @tasks.sort.reverse.each do |task| %>
+    <%= render "tasks/task", task: task %>
+  <% end %>
+</div>
 
 
 

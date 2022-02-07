@@ -15,8 +15,8 @@ const initProjectCable = () => {
         // TASKS
         // TASK MADE PUBLIC
         if (data.create) {
-          const tokenTotalContainer = document.getElementById("tokenTotal")
-          tokenTotalContainer.innerHTML = parseInt(data.total)
+          // const tokenTotalContainer = document.getElementById("tokenTotal")
+          // tokenTotalContainer.innerHTML = parseInt(data.total)
 
           if (taskContainer === null) {
             tasksContainer.insertAdjacentHTML('afterbegin', data.partial);
@@ -28,28 +28,28 @@ const initProjectCable = () => {
         // TASK EDITED
         } else if (data.update) {
           if (taskContainer) {
-            const tokenSubTotalContainer = document.getElementById("tokenSubTotal")
-            const tokenTotalContainer = document.getElementById("tokenTotal")
-            const tokenUserTotalContainer = document.getElementById("tokenUserTotal")
+            // const tokenSubTotalContainer = document.getElementById("tokenSubTotal")
+            // const tokenTotalContainer = document.getElementById("tokenTotal")
+            // const tokenUserTotalContainer = document.getElementById("tokenUserTotal")
 
             taskContainer.parentElement.outerHTML = data.partial
-            tokenSubTotalContainer.innerHTML = parseInt(data.subtotal)
-            tokenTotalContainer.innerHTML = parseInt(data.total)
+            // tokenSubTotalContainer.innerHTML = parseInt(data.subtotal)
+            // tokenTotalContainer.innerHTML = parseInt(data.total)
 
-            if (tokenUserTotalContainer.dataset.id == data.user_id) {
-              tokenUserTotalContainer.innerHTML = parseInt(data.usertotal)
-            }
+            // if (tokenUserTotalContainer.dataset.id == data.user_id) {
+            //   tokenUserTotalContainer.innerHTML = parseInt(data.usertotal)
+            // }
           }
         }
 
         // TOPICS
 
-        if (!topicContainer && data.topic) {
-          if ((data.private && data.current_user_id == currentUserId) || !data.private) {          
-            const filtersContainer = document.getElementById("filtersContainer")
-            filtersContainer.insertAdjacentHTML("beforeend", data.new_filter)
-          }
-        }
+        // if (!topicContainer && data.topic) {
+        //   if ((data.private && data.current_user_id == currentUserId) || !data.private) {          
+        //     const filtersContainer = document.getElementById("filtersContainer")
+        //     filtersContainer.insertAdjacentHTML("beforeend", data.new_filter)
+        //   }
+        // }
         const bubble = document.getElementById(`bubble-${data.topic}`)
         if (bubble && !data.private && data.current_user_id !== parseInt(currentUserId)) {
           console.log("HAS THE BUBBLE")

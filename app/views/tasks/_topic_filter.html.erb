@@ -1,5 +1,5 @@
 <div class="tag-item tag-topic" id="topic-<%= topic.name%>">
-  <%= radio_button_tag :by_topic, topic.id, params[:by_topic] == topic.id, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
+  <%= radio_button_tag :by_topic, topic.id, params[:by_topic] == topic.id.to_s, class: "tag-selector", "data-filter-target": "input", 'data-action': 'change->filter#apply' %>
   <%= label_tag "by_topic_#{topic.id}", "##{topic.name}" %>
   <% if current_user.present? %>
       <span id="bubble-<%= topic %>" class="notification-bubble top-right-bubble <%= 'd-none' unless current_user.has_topic_notifications_for(topic) %>"></span>
