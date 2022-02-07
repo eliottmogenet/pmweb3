@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
-                <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
                 <%= f.error_notification %>
 
                 <div class="form-inputs">
