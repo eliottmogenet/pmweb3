@@ -56,6 +56,23 @@ export default class extends Controller {
       })    
   }
 
+  vote(event) {
+    event.preventDefault()
+
+    const id = this.cardTarget.dataset.id
+    const url = `/tasks/${id}/vote`
+    fetchWithToken(url, {
+      method: 'PATCH',
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(response => response.json())
+      .then((data) => {
+        // this.cardTarget.outerHTML = data.partial
+        // document.getElementById("tokenSubTotal").innerHTML = parseInt(data.subtotal)
+        // document.getElementById("tokenUserTotal").innerHTML = parseInt(data.usertotal)
+      })    
+  }
+
   archive(event) {
     event.preventDefault()
 

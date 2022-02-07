@@ -6,7 +6,7 @@ export default class extends Controller {
   toggleAll(event) {
     event.preventDefault()
 
-    const url = `${this.formTarget.action}`
+    const url = `${this.formTarget.action}?puzzle=true`
     this.inputTargets.forEach((input) => {
       input.checked = false
     })
@@ -14,7 +14,7 @@ export default class extends Controller {
       .then(response => response.json())
       .then((data) => {
         this.listTarget.innerHTML = data.partial;
-        window.history.pushState('', '', '?')
+        window.history.pushState('', '', '?puzzle=true')
       })
   }
 

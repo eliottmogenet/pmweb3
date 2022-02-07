@@ -1,5 +1,4 @@
 class TasksController < ApplicationController
-  has_scope :project_tasks, type: :boolean
   has_scope :is_private, type: :boolean
   has_scope :assigned_to_me
   has_scope :unassigned, type: :boolean
@@ -152,10 +151,34 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
-    @vote = Vote.new
-    @vote.task = @task
-    @vote.user = current_user
-    @vote.save
+    @vote = Vote.new(
+      task: @task,
+      user: current_user
+    )
+    if @vote.save
+      @task.token_number += 1
+      @task.save
+
+      @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
+
+      ProjectChannel.broadcast_to(
+        @project,
+        {
+          vote: true,
+          current_user_id: current_user.id,
+          id: @task.id,
+          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
+          subtotal: @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+          total: @project.public_tasks.pluck(:token_number).map(&:to_i).sum,
+          user_id: @task.user_id,
+        }
+      )
+
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.json { render json: { success: true }.to_json }
+      end
+    end
   end
 
   def archive

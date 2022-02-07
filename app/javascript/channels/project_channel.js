@@ -4,6 +4,7 @@ const initProjectCable = () => {
   const tasksContainer = document.getElementById('tasks');
   if (tasksContainer) {
     const id = tasksContainer.dataset.projectId;
+    const userId = tasksContainer.dataset.userId;
 
     consumer.subscriptions.create({ channel: "ProjectChannel", id: id }, {
       received(data) {
@@ -39,6 +40,16 @@ const initProjectCable = () => {
             // if (tokenUserTotalContainer.dataset.id == data.user_id) {
             //   tokenUserTotalContainer.innerHTML = parseInt(data.usertotal)
             // }
+          }
+        } else if (data.vote) {
+          if (taskContainer && userId == data.current_user_id) {
+            taskContainer.parentElement.outerHTML = data.partial
+          } else if (taskContainer) {
+            const tokenContainer = taskContainer.querySelector("#tokenContainer")
+            
+            if (tokenContainer) {
+              tokenContainer.innerText = parseInt(tokenContainer.innerText) + 1
+            }
           }
         }
 

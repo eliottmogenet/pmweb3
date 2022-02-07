@@ -1056,8 +1056,8 @@
       "validations": []
     }, {
       "field": "token_number",
-      "type": "String",
-      "default_value": null,
+      "type": "Number",
+      "default_value": "0",
       "enums": null,
       "integration": null,
       "is_filterable": true,
@@ -1082,6 +1082,22 @@
       "is_virtual": false,
       "reference": "Vote.id",
       "inverse_of": "task",
+      "relationship": "HasMany",
+      "widget": null,
+      "validations": []
+    }, {
+      "field": "voters",
+      "type": ["Number"],
+      "default_value": null,
+      "enums": null,
+      "integration": null,
+      "is_filterable": false,
+      "is_read_only": false,
+      "is_required": false,
+      "is_sortable": true,
+      "is_virtual": false,
+      "reference": "User.id",
+      "inverse_of": "tasks",
       "relationship": "HasMany",
       "widget": null,
       "validations": []

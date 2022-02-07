@@ -137,7 +137,7 @@
 
     <!-- Start of the index of the tasks @filtered_tasks -->
 
-    <div id="tasks" data-project-id="<%= @project.id %>" data-filter-target="list"> <!-- Div with all the tasks --> 
+    <div data-filter-target="list"> <!-- Div with all the tasks --> 
       <% if @project.tasks.empty? %>
         Be the first to create a task
       <% else %>

@@ -1,4 +1,4 @@
-<%= simple_form_for([ @project, task ], html: { "data-controller": "task", "data-task-target": "form", "data-action": "submit->task#submit"}) do |f| %>
+<%= simple_form_for([ @project, task ], html: { novalidate: "novalidate", "data-controller": "task", "data-task-target": "form", "data-action": "submit->task#submit"}) do |f| %>
   <div class="task-card" id="task-<%= task.id %>" data-id="<%= task.id %>" data-task-target="card"> <!-- Start of task-card div -->
     <div class="task-edit"> <!-- Div for token number form or display -->
       <div>
@@ -6,21 +6,26 @@
          <p id="token-number"><p>
         <% elsif task.private? && task.topic.can_vote == true %>
           <p id="token-number">On vote<p>
-        <% elsif task.token_number.present? %>
-          <p id="token-number"><%= task.token_number %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
+        <% elsif task.topic.present? && task.topic.can_vote == true && task.was_upvoted_by(current_user) %>
+          <p id="token-number">
+            <span id="tokenContainer"><%= task.token_number %></span>
+            <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p>
         <% elsif task.topic.present? && task.topic.can_vote == true %>
-          <p id="token-number"><%= task.votes.count %>
-              <span id="vote-button" class="button-postfix" data-action="click->task#vote">
-                <i class="fas fa-sort-up"></i>
-              </span>
-          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          <p id="token-number">
+            <span id="tokenContainer"><%= task.token_number %></span>
+            <span id="vote-button" class="button-postfix" data-action="click->task#vote">
+              <i class="fas fa-sort-up"></i>
+            </span>
+            <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
           <p>
-        <% elsif task.topic.present? && task.topic.can_vote == true && task.votes.include?(user_id: current_user) %>
-          <p id="token-number"><%= task.votes.count %>
-          <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
-          <p>
+        <% elsif task.token_number.positive? %>
+          <p id="token-number">
+            <span id="tokenContainer"><%= task.token_number %></span>
+            <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
+          </p>
         <% else %>
-            <%= f.input :token_number, label: false, placeholder: '0', input_html: { autocomplete: 'off'} %>
+          <%= f.input :token_number, as: :string, label: false, placeholder: '0', input_html: { novalidate: "novalidate", autocomplete: 'off'} %>
         <% end %>
       </div>
     </div>

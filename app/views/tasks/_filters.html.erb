@@ -1,6 +1,6 @@
 <%= form_tag project_tasks_path(project), method: :get, 'data-filter-target': 'form', id: "filtersContainer" do %>
   <div class="tag-item">
-    <%= check_box_tag :project_tasks, "true", params[:project_tasks] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
+    <%= check_box_tag :project_tasks, "true", params[:puzzle] == "true", class: "tag-selector", "data-action": "change->filter#toggleAll", "data-filter-target": "all" %>
     <%= label_tag :project_tasks, "#Puzzle" %>
   </div>
 
