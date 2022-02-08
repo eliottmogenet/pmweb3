@@ -17,7 +17,7 @@
           <%= f.input :description, label: false, placeholder: 'Describe your Puzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true, error: "description is missing" %>
       </div>
     </div>
-    <%= f.submit 'Unlock 1/2 piece', class: "button-type", id: "button-project"%>
+    <%= f.submit 'Unlock 1/2 piece', class: "button-type", id: "button-project", style: "background-color: #{@project.txt_color};" %>
     <% end %>
   </div>
 

@@ -12,7 +12,11 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
   </head>
 
-  <body>
+  <% if @project && @project.background.attached? %>
+    <body style="background-image: url(<%= cl_image_path(@project.background.key) %>);">
+  <% else %>
+    <body style="background-image: url(<%= image_path 'background.png' %>);">
+  <% end %>
     <%= yield %>
     <%= render 'shared/flashes' %>
   </body>

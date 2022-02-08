@@ -66,12 +66,6 @@ class ProjectsController < ApplicationController
     redirect_to project_tasks_path(@project)
   end
 
-  def reset_time
-    @project = Project.find(params[:id])
-    @project.date = nil
-    @project.save!
-    redirect_to project_tasks_path(@project)
-  end
 
   def join_puzzle
     @project =  Project.find(params[:id])
@@ -95,7 +89,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :date, :user_id, :description, :txt_color, :date, :uui)
+    params.require(:project).permit(:name, :date, :user_id, :description, :txt_color, :date, :uui, :background)
   end
 
   def project_users_params

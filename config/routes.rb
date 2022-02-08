@@ -1,16 +1,19 @@
 Rails.application.routes.draw do
   mount ForestLiana::Engine => '/forest'
-  devise_for :users, controllers: {registrations: "registrations"}
+  devise_for :users, controllers: {
+    registrations: "registrations",
+    :omniauth_callbacks => "users/omniauth_callbacks"
+  }
 
   devise_scope :user do
    get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
   root to: 'pages#home'
+  get 'reload', to: 'pages#reload'
 
   resources :projects do
     member do
-      post 'reset_time', to: "projects#reset_time"
       post 'join_puzzle', to: "projects#join_puzzle"
     end
     resources :tasks
@@ -25,6 +28,13 @@ Rails.application.routes.draw do
       patch :mark_as_done
       patch :vote
       patch :archive
+    end
+  end
+
+  resources :topics, only: [] do
+    resources :user_topics, only: [:create]
+    member do
+      patch 'reset_time'
     end
   end
   #resources :employers do

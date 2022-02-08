@@ -41,7 +41,7 @@
         <%= f.input :background, as: :file, :label  =>  'What’s your workspace background?*' %>
       </div>
     </div>
-      <%= f.submit 'Unlock 2/2 pieces', class: "button-type", id: "button-project"%>
+      <%= f.submit 'Unlock 2/2 pieces', class: "button-type", id: "button-project", style: "background-color: #{@project.txt_color};"%>
     <% end %>
   </div>
 </div>
