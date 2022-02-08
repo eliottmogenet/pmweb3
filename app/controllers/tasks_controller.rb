@@ -146,6 +146,8 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
+    authorize @task
+
     if @task.update(status: "archive")
       broadcast_changes
 

@@ -12,10 +12,14 @@ class ProjectsController < ApplicationController
     # end
   def new
     @project = Project.new
-  end
 
+    authorize @project
+  end
+  
   def create
     @project = Project.new(project_params)
+    authorize @project
+    
     @project.user = current_user
     @project_user = ProjectUser.new
     @project_user.project = @project
@@ -32,11 +36,14 @@ class ProjectsController < ApplicationController
 
   def edit
     @project = Project.find(params[:id])
+    authorize @project
   end
-
+  
   def show
     @employer = current_user.employer
     @project = current_user.projects.first
+    authorize @project
+    
     @task = Task.new
       if @project.tasks != nil
         @assigned_tasks = @project.tasks.where.not('user_id' => nil)
@@ -62,6 +69,8 @@ class ProjectsController < ApplicationController
 
   def update
     @project = Project.find(params[:id])
+    authorize @project
+    
     @project.update(project_params)
     redirect_to project_tasks_path(@project)
   end
@@ -69,6 +78,8 @@ class ProjectsController < ApplicationController
 
   def join_puzzle
     @project =  Project.find(params[:id])
+    authorize @project
+
     @project_user = ProjectUser.new
     @project_user.project = @project
     @project_user.user = current_user
@@ -77,6 +88,8 @@ class ProjectsController < ApplicationController
   end
 
   def join
+    authorize @project
+
     if user_signed_in? && current_user.projects.include?(@project)
       flash[:notice] = "You already joined #{@project.name}'s Puzzle"
       redirect_to project_tasks_path(@project)

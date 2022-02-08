@@ -1598,6 +1598,22 @@
       "widget": null,
       "validations": []
     }, {
+      "field": "user_topics",
+      "type": ["Number"],
+      "default_value": null,
+      "enums": null,
+      "integration": null,
+      "is_filterable": false,
+      "is_read_only": false,
+      "is_required": false,
+      "is_sortable": true,
+      "is_virtual": false,
+      "reference": "UserTopic.id",
+      "inverse_of": "user",
+      "relationship": "HasMany",
+      "widget": null,
+      "validations": []
+    }, {
       "field": "photo_attachment",
       "type": "Number",
       "default_value": null,
@@ -1722,7 +1738,7 @@
       "is_sortable": true,
       "is_virtual": false,
       "reference": "User.id",
-      "inverse_of": null,
+      "inverse_of": "user_topics",
       "relationship": "BelongsTo",
       "widget": null,
       "validations": []
