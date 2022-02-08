@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount ForestLiana::Engine => '/forest'
   devise_for :users, controllers: {
     registrations: "registrations",
-    :omniauth_callbacks => "users/omniauth_callbacks" 
+    :omniauth_callbacks => "users/omniauth_callbacks"
   }
 
   devise_scope :user do
@@ -14,11 +14,14 @@ Rails.application.routes.draw do
 
   resources :projects do
     member do
-      post 'reset_time', to: "projects#reset_time"
       post 'join_puzzle', to: "projects#join_puzzle"
     end
     resources :tasks
-    resources :topics
+    resources :topics do
+      member do
+        post 'reset_time', to: "topics#reset_time"
+      end
+    end
   end
 
   get "/projects/:uuid/join", to: "projects#join", as: :join_project

@@ -57,7 +57,7 @@
                 </span>
             <% else %>
               <%= @project.name %>
-              <span>
+              <span style="color: <%= @project.txt_color %>">
                 #Puzzle
               </span>
             <% end  %>
@@ -114,7 +114,7 @@
           <div class="reset-deadline">
             <p>Before deadline
             <% if current_user == @project.user %>
-                <%= link_to reset_time_project_path(@project), id: "reset-button" , method: :post do %>
+                <%= link_to reset_time_project_topic_path(@project, @topic_selected), id: "reset-button" , method: :post do %>
                   <i class="fas fa-undo"></i></p>
               <% end %>
             <% end %>
@@ -137,7 +137,7 @@
 
     <!-- Start of the index of the tasks @filtered_tasks -->
 
-    <div data-filter-target="list"> <!-- Div with all the tasks --> 
+    <div data-filter-target="list"> <!-- Div with all the tasks -->
       <% if @project.tasks.empty? %>
         Be the first to create a task
       <% else %>
