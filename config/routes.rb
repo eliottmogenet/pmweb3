@@ -17,11 +17,7 @@ Rails.application.routes.draw do
       post 'join_puzzle', to: "projects#join_puzzle"
     end
     resources :tasks
-    resources :topics do
-      member do
-        post 'reset_time', to: "topics#reset_time"
-      end
-    end
+    resources :topics
   end
 
   get "/projects/:uuid/join", to: "projects#join", as: :join_project
@@ -37,6 +33,9 @@ Rails.application.routes.draw do
 
   resources :topics, only: [] do
     resources :user_topics, only: [:create]
+    member do
+      patch 'reset_time'
+    end
   end
   #resources :employers do
     #resources :projects do

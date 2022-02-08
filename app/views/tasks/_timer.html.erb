@@ -1,0 +1,18 @@
+<% if topic_selected.date.nil? && project.user == current_user %>
+  <div class="datepicker">
+    <%= simple_form_for([project, topic_selected], html: { class: "form-horizontal", "data-timer-target": "form", "data-action": "submit->timer#submit" }) do |f| %>
+      <%= f.input :date, default: Time.parse('00:00'), label: false, date_separator: '', time_separator: '', datetime_separator: " " %>
+      <%= f.submit 'Start', id: 'time_set', style: "background-color: #{project.txt_color}" %>
+    <% end %>
+  </div>
+<% elsif topic_selected.date.nil? && project.user != current_user %>
+  <h1 id="timer" style="margin-left: 170px"><i class="fas fa-infinity"></i></h1>
+<% else %>
+  <h1 id="timer">
+  <% if date[:weeks] == 0 %>
+    <%= pluralize date[:days], "day" %>
+  <% else  %>
+    <%= pluralize (date[:weeks]*7 + date[:days]), "day" %>
+  <% end %>
+  <%= pluralize date[:hours], "h" %> <i class="far fa-clock"></i></h1>
+<% end %>

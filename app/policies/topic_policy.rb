@@ -8,4 +8,12 @@ class TopicPolicy < ApplicationPolicy
   def create?
     record.project.user == user
   end
+
+  def update?
+    record.project.user == user
+  end
+  
+  def reset_time?
+    record.project.user == user
+  end
 end

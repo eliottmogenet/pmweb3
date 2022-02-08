@@ -11,16 +11,34 @@ class TopicsController < ApplicationController
   end
 
   def reset_time
-    @project = Project.find(params[:project_id])
     @topic_selected = Topic.find(params[:id])
+    @project = @topic_selected.project
+
+    authorize @topic_selected
+
     @topic_selected.date = nil
-    @topic_selected.save!
+
+    if @topic_selected.save
+      respond_to do |format|
+        format.html
+        format.text { render partial: "tasks/timer", locals: {project: @project, topic_selected: @topic_selected}, formats: [:html] }
+      end
+    end
   end
 
   def update
     @topic_selected = Topic.find(params[:id])
-    @topic_selected.update(topic_params)
-    @topic_selected.save!
+    @project = Project.find(params[:project_id])
+    
+    authorize @topic_selected
+    
+    if @topic_selected.update(topic_params)
+      @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
+      respond_to do |format|
+        format.html
+        format.text { render partial: "tasks/timer", locals: {project: @project, topic_selected: @topic_selected, date: @date}, formats: [:html] }
+      end
+    end
   end
 
   private

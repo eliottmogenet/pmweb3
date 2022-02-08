@@ -44,90 +44,17 @@
     </div>
 </div>
 
-<div class="container" data-controller="tasks" id="mainContainer" data-user-id="<%= @project.id %>"> <!-- Change from <%= current_user %> to <%= @project.id %>-->
+<div class="container" data-controller="tasks filter" id="mainContainer" data-user-id="<%= @project.id %>"> <!-- Change from <%= current_user %> to <%= @project.id %>-->
   <div class="puzzle-header">
-    <div>
-      <div class="header1">
-        <h1 id="project-header-title">
-          <b id="text-low">
-            <% if params[:by_topic].present?%><!-- Condition on #topic title %>-->
-              <%= @project.name %>
-                <span style="color: <%= @project.txt_color %>">
-                  #<%= @topic_selected.name %>
-                </span>
-            <% else %>
-              <%= @project.name %>
-              <span style="color: <%= @project.txt_color %>">
-                #Puzzle
-              </span>
-            <% end  %>
-          </b>
-        </h1>
-        <% if @topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
-          <% if user_signed_in? && @project.users.include?(current_user) %>
-            Member
-          <% elsif user_signed_in? && @project.users.exclude?(current_user) %>
-            <%= link_to "Join #{@project.name} Puzzle", join_puzzle_project_path(@project), method: :post, class: "button-type", style: "background-color: #{@project.txt_color}" %>
-          <% else %>
-            <button type="button" class="button-type" style="background-color: <%= @project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
-              Join <%= @project.name %> Puzzle
-            </button>
-          <% end %>
-        <% else %>
-            <div class="set-deadline"><!-- If topic is selected display the timer edition only for the @project.user >-->
-              <% if @topic_selected.date.nil? && @project.user == current_user %>
-                  <div class="datepicker">
-                        <%= simple_form_for([@project, @topic_selected], html: { class: "form-horizontal"}) do |f| %>
-                          <%= f.input :date, default: Time.parse('00:00'), label: false, date_separator: '', time_separator: '', datetime_separator: " " %>
-                          <%= f.submit 'Start', id: 'time_set', style: "background-color: #{@project.txt_color}" %>
-                        <% end %>
-                  </div>
-              <% elsif @topic_selected.date.nil? && @project.user != current_user %>
-                <h1 id="timer" style="margin-left: 170px"><i class="fas fa-infinity"></i></h1>
-              <% else %>
-                  <h1 id="timer">
-                    <% if @date[:weeks] == 0 %>
-                      <%= pluralize @date[:days], "day" %>
-                    <% else  %>
-                      <%= pluralize (@date[:weeks]*7 + @date[:days]), "day" %>
-                    <% end %>
-                      <%= pluralize @date[:hours], "h" %> <i class="far fa-clock"></i></h1>
-              <% end %>
-            </div>
-        <% end %>
-      </div>
-      <div id="header2">
-        <div class="topic_title">
-          <% if @topic_selected.nil?  %>
-           <p><%= @project.description %></p>
-          <% else %>
-            <p><%= @topic_selected.description %>
-            <% if @topic_selected.can_vote == true %>
-              (On vote)
-            <% end %></p>
-          <% end  %>
-        </div>
-        <% if @topic_selected.nil? %>
-        <% elsif  @topic_selected.date.nil? && @project.user != current_user %>
-          <p>No time limit here</p>
-        <% else %>
-          <div class="reset-deadline">
-            <p>Before deadline
-            <% if current_user == @project.user %>
-                <%= link_to reset_time_project_topic_path(@project, @topic_selected), id: "reset-button" , method: :post do %>
-                  <i class="fas fa-undo"></i></p>
-              <% end %>
-            <% end %>
-        </div>
-        <% end %>
-      </div>
+    <div data-filter-target="title" data-controller="timer">
+      <%= render "tasks/header", project: @project, topic_selected: @topic_selected, date: @date %>
     </div>
   </div>
 
   <hr id="separation1">
 
   <!-- Filters with links_to and params for filtering the view -->
-  <div data-controller="filter">
+  <div>
     <div class="filters">
       <%= render "tasks/filters", project: @project, topics: @topics %>
       <% if current_user == @project.user %>

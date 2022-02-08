@@ -10,7 +10,11 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def update?
-    record.public? && record.user.nil? && (record.topic.can_assign_task || user == record.project.user )
+    user == record.project.user || user == record.creator
+  end
+
+  def set_tokens?
+    user == record.project.user || user == record.creator
   end
 
   def mark_as_public?
@@ -26,6 +30,10 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def archive?
-    !record.archived? && (user == record.creator || user == record.project.user)
+    !record.archived? && (user == record.creator || user == record.project.user || user == record.user)
+  end
+
+  def vote?
+    record.topic.can_vote
   end
 end

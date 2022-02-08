@@ -43,6 +43,7 @@ class TasksController < ApplicationController
         render json: {
           partial: render_to_string(partial: "tasks/list", locals: {tasks: @tasks}, formats: [:html]),
           filters: render_to_string(partial: "tasks/filters", locals: {project: @project, topics: @topics}, formats: [:html]),
+          title: render_to_string(partial: "tasks/header", locals: {project: @project, topic_selected: @topic_selected, date: @date}, formats: [:html]),
         }.to_json
       end
     end
@@ -104,7 +105,17 @@ class TasksController < ApplicationController
     if @task.update(status: "claimed")
       @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
       broadcast_changes
-      respond_with_task
+
+      respond_to do |format|
+        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.json do 
+          render json: {
+            partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
+            user_total: @task.user&.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
+            user_id: @task.user&.id
+          }.to_json
+        end
+      end
     end
   end
 
@@ -112,6 +123,8 @@ class TasksController < ApplicationController
     #To complete with AJAX method
     @task = Task.find(params[:id])
     @project = @task.project
+
+    authorize @task
 
     @vote = Vote.new(
       task: @task,
@@ -124,20 +137,8 @@ class TasksController < ApplicationController
 
       @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
 
-      ProjectChannel.broadcast_to(
-        @project,
-        {
-          vote: true,
-          current_user_id: current_user.id,
-          id: @task.id,
-          partial: render_to_string(partial: "tasks/task", locals: {task: @task, notify: true}, formats: [:html]),
-        }
-      )
-
-      respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.json { render json: { success: true }.to_json }
-      end
+      broadcast_changes
+      respond_with_task
     end
   end
 
