@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :votes
   has_many :project_users
   has_many :projects, through: :project_users
-  has_many :notifications, as: :recipient
+  has_many :notifications, as: :recipient, dependent: :destroy
   has_many :user_topics, dependent: :destroy
   has_one_attached :photo
 

@@ -5,7 +5,8 @@ class Task < ApplicationRecord
   belongs_to :topic, optional: true
   has_many :votes, dependent: :destroy
   has_many :voters, through: :votes, source: :user
-  #belongs_to :project, through: :topic
+
+  has_noticed_notifications
 
   validates :title, presence: true
   validates_length_of :title, :maximum => 100, :message => "Task title is too long"
