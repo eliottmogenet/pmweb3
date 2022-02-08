@@ -29,7 +29,7 @@
     <% end %>
   <% end %>
 
-  <div data-tasks-target="list" class="mt-3" id="tasks" data-project-id="<%= @project.id %>" data-user-id="<%= current_user.id %>"> <!-- Div with all the tasks --> 
+  <div data-tasks-target="list" class="mt-3" id="tasks" data-project-id="<%= @project.id %>" data-user-id="<%= current_user.id %>"> <!-- Div with all the tasks -->
     <% @tasks.each do |task| %>
       <%= render "tasks/task", task: task %>
     <% end %>

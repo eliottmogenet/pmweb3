@@ -7,6 +7,13 @@ class TopicsController < ApplicationController
     redirect_to project_tasks_path(@project) #+topic scope selected
   end
 
+  def reset_time
+    @project = Project.find(params[:project_id])
+    @topic_selected = Topic.find(params[:id])
+    @topic_selected.date = nil
+    @topic_selected.save!
+  end
+
   def update
     @topic_selected = Topic.find(params[:id])
     @topic_selected.update(topic_params)
