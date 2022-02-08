@@ -72,7 +72,7 @@ class ProjectsController < ApplicationController
     authorize @project
     
     @project.update(project_params)
-    redirect_to project_tasks_path(@project)
+    redirect_to project_tasks_path(@project, puzzle: true)
   end
 
 
@@ -84,7 +84,7 @@ class ProjectsController < ApplicationController
     @project_user.project = @project
     @project_user.user = current_user
     @project_user.save
-    redirect_to project_tasks_path(@project)
+    redirect_to project_tasks_path(@project, puzzle: true)
   end
 
   def join
@@ -92,10 +92,10 @@ class ProjectsController < ApplicationController
 
     if user_signed_in? && current_user.projects.include?(@project)
       flash[:notice] = "You already joined #{@project.name}'s Puzzle"
-      redirect_to project_tasks_path(@project)
+      redirect_to project_tasks_path(@project, puzzle: true)
     else
       flash[:alert] = "You cannot join two projects (yet)..."
-      redirect_to project_tasks_path(current_user.projects.first)
+      redirect_to project_tasks_path(current_user.projects.first, puzzle: true)
     end
   end
 

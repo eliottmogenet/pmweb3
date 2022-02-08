@@ -38,7 +38,7 @@ class RegistrationsController < Devise::RegistrationsController
     @user = current_user
     @project = current_user.projects.first
     @user.update(user_params)
-    redirect_to project_tasks_path(@project)
+    redirect_to project_tasks_path(@project, puzzle: true)
   end
 
   private

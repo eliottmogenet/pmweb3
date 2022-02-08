@@ -107,7 +107,7 @@ class TasksController < ApplicationController
       broadcast_changes
 
       respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.html { redirect_to project_tasks_path(@project, puzzle: true) }
         format.json do 
           render json: {
             partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
@@ -152,7 +152,7 @@ class TasksController < ApplicationController
       broadcast_changes
 
       respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+        format.html { redirect_to project_tasks_path(@project, puzzle: true) }
         format.text
       end
     end
@@ -162,7 +162,7 @@ class TasksController < ApplicationController
 
   def respond_with_task
     respond_to do |format|
-      format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+      format.html { redirect_to project_tasks_path(@project, puzzle: true) }
       format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
     end
   end
