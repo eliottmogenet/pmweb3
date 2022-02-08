@@ -22,6 +22,11 @@ export default class extends Controller {
   apply(event) {
     event.preventDefault()
 
+    this.inputTargets.forEach((input) => {
+      input.checked = false
+    })
+    event.currentTarget.checked = true
+
     let query = "?"
     this.allTarget.checked = false
     this.inputTargets.forEach((input) => {

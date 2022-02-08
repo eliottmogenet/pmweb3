@@ -14,12 +14,16 @@
   <% end %>
 
   <% if params[:by_topic].present? && policy(@task).create? %>
-    <div class="task-create-button">
-      <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
-        <%= f.input :topic_id, as: :hidden, input_html: { value: @topic_selected.id } %>
-        <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
-      <% end %>
-    </div>
+  	<% if user_signed_in? %>
+	    <div class="task-create-button">
+	      <%= simple_form_for([ @project, @task ], html: { "data-tasks-target": "createForm", "data-action": "submit->tasks#submit" }) do |f| %>
+	        <%= f.input :topic_id, as: :hidden, input_html: { value: @topic_selected.id } %>
+	        <%= f.input :title, label: false, placeholder: '+ Create a new puzzle piece', input_html: { autocomplete: 'off', "data-tasks-target": "input" }, :error_html => { :id => "name_error"} %>
+	      <% end %>
+	    </div>
+  	<% else %>
+  	<p>This subpuzzle is open for task creation, but you need to <a href="#" class="sign-in-link" data-toggle="modal" data-target="#login-modal">sign-in first</a> !</p>
+		<% end %>
   <% end %>
 
   <div data-tasks-target="list" class="mt-3" id="tasks" data-project-id="<%= @project.id %>" data-user-id="<%= current_user&.id %>"> <!-- Div with all the tasks --> 
