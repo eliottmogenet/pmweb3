@@ -21,6 +21,6 @@ class NewTaskNotification < Noticed::Base
   end
 
   def url
-    project_tasks_path(Task.find(params[:task]).project)
+    project_tasks_path(Task.find(params[:task]).project, puzzle: true)
   end
 end

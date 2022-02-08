@@ -39,6 +39,10 @@ gem 'font-awesome-sass'
 gem 'simple_form'
 
 gem 'postmark-rails'
+gem 'omniauth-discord'
+gem 'omniauth-rails_csrf_protection'
+
+gem 'pundit'
 
 group :development, :test do
   gem 'pry-byebug'

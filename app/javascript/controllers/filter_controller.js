@@ -1,12 +1,12 @@
 import { Controller } from "stimulus";
 
 export default class extends Controller {
-  static targets = ['form', 'input', 'list', 'all'];
+  static targets = ['form', 'input', 'list', 'all', 'title'];
 
   toggleAll(event) {
     event.preventDefault()
 
-    const url = `${this.formTarget.action}`
+    const url = `${this.formTarget.action}?puzzle=true`
     this.inputTargets.forEach((input) => {
       input.checked = false
     })
@@ -14,12 +14,18 @@ export default class extends Controller {
       .then(response => response.json())
       .then((data) => {
         this.listTarget.innerHTML = data.partial;
-        window.history.pushState('', '', '?')
+        this.titleTarget.innerHTML = data.title;
+        window.history.pushState('', '', '?puzzle=true')
       })
   }
 
   apply(event) {
     event.preventDefault()
+
+    this.inputTargets.forEach((input) => {
+      input.checked = false
+    })
+    event.currentTarget.checked = true
 
     let query = "?"
     this.allTarget.checked = false
@@ -36,6 +42,7 @@ export default class extends Controller {
       .then((data) => {
         this.listTarget.innerHTML = data.partial;
         this.formTarget.outerHTML = data.filters;
+        this.titleTarget.innerHTML = data.title;
         window.history.pushState('', '', query)
       })
   }

@@ -3,13 +3,14 @@ class Task < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :creator, class_name: "User"
   belongs_to :topic, optional: true
-  has_many :votes
-  #belongs_to :project, through: :topic
+  has_many :votes, dependent: :destroy
+  has_many :voters, through: :votes, source: :user
+
+  has_noticed_notifications
 
   validates :title, presence: true
   validates_length_of :title, :maximum => 100, :message => "Task title is too long"
 
-  scope :project_tasks, ->(project_id) { where(project_id: project_id) }
   scope :is_private, -> { where(confidentiality: "Private") }
   scope :assigned_to_me, ->(user_id) { where(user_id: user_id) }
   scope :unassigned, -> { where(user_id: nil) }
@@ -29,6 +30,14 @@ class Task < ApplicationRecord
 
   def ongoing?
     status == "ongoing"
+  end
+
+  def archived?
+    status == "archive"
+  end
+
+  def was_upvoted_by(user)
+    self.voters.include? user
   end
 
   private

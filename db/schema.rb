@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_05_180212) do
+ActiveRecord::Schema.define(version: 2022_02_08_074500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2022_02_05_180212) do
     t.string "topic"
     t.text "description"
     t.bigint "topic_id"
-    t.string "token_number"
+    t.integer "token_number", default: 0
     t.index ["creator_id"], name: "index_tasks_on_creator_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["topic_id"], name: "index_tasks_on_topic_id"
@@ -108,9 +108,16 @@ ActiveRecord::Schema.define(version: 2022_02_05_180212) do
     t.index ["project_id"], name: "index_topics_on_project_id"
   end
 
-  create_table "user_projects", force: :cascade do |t|
+  create_table "user_topics", force: :cascade do |t|
+    t.boolean "seen", default: false
+    t.datetime "seen_at"
+    t.bigint "user_id"
+    t.bigint "topic_id", null: false
+    t.string "user_ip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["topic_id"], name: "index_user_topics_on_topic_id"
+    t.index ["user_id"], name: "index_user_topics_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -125,6 +132,8 @@ ActiveRecord::Schema.define(version: 2022_02_05_180212) do
     t.string "last_name"
     t.bigint "employer_id"
     t.string "pseudo"
+    t.string "provider"
+    t.string "uid"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["employer_id"], name: "index_users_on_employer_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -141,4 +150,6 @@ ActiveRecord::Schema.define(version: 2022_02_05_180212) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "tasks", "users", column: "creator_id"
+  add_foreign_key "user_topics", "topics"
+  add_foreign_key "user_topics", "users"
 end

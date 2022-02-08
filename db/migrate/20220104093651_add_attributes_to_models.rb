@@ -8,8 +8,8 @@ class AddAttributesToModels < ActiveRecord::Migration[6.0]
     add_column :users, :first_name, :string
     add_column :users, :last_name, :string
     add_reference :users, :employer
-    add_reference :user_projects, :user
-    add_reference :user_projects, :project
+    # add_reference :user_projects, :user
+    # add_reference :user_projects, :project
     add_reference :tasks, :project
     add_reference :tasks, :user
   end
