@@ -25,7 +25,7 @@ class TasksController < ApplicationController
       @topic_selected = Topic.find(params[:by_topic])
       if user_signed_in?
         @notifications.each do |notif|
-          notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic == params[:by_topic]
+          notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic_id == params[:by_topic].to_i
         end
         @user_topic = UserTopic.find_by(user: current_user, topic: @topic_selected)
       else
