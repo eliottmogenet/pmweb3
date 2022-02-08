@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'pages#home'
+  get 'reload', to: 'pages#reload'
 
   resources :projects do
     member do
@@ -29,6 +30,10 @@ Rails.application.routes.draw do
       patch :vote
       patch :archive
     end
+  end
+
+  resources :topics, only: [] do
+    resources :user_topics, only: [:create]
   end
   #resources :employers do
     #resources :projects do

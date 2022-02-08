@@ -17,14 +17,19 @@ class TasksController < ApplicationController
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
     @topic = Topic.new
 
-    if current_user.nil? == false
+    if user_signed_in?
       @notifications = current_user.notifications
     end
 
     if params[:by_topic].present?
       @topic_selected = Topic.find(params[:by_topic])
-      @notifications.each do |notif|
-        notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic == params[:by_topic]
+      if user_signed_in?
+        @notifications.each do |notif|
+          notif.update(read_at: Time.now) if notif.to_notification.params[:task].topic == params[:by_topic]
+        end
+        @user_topic = UserTopic.find_by(user: current_user, topic: @topic_selected)
+      else
+        @user_topic = UserTopic.find_by(user_ip: request.remote_ip, topic: @topic_selected)
       end
 
       if @topic_selected.date.nil? == false
@@ -61,10 +66,7 @@ class TasksController < ApplicationController
     end
 
     if @task.save
-      respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project) }
-        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
-      end
+      respond_with_task
     end
   end
 
@@ -76,13 +78,8 @@ class TasksController < ApplicationController
 
     if @task.update(task_params)
       broadcast_changes
-
+      respond_with_task
       UserMailer.with(user: @task.user, task: @task, assigner: current_user).assigned_to_task.deliver_now if task_params[:user_id].present?
-
-      respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
-      end
     end
   end
 
@@ -94,11 +91,7 @@ class TasksController < ApplicationController
 
     if @task.update(confidentiality: "Public")
       broadcast_changes
-
-      respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
-      end
+      respond_with_task
     end
   end
 
@@ -111,11 +104,7 @@ class TasksController < ApplicationController
     if @task.update(status: "claimed")
       @topics = @project.tasks.pluck(:topic).uniq.reject(&:blank?).sort
       broadcast_changes
-
-      respond_to do |format|
-        format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
-        format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
-      end
+      respond_with_task
     end
   end
 
@@ -167,6 +156,13 @@ class TasksController < ApplicationController
   end
 
   private
+
+  def respond_with_task
+    respond_to do |format|
+      format.html { redirect_to project_tasks_path(@project, anchor: "task-#{@task.id}") }
+      format.text { render partial: "tasks/task", locals: {task: @task}, formats: [:html] }
+    end
+  end
 
   def broadcast_changes
     ProjectChannel.broadcast_to(@project,

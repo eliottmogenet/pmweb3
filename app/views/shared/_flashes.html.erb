@@ -8,7 +8,7 @@
 <% end %>
 <% if alert && alert == "outdated" %>
   <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    Changes have been made by a collaborator. Please refresh the page to see the changes.
+    Changes have been made by a collaborator. Please <%= link_to "refresh", reload_path, remote: true %> the page to see the changes.
   </div>
 <% elsif alert %>
   <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
