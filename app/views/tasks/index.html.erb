@@ -67,9 +67,8 @@
     <div data-filter-target="list"> <!-- Div with all the tasks -->
       <% if @project.tasks.empty? %>
         Be the first to create a task
-      <% else %>
-        <%= render "tasks/list", tasks: @tasks %>
       <% end %>
+      <%= render "tasks/list", tasks: @tasks %>
     </div>
   </div>
 

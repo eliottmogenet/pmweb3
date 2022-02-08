@@ -4,7 +4,11 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     @project = resource.projects.first
-    if @project.present?
+    if session[:redirect_url].present?
+      url = session[:redirect_url]
+      session[:redirect_url] = nil
+      url
+    elsif @project.present?
       project_tasks_path(@project, puzzle: true)
     else
       new_project_path

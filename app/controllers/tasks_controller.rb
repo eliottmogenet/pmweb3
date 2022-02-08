@@ -21,6 +21,8 @@ class TasksController < ApplicationController
       @notifications = current_user.notifications
     end
 
+    session[:redirect_url] = request.url
+    
     if params[:by_topic].present?
       @topic_selected = Topic.find(params[:by_topic])
       if user_signed_in?
