@@ -38,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+    where(provider: auth.provider, uid: auth.uid).or(where(email: auth.info.email)).first_or_create do |user|
       user.email = auth.info.email
       user.provider = auth.provider
       user.photo.attach(io: URI.open(auth.info.image), filename: "#{auth.info.name}.png")
