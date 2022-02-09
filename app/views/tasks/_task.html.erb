@@ -145,4 +145,49 @@
   <% end %>
 
   <!-- Modal task description : modal should not be here but it was easy and quick inside the iteration -->
+  <div id="description-<%= task.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <%= simple_form_for([ @project, task ], html: {"data-task-target": "descrForm", "data-action": "submit->task#updateDescr", "data-task-id": task.id}) do |ff| %>
+      <div class="modal-dialog" role="document" id="description-dialog">
+        <div class="modal-content" id="description">
+          <div class="modal-header" id="description-header">
+            <h2 class="modal-title" id="exampleModalLabel">
+              <%= task.token_number %><%= image_tag("piece.png", :width => 40, style: "padding-bottom: 15px; margin-left: 10px;") %> <%= task.title %></h2>
+          </div>
+          <div class="modal-body" id="description-body">
+            <div class="task-creator">
+              <% if task.creator.pseudo.nil? %>
+                <p>Created by @<%= task.creator.first_name %><%= task.creator.last_name %>  <%= time_ago_in_words(task.created_at)%></p>
+              <% else %>
+                  <p>Created by @<%= task.creator.pseudo %>  <%= time_ago_in_words(task.created_at)%></p>
+              <% end %>
+              <% if task.topic.nil? %><!-- Form to assign topic or to display topic -->
+                <p>No #topic yet </p>
+              <% else %>
+                <p style="color: white">#<%= task.topic.name  %></p>
+              <% end %>
+              <% if task.user.present? %>
+                <p style="color: white">Assigned to @<%= task.user.pseudo %></p>
+              <% else %>
+                <p>Not assigned yet</p>
+              <% end %>
+            <hr>
+          </div>
+          <% if task.description.nil? && policy(task).update? %><!-- Form to enter description -->
+              <%= ff.input :description, label: false, placeholder: 'Add description to the piece...'%>
+              <%#= ff.button :submit %>
+          <% else %>
+            <p id="description-p"><%= task.description %></p>
+          <% end %>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="share3" data-dismiss="modal">Close</button>
+            <% if task.description.nil? %>
+              <button type="submit" class="token_box" id="share2">+ Add description</button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

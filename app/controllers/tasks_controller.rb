@@ -9,6 +9,7 @@ class TasksController < ApplicationController
   def index
     @project = Project.find(params[:project_id])
     @task = Task.new(project: @project)
+    session[:project_uuid] = @project.uuid
 
     @task.topic = Topic.find(params[:by_topic]) if params[:by_topic]
     
@@ -21,7 +22,6 @@ class TasksController < ApplicationController
       @notifications = current_user.notifications
     end
 
-    session[:redirect_url] = request.url unless user_signed_in?
     
     if params[:by_topic].present?
       @topic_selected = Topic.find(params[:by_topic])
@@ -77,7 +77,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
-    authorize @task
+    task_params[:user_id].present? ? authorize(@task, :assign?) : authorize(@task)
 
     if @task.update(task_params)
       broadcast_changes
