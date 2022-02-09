@@ -33,7 +33,7 @@
     </div>
     <div id="request" class="col-5">
       <% if current_user == @project.user %>
-        <button class="button-type" style="background-color: <%= @project.txt_color %>;">
+        <button class="button-type" id="share" data-url="<%= project_tasks_url(@project, puzzle: true) %>" data-toggle="tooltip" data-placement="left" style="background-color: <%= @project.txt_color %>;">
             Share <%= @project.name %> Puzzle 🔗
         </button>
       <% else %>
@@ -73,6 +73,86 @@
   <!-- End of the list of tasks-->
 <!-- End of container -->
 
+<div class="modal fade" id="topic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" id="subpuzzle-dialog">
+        <div class="modal-content" id="subpuzzle-create">
+          <div class="modal-header">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-contact-tab" data-toggle="pill" href="#pills-templates" role="tab" aria-controls="pills-templates" aria-selected="false">Templates</a>
+              </li>
+              <li>
+                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-custom" role="tab" aria-controls="pills-custom" aria-selected="false">Custom</a>
+              </li>
+            </ul>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body" id="subpuzzle-modal-body">
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-templates" role="tabpanel" aria-labelledby="pills-home-tab">
+
+                    <div class="projects-cards">
+                      <div class="project-card">
+                        <h5>Feedbacks 👍</h5>
+                          <p>Ask you community to give you feature ideas and vote for the best</p>
+                      </div>
+                      <div class="project-card">
+                        <h5>Twitter 🐦</h5>
+                          <p>Ask your community to tweet about <%= @project.name %></p>
+                      </div>
+                      <div class="project-card">
+                        <h5>Moderators 👀</h5>
+                          <p>Create, assign & follow the tasks of your community moderators</p>
+                      </div>
+                      <div class="project-card">
+                        <h5>Referrals 🚀</h5>
+                          <p>Ask your community to refer their friends to join <%= @project.name %></p>
+                      </div>
+                      <div class="project-card" id="custom">
+                        <h5>Custom +</h5>
+                          <p>Build what you want</p>
+                      </div>
+                    </div>
+
+              </div>
+
+              <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="create_topic">
+                  <%= simple_form_for([@project, @topic]) do |f| %>
+                   <%= f.input :name,  label: false, placeholder: 'Name*', input_html: { autocomplete: 'off' }, required: true %>
+                   <%= f.input :description, label: false, placeholder: 'Describe the goal of the subpuzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true %>
+                   <div>
+                    <%= f.input :rules, label: false, placeholder: 'Describe the rules step by step*', input_html: { autocomplete: 'off' }, required: true %>
+                   </div>
+                  <hr>
+                  <p>⚙️ Authorize everyone to :</p>
+                    <div class="custom-control custom-switch">
+                       <%= f.check_box :can_create_task, class: "custom-control-input", id: "customSwitch1"  %>
+                        <label class="custom-control-label" for="customSwitch1">Create new tasks</label>
+                    </div>
+                    <div class="custom-control custom-switch">
+                       <%= f.check_box :can_assign_task, class: "custom-control-input", id: "customSwitch2"  %>
+                        <label class="custom-control-label" for="customSwitch2">Assign someone to a task</label>
+                     </div>
+                  <hr>
+                  <p>💰 Rewards</p>
+                   <div class="custom-control custom-switch">
+                      <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
+                      <label class="custom-control-label" for="customSwitch3">By vote only</label>
+                   </div>
+                   <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}" %>
+                <%end%>
+              </div>
+             </div>
+        </div>
+      </div>
+  </div>
+  </div>
+</div>
+
 <!-- Sign_up modal -->
 
   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -81,104 +161,31 @@
          <div class="modal-body">
           <%= render template: "devise/registrations/new" %>
         </div>
-      </div>
-    </div>
-  </div>
+  <!-- End of the list of tasks-->
+<!-- End of container -->
 
-    <!-- Modal change photo -->
-
-  <div class="modal fade" id="photo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Change your photo</h5>
-        </div>
-        <% if current_user.present? %>
-         <div class="modal-body">
-          <%= render template: "devise/registrations/edit" %>
-        </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <!-- Modal for creating topic -->
-
-  <div class="modal fade" id="topic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" id="subpuzzle-dialog">
-      <div class="modal-content" id="subpuzzle-create">
-        <div class="modal-header">
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link active" id="pills-contact-tab" data-toggle="pill" href="#pills-templates" role="tab" aria-controls="pills-templates" aria-selected="false">Templates</a>
-            </li>
-            <li>
-              <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-custom" role="tab" aria-controls="pills-custom" aria-selected="false">Custom</a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="modal-body" id="subpuzzle-modal-body">
-          <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-templates" role="tabpanel" aria-labelledby="pills-home-tab">
-
-                  <div class="projects-cards">
-                    <div class="project-card">
-                      <h5>Feedbacks 👍</h5>
-                        <p>Ask you community to give you feature ideas and vote for the best</p>
-                    </div>
-                    <div class="project-card">
-                      <h5>Twitter 🐦</h5>
-                        <p>Ask your community to tweet about <%= @project.name %></p>
-                    </div>
-                    <div class="project-card">
-                      <h5>Moderators 👀</h5>
-                        <p>Create, assign & follow the tasks of your community moderators</p>
-                    </div>
-                    <div class="project-card">
-                      <h5>Referrals 🚀</h5>
-                        <p>Ask your community to refer their friends to join <%= @project.name %></p>
-                    </div>
-                    <div class="project-card" id="custom">
-                      <h5>Custom +</h5>
-                        <p>Build what you want</p>
-                    </div>
-                  </div>
-
-            </div>
-
-            <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-home-tab">
-              <div class="create_topic">
-                <%= simple_form_for([@project, @topic]) do |f| %>
-                 <%= f.input :name,  label: false, placeholder: 'Name*', input_html: { autocomplete: 'off' }, required: true %>
-                 <%= f.input :description, label: false, placeholder: 'Describe the goal of the subpuzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true %>
-                 <div>
-                  <%= f.input :rules, label: false, placeholder: 'Describe the rules step by step*', input_html: { autocomplete: 'off' }, required: true %>
-                 </div>
-                <hr>
-                <p>⚙️ Authorize everyone to :</p>
-                  <div class="custom-control custom-switch">
-                     <%= f.check_box :can_create_task, class: "custom-control-input", id: "customSwitch1"  %>
-                      <label class="custom-control-label" for="customSwitch1">Create new tasks</label>
-                  </div>
-                  <div class="custom-control custom-switch">
-                     <%= f.check_box :can_assign_task, class: "custom-control-input", id: "customSwitch2"  %>
-                      <label class="custom-control-label" for="customSwitch2">Assign someone to a task</label>
-                   </div>
-                <hr>
-                <p>💰 Rewards</p>
-                 <div class="custom-control custom-switch">
-                    <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
-                    <label class="custom-control-label" for="customSwitch3">By vote only</label>
-                 </div>
-                 <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}" %>
-              <%end%>
-            </div>
-           </div>
-        </div>
+<!-- Modal change photo -->
+<div class="modal fade" id="photo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change your photo</h5>
       </div>
     </div>
   </div>
 </div>
+  <!-- Modal for creating topic -->
+
+
+
+
+
+
+
+
+
+<!-- Modal for creating topic -->
+
 
 <script>
 const ethereumButton = document.querySelector('.enableEthereumButton');

@@ -3,10 +3,6 @@ hr {
   background-color: #687086;
 }
 
-p {
-  font-weight: 200;
-}
-
 /* CSS */
 
 .d-none { display: none !important; }
@@ -19,9 +15,6 @@ p {
   justify-content:start;
   align-items: center;
   padding-left: 30px;
-}
-.sign-in-link {
-	text-decoration: underline;
 }
 
 .task-card:hover{
@@ -478,8 +471,6 @@ p {
 .topic_title {
   width: 85%;
   margin-left: 10px;
-  display: flex;
-  justify-content: flex-start;
 }
 
 #timer {
@@ -562,6 +553,7 @@ p {
 }
 
 #project-header-title {
+  width: 75%;
   height: 60px;
   line-height: 60px;
   padding-left: 10px;
@@ -570,9 +562,8 @@ p {
 
 #project-header-title-2 {
   width: 100%;
-  <%# height: 60px; %>
+  height: 60px;
   line-height: 60px;
-  padding-left: 10px;
   font-weight: 900;
 }
 
@@ -719,7 +710,7 @@ p {
 }
 
 #user_blank-small-40 {
-  margin-left: 0px;
+  cursor: pointer;
 
 }
 
@@ -746,7 +737,7 @@ p {
 
 .header1 {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: -15px;
 }
 
@@ -921,6 +912,7 @@ p {
   font-weight: 300;
 }
 
+
 #task_description:focus {
    border-color: inherit;
   -webkit-box-shadow: none;
@@ -965,7 +957,7 @@ hr {
   display: none;
 }
 
-<%# #share {
+#share {
   width: 120px;
   background-color: #60AFFF;
   color: white;
@@ -973,13 +965,13 @@ hr {
   padding-right: 15px;
   font-size: 10px;
   text-align: center;
-} %>
+}
 
-<%# #share:hover {
+#share:hover {
   color: #60AFFF;
   background-color: white;
   cursor:pointer;
-} %>
+}
 
 #share2 {
   width: 140px;
@@ -1013,7 +1005,7 @@ hr {
 #header2 {
   display: flex;
   justify-content: flex-start;
-  line-height: 20px;
+  line-height: 40px;
 }
 
 #text-low {
@@ -1024,22 +1016,12 @@ hr {
 
 .project-card {
   border-radius: 20px;
-  height: 200px;
-  width: 200px;
-  background-color: black;
+  height: 220px;
+  background-color: #1F292C;
   text-align: center;
   padding-top: 30px;
-  padding-left: 15px;
-  padding-right: 15px;
-  cursor: pointer;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.project-card p {
-  margin-top: 20px;
-  font-size: 12px;
-  color: #687086;
-
+  display: flex;
+  justify-content: center;
 }
 
 .project-card-create {
@@ -1125,19 +1107,18 @@ a:hover {
 }
 
 body {
-  background-image: url(background.png);
-  background-size: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100%;
 }
 
 .container {
   background-color: black;
-  opacity: 95%;
-  border-radius: 50px;
-  border-radius: 50px;
   padding: 40px;
+  border-radius: 50px;
   height: 100%;
-  min-height: calc(100vh - 110px);
 }
 
 .page-header {
@@ -1151,7 +1132,7 @@ body {
 
 .rules-description {
   background-color: #1F292C;
-  <%# height: 330px; %>
+  height: 330px;
   width: 100%;
   padding: 30px;
   border-radius: 20px;
@@ -1163,16 +1144,12 @@ body {
 
 #mainContainer2 {
   height: 700px;
-}
 
-#mainContainer {
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
 }
 
 .body-onboarding {
   background-color: #1F292C;
-  <%# height: 100vh; %>
+  height: 100vh;
 }
 
 .project_description {
@@ -1205,10 +1182,11 @@ body {
  height: 90px;
  margin-top: 50px;
  text-align: center;
+
 }
 
 .project-description {
-  margin-top: 60px;
+  margin-top: 30px !important;
   height: 60%;
   display: flex;
   justify-content: center;
@@ -1223,7 +1201,6 @@ body {
   text-align: center;
   color: white;
   font-weight: 900;
-  background-color: #186152;
   outline: none;
   border: none;
   padding: 15px;
@@ -1325,7 +1302,7 @@ body {
   height: 40px;
   width: 200px;
   padding: 10px;
-  margin-left: 80%;
+  margin-left: 50%;
 }
 
 .nav {
@@ -1572,122 +1549,4 @@ span {
 
 #onboarding-button {
   background-color: #B45CD2 !important;
-}
-
-.puzzle-body {
-  display: flex;
-  justify-content: start;
-}
-
-.contributors {
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-.contributor {
-  margin-left: 20px;
-}
-
-.contributor p {
-  text-align: center;
-  margin-top: 5px;
-}
-
-#badge2 {
-  width: 100px;
-  margin-bottom: 20px;
-}
-
-.progress {
-  background-color: #1F292C;
-  border-radius: 50px;
-  width: 400px;
-  margin-left: 20px;
-  margin-right: 50px;
-  margin-top: 10px;
-  line-height: 60px;
-}
-
-.text-level {
-  margin-left: 20px;
-  margin-bottom: -2px;
-}
-
-#vote {
-  width: 90px;
-  margin-left: 10px;
-  margin-top: 5px;
-}
-
-.directory {
-  margin-top: 20px;
-  width: 420px;
-}
-
-.directory h4 {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#count {
-  font-size: 10px;
-  width: 100px;
-  margin-left: 10px;
-}
-
-#top10 {
-  display: flex;
-  justify-content: flex-start;
-}
-
-#level-2 {
-  margin-left: 100px;
-}
-
-#settings {
-  font-size: 20px;
-  color: #1F292C;
-  margin-top: 12px;
-}
-
-#settings:hover {
-  color: white;
-  cursor: pointer;
-}
-
-#topic-modal {
-  width: 1000px;
-  height: 750px;
-  margin-left: 230px;
-
-}
-
-#subpuzzle-create {
-  width: 1000px;
-  height: 750px;
-}
-
-#subpuzzle-dialog {
-    max-width: 1000px;
-    height: 750px;
-}
-
-#subpuzzle-modal-body {
-  padding: 40px;
-}
-
-.project-card:hover {
-  background-color: white;
-  color: black;
-
-}
-
-#custom {
-  background-color:rgba(0, 0, 0, 0.5);
-  border-shadow: none;
-}
-
-#custom:hover {
-  background-color: white;
 }

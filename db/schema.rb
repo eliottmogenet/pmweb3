@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_08_074500) do
+ActiveRecord::Schema.define(version: 2022_02_09_154934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2022_02_08_074500) do
     t.datetime "date"
     t.string "uuid"
     t.string "txt_color", default: "#B45CD2"
-    t.string "description"
+    t.text "description"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2022_02_08_074500) do
     t.text "description"
     t.bigint "topic_id"
     t.integer "token_number", default: 0
+    t.boolean "archived", default: false
     t.index ["creator_id"], name: "index_tasks_on_creator_id"
     t.index ["project_id"], name: "index_tasks_on_project_id"
     t.index ["topic_id"], name: "index_tasks_on_topic_id"

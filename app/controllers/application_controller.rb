@@ -3,13 +3,15 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def after_sign_in_path_for(resource)
-    @project = resource.projects.first
-    if session[:redirect_url].present?
+    @project = Project.find_by(uuid: session[:project_uuid])
+
+    if @project
+      resource.project_users.create(project: @project)
+      project_tasks_path(@project, puzzle: true)
+    elsif session[:redirect_url]
       url = session[:redirect_url]
       session[:redirect_url] = nil
       url
-    elsif @project.present?
-      project_tasks_path(@project, puzzle: true)
     else
       new_project_path
     end

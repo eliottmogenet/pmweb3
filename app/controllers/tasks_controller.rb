@@ -9,6 +9,7 @@ class TasksController < ApplicationController
   def index
     @project = Project.find(params[:project_id])
     @task = Task.new(project: @project)
+    session[:project_uuid] = @project.uuid
 
     @progress = @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum / 500 * 100
 
@@ -79,7 +80,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @project = @task.project
 
-    authorize @task
+    task_params[:user_id].present? ? authorize(@task, :assign?) : authorize(@task)
 
     if @task.update(task_params)
       broadcast_changes
@@ -152,7 +153,7 @@ class TasksController < ApplicationController
 
     authorize @task
 
-    if @task.update(status: "archive")
+    if @task.update(archived: true)
       broadcast_changes
 
       respond_to do |format|

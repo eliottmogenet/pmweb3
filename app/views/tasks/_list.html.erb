@@ -6,7 +6,8 @@
       <div class="directory">
         <h4 id="top10">Top 10 <%= @project.name %> builders 🏆 <div class="filter" id="count"><%= @project.users.count %> players</div></h4>
           <div class="contributors">
-            <% @project.users.first(10).each do |user| %>
+
+            <% @project.users.sort_by { |user| user.tokens_for(@projet) }.each do |user| %>
               <div class="contributor">
                 <% if user.photo.attached? %>
                   <div class="photo-round-small-40">
@@ -18,7 +19,7 @@
                     </div>
                   <% end %>
                 <p style="color: white">@<%= user.pseudo %></p>
-                <p style="color: grey; margin-top: -12px;"><%= user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %><%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %></p>
+                <p style="color: grey; margin-top: -12px;"><%= user.tokens_for(@project) %><%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %></p>
               </div>
             <% end  %>
           </div>

@@ -16,6 +16,10 @@ class User < ApplicationRecord
 
   validate :has_pseudo_or_name
 
+  def tokens_for(project)
+    tasks.where(project: project, status: "claimed").pluck(:token_number).map(&:to_i).sum
+  end
+
   def has_pseudo_or_name
     if pseudo.blank? && (first_name.blank? && last_name.blank?)
       errors.add(:pseudo, "and name can't be both blank")
