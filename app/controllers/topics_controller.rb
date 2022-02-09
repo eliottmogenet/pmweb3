@@ -29,9 +29,9 @@ class TopicsController < ApplicationController
   def update
     @topic_selected = Topic.find(params[:id])
     @project = Project.find(params[:project_id])
-    
+
     authorize @topic_selected
-    
+
     if @topic_selected.update(topic_params)
       @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
       respond_to do |format|
@@ -40,6 +40,26 @@ class TopicsController < ApplicationController
       end
     end
   end
+
+  def feedback_template
+    @project = Project.find(params[:project_id])
+    @topic = Topic.new(name: "Feedbacks", description: "In this subpuzzle, give any feedback, ideas you can have to improve #{@project.name}. Vote for the best.")
+    @topic.project = @project
+
+    authorize @topic
+  end
+
+  def tweeter_template
+  end
+
+
+  def moderator_template
+  end
+
+
+  def referral_template
+  end
+
 
   private
 

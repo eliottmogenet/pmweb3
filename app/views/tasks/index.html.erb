@@ -71,80 +71,6 @@
 </div>
 
   <!-- End of the list of tasks-->
-
-  <!-- Modal for project members -->
-  <div class="modal fade" id="membersmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="member-header">
-            <h5 class="modal-title"><%= @project.name %> 's Puzzle members </h5>
-            <p><%= @project.users.count %> members in the puzzle</p>
-          </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div>
-          <div class="member-line">
-
-              <% if @project.user.photo.attached?  %>
-                <div class="photo-round-small-40">
-                <%= cl_image_tag @project.user.photo.key, width: 30, style: "border-radius: 100%" %>
-                </div>
-              <% else %>
-                <div class="photo-round-small-40">
-                  <div class="profile-background" id="editable-photo">
-                      <i id="user_blank-small-40" class="far fa-user"></i>
-                  </div>
-                </div>
-              <% end %>
-            <p><%= @project.user.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-            <% if @project.user.pseudo.nil? %>
-              <p id="name">@<%= @project.user.first_name + " " %><%= @project.user.last_name %></p>
-            <% else %>
-              <p id="name">@<%= @project.user.pseudo %></p>
-            <% end %>
-            <div class="filter" id="member-state">
-              <p>Puzzle Master 👑</p>
-            </div>
-          </div>
-          <% @project.users.each do |member| %>
-            <% if member != @project.user %>
-              <div class="project-users">
-                <div class="member-line">
-                  <% if member.photo.attached? %>
-                    <div class="photo-round-small-40">
-                      <%= cl_image_tag member.photo.key, width: 30, style: "border-radius: 100%" %>
-                    </div>
-                  <% else %>
-                      <div class="profile-background" id="editable-photo">
-                        <i id="user_blank-small-40" class="far fa-user"></i>
-                      </div>
-                  <% end %>
-                  <p><%= member.tasks.where(status: "claimed").map { |task| task.token_number.to_i }.sum %><%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %></p>
-                  <% if member.pseudo.nil? %>
-                    <p id="name">@<%= member.first_name + " " %><%= member.last_name %></p>
-                  <% else %>
-                    <p id="name">@<%= member.pseudo %></p>
-                  <% end %>
-                  <% if member.tasks.nil?  %>
-                    <div class="filter" id="member-state">
-                      <p>Member 👤</p>
-                    </div>
-                  <% else %>
-                    <div class="filter" id="member-state">
-                      <p>Contributor 🔥</p>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
 <!-- End of container -->
 
 <!-- Sign_up modal -->
@@ -178,7 +104,7 @@
   <!-- Modal for creating topic -->
 
   <div class="modal fade" id="topic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" id="subpuzzle-dialog">
       <div class="modal-content" id="subpuzzle-create">
         <div class="modal-header">
           <ul class="nav">
@@ -190,30 +116,36 @@
             </li>
           </ul>
         </div>
-        <div class="modal-body">
+
+        <div class="modal-body" id="subpuzzle-modal-body">
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-templates" role="tabpanel" aria-labelledby="pills-home-tab">
-              <div class="templates">
 
                   <div class="projects-cards">
                     <div class="project-card">
+                      <h5>Feedbacks 👍</h5>
+                        <p>Ask you community to give you feature ideas and vote for the best</p>
                     </div>
                     <div class="project-card">
+                      <h5>Twitter 🐦</h5>
+                        <p>Ask your community to tweet about <%= @project.name %></p>
                     </div>
                     <div class="project-card">
+                      <h5>Moderators 👀</h5>
+                        <p>Create, assign & follow the tasks of your community moderators</p>
+                    </div>
+                    <div class="project-card">
+                      <h5>Referrals 🚀</h5>
+                        <p>Ask your community to refer their friends to join <%= @project.name %></p>
+                    </div>
+                    <div class="project-card" id="custom">
+                      <h5>Custom +</h5>
+                        <p>Build what you want</p>
                     </div>
                   </div>
 
-
-
-
-
-
-
-
-
-              </div>
             </div>
+
             <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-home-tab">
               <div class="create_topic">
                 <%= simple_form_for([@project, @topic]) do |f| %>
@@ -242,44 +174,6 @@
               <%end%>
             </div>
            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-    <div class="modal fade" id="topic-edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" id="subpuzzle-create">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add a Subpuzzle</h5>
-        </div>
-        <div class="modal-body">
-          <div class="create_topic">
-              <%= simple_form_for([@project, @topic]) do |f| %>
-               <%= f.input :name,  label: false, placeholder: 'Name*', input_html: { autocomplete: 'off' }, required: true %>
-               <%= f.input :description, label: false, placeholder: 'Describe the goal of the subpuzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true %>
-               <div>
-                <%= f.input :rules, label: false, placeholder: 'Describe the rules step by step*', input_html: { autocomplete: 'off' }, required: true %>
-               </div>
-              <hr>
-              <p>⚙️ Authorize everyone to :</p>
-                <div class="custom-control custom-switch">
-                   <%= f.check_box :can_create_task, class: "custom-control-input", id: "customSwitch1"  %>
-                    <label class="custom-control-label" for="customSwitch1">Create new tasks</label>
-                </div>
-                <div class="custom-control custom-switch">
-                   <%= f.check_box :can_assign_task, class: "custom-control-input", id: "customSwitch2"  %>
-                    <label class="custom-control-label" for="customSwitch2">Assign someone to a task</label>
-                 </div>
-              <hr>
-              <p>💰 Rewards</p>
-               <div class="custom-control custom-switch">
-                  <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
-                  <label class="custom-control-label" for="customSwitch3">By vote only</label>
-               </div>
-               <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}"  %>
-            <%end%>
-          </div>
         </div>
       </div>
     </div>

@@ -1025,13 +1025,22 @@ hr {
 
 .project-card {
   border-radius: 20px;
-  height: 180px;
-  width: 180px;
+  height: 200px;
+  width: 200px;
   background-color: black;
   text-align: center;
   padding-top: 30px;
-  display: flex;
-  justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.project-card p {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #687086;
+
 }
 
 .project-card-create {
@@ -1316,7 +1325,7 @@ body {
   height: 40px;
   width: 200px;
   padding: 10px;
-  margin-left: 50%;
+  margin-left: 80%;
 }
 
 .nav {
@@ -1647,3 +1656,38 @@ span {
   cursor: pointer;
 }
 
+#topic-modal {
+  width: 1000px;
+  height: 750px;
+  margin-left: 230px;
+
+}
+
+#subpuzzle-create {
+  width: 1000px;
+  height: 750px;
+}
+
+#subpuzzle-dialog {
+    max-width: 1000px;
+    height: 750px;
+}
+
+#subpuzzle-modal-body {
+  padding: 40px;
+}
+
+.project-card:hover {
+  background-color: white;
+  color: black;
+
+}
+
+#custom {
+  background-color:rgba(0, 0, 0, 0.5);
+  border-shadow: none;
+}
+
+#custom:hover {
+  background-color: white;
+}

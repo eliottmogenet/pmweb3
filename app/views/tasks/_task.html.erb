@@ -97,11 +97,11 @@
 
 
       <div class="comment">
-        <% if policy(task).update? %>
+
           <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
             <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
           </a>
-        <% end %>
+
       </div>
 
       <!-- Task time -->
@@ -145,6 +145,7 @@
 
     <%= f.submit class: "d-none" %>
   <% end %>
+</div>
 
   <!-- Modal task description : modal should not be here but it was easy and quick inside the iteration -->
 
@@ -193,4 +194,3 @@
       </div>
     <% end %>
   </div>
-</div>
