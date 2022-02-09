@@ -1,41 +1,57 @@
 <div class="header1">
-	<h1 id="project-header-title">
-		<b id="text-low">
-			<% if topic_selected %>
-				<%= project.name %>
-					<span style="color: <%= project.txt_color %>">
-						#<%= topic_selected.name %>
-					</span>
-			<% else %>
-				<%= project.name %>
-				<span style="color: <%= project.txt_color %>">
-					#Puzzle
-				</span>
-			<% end  %>
-		</b>
-	</h1>
-	<% if topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
-		<% if user_signed_in? && project.users.include?(current_user) %>
-			Member
-		<% elsif user_signed_in? && project.users.exclude?(current_user) %>
-			<%= link_to "Join #{project.name} Puzzle", join_puzzle_project_path(project), method: :post, class: "button-type", style: "background-color: #{project.txt_color}" %>
-		<% else %>
-			<button type="button" class="button-type" style="background-color: <%= project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
-				Join <%= project.name %> Puzzle
-			</button>
-		<% end %>
-	<% else %>
-		<div class="set-deadline" data-timer-target="container"><!-- If topic is selected display the timer edition only for the project.user >-->
-			<%= render "tasks/timer", project: project, topic_selected: topic_selected, date: date %>
-		</div>
-	<% end %>
+  <div style="display: flex; justify-content: start">
+    <div>
+    	<h1 id="project-header-title">
+    		<b id="text-low">
+    			<% if topic_selected %>
+    				<%= project.name %>
+    					<span style="color: <%= project.txt_color %>">
+    						#<%= topic_selected.name %>
+    					</span>
+    			<% else %>
+    				<%= project.name %>
+    				<span style="color: <%= project.txt_color %>">
+    					#Puzzle
+    				</span>
+    			<% end  %>
+    		</b>
+      </div>
+      <div>
+      <% if params[:puzzle].present? %>
+        <div>
+          <p class="text-level"><%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>/ 500 <%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %><span style="margin-left: 280px; color: grey"><b>Level 2 </p></span></p>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 70%; background-color: <%= project.txt_color %>;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+      <% else %>
+    <% end %>
+  	</h1>
+    </div>
+  </div>
+  <% if topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
+    <% if user_signed_in? && project.users.include?(current_user) %>
+    <% elsif user_signed_in? && project.users.exclude?(current_user) %>
+      <%= link_to "Join #{project.name} Puzzle", join_puzzle_project_path(project), method: :post, class: "button-type", style: "background-color: #{project.txt_color}" %>
+    <% else %>
+      <button type="button" class="button-type" style="background-color: <%= project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
+        Join <%= project.name %> Puzzle
+      </button>
+    <% end %>
+  <% else %>
+    <div class="set-deadline" data-timer-target="container"><!-- If topic is selected display the timer edition only for the project.user >-->
+      <%= render "tasks/timer", project: project, topic_selected: topic_selected, date: date %>
+    </div>
+  <% end %>
 </div>
 <div id="header2">
 	<div class="topic_title">
 		<% if topic_selected  %>
 			<p><%= topic_selected.description %>
 			<% if topic_selected.can_vote == true %>
-				(On vote)
+				<div class="filter" id="vote">
+          <p>On vote 🗳</p>
+        </div>
 			<% end %></p>
 		<% else %>
 			<p><%= project.description %></p>
