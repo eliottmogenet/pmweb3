@@ -556,7 +556,6 @@ hr {
 }
 
 #project-header-title {
-  width: 75%;
   height: 60px;
   line-height: 60px;
   padding-left: 10px;
@@ -714,7 +713,7 @@ hr {
 }
 
 #user_blank-small-40 {
-  cursor: pointer;
+  margin-left: 0px;
 
 }
 
@@ -741,7 +740,7 @@ hr {
 
 .header1 {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-bottom: -15px;
 }
 
@@ -1117,8 +1116,10 @@ body {
 
 .container {
   background-color: black;
-  padding: 40px;
+  opacity: 95%;
   border-radius: 50px;
+  border-radius: 50px;
+  padding: 40px;
   height: 100%;
   min-height: calc(100vh - 110px);
 }
@@ -1146,6 +1147,11 @@ body {
 
 #mainContainer2 {
   height: 700px;
+}
+
+#mainContainer {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .body-onboarding {
@@ -1308,7 +1314,7 @@ body {
   text-align: center;
   display: flex;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   color: #687086;
 }
 
@@ -1546,3 +1552,79 @@ span {
   margin-top: 60px;
 }
 
+#onboarding-button {
+  background-color: #B45CD2 !important;
+}
+
+.puzzle-body {
+  display: flex;
+  justify-content: start;
+}
+
+.contributors {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+.contributor {
+  margin-left: 20px;
+}
+
+.contributor p {
+  text-align: center;
+  margin-top: 5px;
+}
+
+#badge2 {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+  .grow { transition: all .2s ease-in-out; }
+  .grow:hover { transform: scale(1.1); }
+
+.progress {
+  background-color: #1F292C;
+  border-radius: 50px;
+  width: 400px;
+  margin-left: 20px;
+  margin-right: 50px;
+  margin-top: 10px;
+  line-height: 60px;
+}
+
+.text-level {
+  margin-left: 20px;
+  margin-bottom: -2px;
+}
+
+#vote {
+  width: 90px;
+}
+
+.directory {
+  margin-top: 20px;
+  width: 420px;
+}
+
+.directory h4 {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+#count {
+  font-size: 10px;
+  width: 100px;
+  margin-left: 10px;
+}
+
+#top10 {
+  display: flex;
+  justify-content: flex-start;
+}
+
+#level-2 {
+  margin-left: 100px;
+}

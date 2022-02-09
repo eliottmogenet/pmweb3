@@ -108,6 +108,11 @@ ActiveRecord::Schema.define(version: 2022_02_09_090912) do
     t.index ["project_id"], name: "index_topics_on_project_id"
   end
 
+  create_table "user_projects", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_topics", force: :cascade do |t|
     t.boolean "seen", default: false
     t.datetime "seen_at"

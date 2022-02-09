@@ -11,7 +11,10 @@
         <% if @project.present? %>
            <h1 class="onboarding-title" id="project-header-title-2">Join <%= @project.name %> Puzzle</h1>
         <% else %>
-            <h1 class="onboarding-title" id="project-header-title-2">Become the Puzzle master</h1>
+          <%= image_tag("logo-puzzle.png", :width => 200, style: "padding-bottom: 10px") %>
+            <h1 class="onboarding-title" id="project-header-title-2" style="padding: 0px !important;">Become the Puzzle master
+              <%= image_tag("3D-crown.png", :width => 50, style: "padding-bottom: 10px") %>
+            </h1>
         <% end %>
 
         <ul class="nav">
@@ -25,14 +28,20 @@
 
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-discord" role="tabpanel" aria-labelledby="pills-home-tab">
-              <div id="discord-signup" class="mb-4">
-                <%= link_to "/users/auth/discord", method: :post, class: "button-type", style: "background-color: #{@project&.txt_color}" do %>
-                  Sign-up with Discord <i class="fab fa-discord"></i>
-                <% end %>
-              </div>
               <% if @project.present? %>
-                <%= link_to 'Log-in', new_user_session_path %>
+                <div id="discord-signup">
+                  <%= link_to "/users/auth/discord", method: :post, class: "button-type mb-4", style: "background-color: #{@project&.txt_color}" do %>
+                    Connect Discord <i class="fab fa-discord"></i>
+                  <% end %>
+                </div>
+                <% else %>
+                <div id="discord-signup">
+                  <%= link_to "/users/auth/discord", method: :post, class: "button-type mb-4", style: "background-color: #B45CD2" do %>
+                    Connect Discord <i class="fab fa-discord"></i>
+                  <% end %>
+                </div>
               <% end %>
+              <p class="mt-4"><%= link_to 'Log-in', new_user_session_path %></p>
             </div>
             <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
                 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -50,11 +59,6 @@
                               placeholder: 'Password*',
                               required: true,
                               input_html: { autocomplete: 'off'} %>
-                  <%= f.input :password_confirmation,
-                              label: false,
-                              placeholder: 'Password confirmation*',
-                              required: true,
-                              input_html: { autocomplete: 'off'} %>
                 </div>
                 <input type="hidden" name="project_uuid" value="<%= params[:project_uuid] %>">
 
@@ -64,12 +68,12 @@
                   </div>
                 <% else %>
                   <div class="form-actions">
-                    <%= f.button :submit, "Create account", class: "button-type", style: "background-color: #{@project&.txt_color};" %>
+                    <%= f.button :submit, "Create account", class: "button-type", style: "background-color: #B45CD2;", id: "onboarding-button" %>
                   </div>
                 <% end %>
               <% end %>
               <% if @project.present? %>
-                <%= link_to 'Log-in', new_user_session_path %>
+                <p class="mt-4"><%= link_to 'Log-in', new_user_session_path %></p>
               <% end %>
             </div>
           </div>

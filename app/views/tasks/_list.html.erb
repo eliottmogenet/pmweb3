@@ -1,5 +1,29 @@
 <% if params[:puzzle].present? %>
-  <div>Placeholder for 3D puzzle</div>
+    <div class="puzzle-body">
+      <div style="margin-left: 50px;">
+        <%= image_tag("Puzzle1.png", :width => 500) %>
+      </div>
+      <div class="directory">
+        <h4 id="top10">Top 10 <%= @project.name %> builders 🏆 <div class="filter" id="count"><%= @project.users.count %> players</div></h4>
+          <div class="contributors">
+            <% @project.users.each do |user| %>
+              <div class="contributor">
+                <% if user.photo.attached? %>
+                  <div class="photo-round-small-40">
+                    <%= cl_image_tag user.photo.key, width: 30, style: "border-radius: 100%" %>
+                  </div>
+                  <% else %>
+                    <div class="photo-round-small-40">
+                     <i id="user_blank-small-40" class="far fa-user" style="color: black"></i>
+                    </div>
+                  <% end %>
+                <p style="color: white">@<%= user.pseudo %></p>
+                <p style="color: grey; margin-top: -12px;"><%= user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %><%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %></p>
+              </div>
+            <% end  %>
+          </div>
+      </div>
+  </div>
 <% else %>
   <% if params[:by_topic].present?%> <!-- Rules div -->
     <% unless @user_topic %>
@@ -26,7 +50,7 @@
 		<% end %>
   <% end %>
 
-  <div data-tasks-target="list" class="mt-3" id="tasks" data-project-id="<%= @project.id %>" data-user-id="<%= current_user&.id %>"> <!-- Div with all the tasks --> 
+  <div data-tasks-target="list" class="mt-3" id="tasks" data-project-id="<%= @project.id %>" data-user-id="<%= current_user&.id %>"> <!-- Div with all the tasks -->
     <% @tasks.each do |task| %>
       <%= render "tasks/task", task: task %>
     <% end %>
