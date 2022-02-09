@@ -97,11 +97,9 @@
 
 
       <div class="comment">
-        <% if policy(task).update? %>
-          <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
-            <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
-          </a>
-        <% end %>
+        <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
+          <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
+        </a>
       </div>
 
       <!-- Task time -->
@@ -175,7 +173,7 @@
               <% end %>
             <hr>
           </div>
-          <% if task.description.nil? %><!-- Form to enter description -->
+          <% if task.description.nil? && policy(task).update? %><!-- Form to enter description -->
               <%= ff.input :description, label: false, placeholder: 'Add description to the piece...'%>
               <%#= ff.button :submit %>
           <% else %>

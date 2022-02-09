@@ -33,7 +33,7 @@
     </div>
     <div id="request" class="col-5">
       <% if current_user == @project.user %>
-        <button class="button-type" style="background-color: <%= @project.txt_color %>;">
+        <button class="button-type" id="share" data-url="<%= join_project_url(@project.uuid) %>" data-toggle="tooltip" data-placement="left" style="background-color: <%= @project.txt_color %>;">
             Share <%= @project.name %> Puzzle 🔗
         </button>
       <% else %>
@@ -65,9 +65,6 @@
     <!-- Start of the index of the tasks @filtered_tasks -->
 
     <div data-filter-target="list"> <!-- Div with all the tasks -->
-      <% if @project.tasks.empty? %>
-        Be the first to create a task
-      <% end %>
       <%= render "tasks/list", tasks: @tasks %>
     </div>
   </div>
@@ -155,7 +152,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-body">
-          <%= render template: "devise/sessions/new" %>
+          <%= render template: "devise/registrations/new" %>
         </div>
       </div>
     </div>
@@ -172,7 +169,7 @@
         <% if current_user.present? %>
          <div class="modal-body">
           <%= render template: "devise/registrations/edit" %>
-        </div>
+          </div>
         <% end %>
       </div>
     </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_08_074500) do
+ActiveRecord::Schema.define(version: 2022_02_09_090912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2022_02_08_074500) do
     t.datetime "date"
     t.string "uuid"
     t.string "txt_color", default: "#B45CD2"
-    t.string "description"
+    t.text "description"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 

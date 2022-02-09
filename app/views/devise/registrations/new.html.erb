@@ -25,11 +25,14 @@
 
           <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-discord" role="tabpanel" aria-labelledby="pills-home-tab">
-              <div id="discord-signup">
+              <div id="discord-signup" class="mb-4">
                 <%= link_to "/users/auth/discord", method: :post, class: "button-type", style: "background-color: #{@project&.txt_color}" do %>
                   Sign-up with Discord <i class="fab fa-discord"></i>
                 <% end %>
               </div>
+              <% if @project.present? %>
+                <%= link_to 'Log-in', new_user_session_path %>
+              <% end %>
             </div>
             <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
                 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -53,6 +56,7 @@
                               required: true,
                               input_html: { autocomplete: 'off'} %>
                 </div>
+                <input type="hidden" name="project_uuid" value="<%= params[:project_uuid] %>">
 
                 <% if @project.present? %>
                   <div class="form-actions">
@@ -64,10 +68,10 @@
                   </div>
                 <% end %>
               <% end %>
+              <% if @project.present? %>
+                <%= link_to 'Log-in', new_user_session_path %>
+              <% end %>
             </div>
-            <% if @project.present? %>
-             <%= link_to 'Log-in', new_user_session_path %>
-            <% end %>
           </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 class RegistrationsController < Devise::RegistrationsController
   def new
+    session[:project_uuid] = params[:project_uuid]
   	@project = Project.find_by(uuid: params[:project_uuid])
     super
   end
@@ -12,7 +13,7 @@ class RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
 
     if resource.persisted?
-    	resource.project_users.create(project: @project)
+    	resource.project_users.create(project: @project) if @project
       #UserMailer.with(user: resource, project: @project).welcome.deliver_now
       if resource.active_for_authentication?
         #flash[:notice] = "Welcome! You have signed up and joined #{@project.name}'s Puzzle successfully."
@@ -42,6 +43,18 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  def after_sign_up_path_for(resource)
+    if @project
+      project_tasks_path(@project, puzzle: true)
+    elsif session[:redirect_url]
+      url = session[:redirect_url]
+      session[:redirect_url] = nil
+      url
+    else
+      new_project_path
+    end
+  end
 
   def user_params
       params.require(:user).permit(:name, :email, :password, :pseudo, :photo,
