@@ -1,12 +1,11 @@
 class RegistrationsController < Devise::RegistrationsController
   def new
-    session[:project_uuid] = params[:project_uuid]
-  	@project = Project.find_by(uuid: params[:project_uuid])
+  	@project = Project.find_by(uuid: session[:project_uuid])
     super
   end
 
   def create
-  	@project = Project.find_by(uuid: params[:project_uuid])
+  	@project = Project.find_by(uuid: session[:project_uuid])
   	build_resource(sign_up_params)
 
     resource.save
@@ -47,10 +46,6 @@ class RegistrationsController < Devise::RegistrationsController
   def after_sign_up_path_for(resource)
     if @project
       project_tasks_path(@project, puzzle: true)
-    elsif session[:redirect_url]
-      url = session[:redirect_url]
-      session[:redirect_url] = nil
-      url
     else
       new_project_path
     end

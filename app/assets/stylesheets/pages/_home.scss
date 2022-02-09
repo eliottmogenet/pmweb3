@@ -1240,7 +1240,9 @@ body {
  height: 70px;
 
 }
-
+.modal-backdrop {
+  z-index: -1 !important;
+}
 #user_password, #user_password_confirmation {
  border: none;
  background-color: #1F292C;
