@@ -150,7 +150,7 @@ class TasksController < ApplicationController
 
     authorize @task
 
-    if @task.update(status: "archive")
+    if @task.update(archived: true)
       broadcast_changes
 
       respond_to do |format|

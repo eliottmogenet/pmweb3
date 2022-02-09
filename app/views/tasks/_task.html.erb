@@ -42,10 +42,6 @@
         <div class="confidentiality-private">
           <p>Private</p>
         </div>
-      <% elsif task.archived? %>
-        <div class="confidentiality-private">
-          <p>Archived</p>
-        </div>
       <% elsif task.confidentiality == "Public" && task.user.nil?%>
         <div class="status-unassigned">
           <p>Unassigned</p>
