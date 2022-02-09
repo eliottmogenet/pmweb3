@@ -52,7 +52,10 @@
 				<div class="filter" id="vote">
           <p>On vote 🗳</p>
         </div>
-			<% end %></p>
+			<% end %>
+      <% if current_user == project.user  %>
+        <i class="fas fa-cog" id="settings"></i></p>
+      <% end %>
 		<% else %>
 			<p><%= project.description %></p>
 		<% end  %>
