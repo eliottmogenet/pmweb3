@@ -68,6 +68,7 @@
       <%= render "tasks/list", tasks: @tasks %>
     </div>
   </div>
+</div>
 
   <!-- End of the list of tasks-->
 
@@ -148,11 +149,11 @@
 
 <!-- Sign_up modal -->
 
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-body">
-          <%= render template: "devise/sessions/new" %>
+          <%= render template: "devise/registrations/new" %>
         </div>
       </div>
     </div>

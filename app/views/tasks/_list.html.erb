@@ -6,7 +6,7 @@
       <div class="directory">
         <h4 id="top10">Top 10 <%= @project.name %> builders 🏆 <div class="filter" id="count"><%= @project.users.count %> players</div></h4>
           <div class="contributors">
-            <% @project.users.each do |user| %>
+            <% @project.users.first(10).each do |user| %>
               <div class="contributor">
                 <% if user.photo.attached? %>
                   <div class="photo-round-small-40">
@@ -23,6 +23,10 @@
             <% end  %>
           </div>
       </div>
+  </div>
+  <div>
+    <% @project.users.first(10).each do |user| %>
+    <% end %>
   </div>
 <% else %>
   <% if params[:by_topic].present?%> <!-- Rules div -->

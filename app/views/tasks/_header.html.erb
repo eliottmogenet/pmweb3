@@ -21,7 +21,7 @@
         <div>
           <p class="text-level"><%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>/ 500 <%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %><span style="margin-left: 280px; color: grey"><b>Level 2 </p></span></p>
         <div class="progress">
-            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 70%; background-color: <%= project.txt_color %>;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= @progress %>%; background-color: <%= project.txt_color %>;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       </div>
       <% else %>

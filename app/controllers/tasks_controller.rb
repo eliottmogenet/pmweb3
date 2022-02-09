@@ -10,8 +10,10 @@ class TasksController < ApplicationController
     @project = Project.find(params[:project_id])
     @task = Task.new(project: @project)
 
+    @progress = @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum / 500 * 100
+
     @task.topic = Topic.find(params[:by_topic]) if params[:by_topic]
-    
+
     @tasks = apply_scopes(policy_scope(@project.tasks)).reject { |task| (task.private? && task.creator != current_user) || task.archived? }.sort_by {|task| [task.token_number, task.created_at]}.reverse
 
     @topics = @project.public_or_own_tasks(current_user).pluck(:topic).uniq.reject(&:blank?).sort
@@ -22,7 +24,7 @@ class TasksController < ApplicationController
     end
 
     session[:redirect_url] = request.url
-    
+
     if params[:by_topic].present?
       @topic_selected = Topic.find(params[:by_topic])
       if user_signed_in?
@@ -110,7 +112,7 @@ class TasksController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_to project_tasks_path(@project, puzzle: true) }
-        format.json do 
+        format.json do
           render json: {
             partial: render_to_string(partial: "tasks/task", locals: {task: @task}, formats: [:html]),
             user_total: @task.user&.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum,
@@ -171,7 +173,7 @@ class TasksController < ApplicationController
 
   def broadcast_changes
     ProjectChannel.broadcast_to(@project,
-      { 
+      {
         update: true,
         user_id: current_user.id,
         partial: render_to_string(partial: "shared/flashes", locals: {alert: "outdated"}, formats: [:html])
