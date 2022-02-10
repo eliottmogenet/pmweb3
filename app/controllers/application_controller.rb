@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   #end
 
   def after_sign_in_path_for(resource)
-    @project = Project.find(params[:id])
+    @project = Project.find_by(uuid: session[:project_uuid])
 
     if @project
       resource.project_users.create(project: @project)
