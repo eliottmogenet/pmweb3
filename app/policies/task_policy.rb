@@ -36,4 +36,22 @@ class TaskPolicy < ApplicationPolicy
   def vote?
     user && record.topic.can_vote
   end
+
+  def feedback_template?
+    true
+  end
+
+  def twitter_template?
+    true
+  end
+
+
+  def moderator_template?
+    true
+  end
+
+
+  def referral_template?
+    true
+  end
 end

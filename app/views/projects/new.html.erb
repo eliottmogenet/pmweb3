@@ -4,21 +4,26 @@
       <% if user_signed_in? %>
         <div id="token_box">
           <p>
+            <li class="nav-item dropdown">
+              <a class="avatar dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= image_tag("logo2.png", :width => 50, style: "margin-bottom: 5px;") %>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+              </div>
+            </li>
             <% if current_user.photo.attached? %>
-              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%" %>
+            <div>
+              <%= cl_image_tag current_user.photo.key, width: 30, height: "auto", style: "border-radius: 100%;" %>
+            </div>
             <% else %>
-              <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
+              <i id="user_blank-small-40-1" class="far fa-user" style="margin-left: 10px"></i>
             <% end %>
               <span id="tokenUserTotal" data-id="<%= current_user.id %>">
                 <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
               </span>
           </p>
-            <div class="nav-item dropdown">
-              <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
-            </div>
-          </div>
+          |
       </div>
       <% end %>
     </div>
@@ -33,7 +38,7 @@
       <hr id="separation1">
     <div class="project-description">
       <div class="project-detail">
-        <h1 class="onboarding-title" id="project-header-title-2">Create your Puzzle <%= image_tag("pencil.png", :width => 50, style: "padding-bottom: 10px") %></h1>
+        <h1 class="onboarding-title" id="project-header-title-2">Create your Puzzle</h1>
         <%= simple_form_for @project do |f| %>
           <%= f.input :name, label: false, placeholder: 'What’s your Puzzle name ?*', input_html: { autocomplete: 'off' }, required: true, error: "Project name is missing", style: "border-radius: 50px" %>
           <%= f.input :description, label: false, placeholder: 'Describe your Puzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true, error: "description is missing" %>

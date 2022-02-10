@@ -720,7 +720,11 @@ p {
 
 #user_blank-small-40 {
   margin-left: 0px;
+}
 
+#user_blank-small-40-1 {
+  margin-left: 0px;
+  margin-top: 23px;
 }
 
 #onbord-puzzle {
@@ -747,7 +751,6 @@ p {
 .header1 {
   display: flex;
   justify-content: space-between;
-  margin-bottom: -15px;
 }
 
 /* Filter design */
@@ -1126,6 +1129,8 @@ a:hover {
 
 body {
   background-image: url(background.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background-size: 100%;
   height: 100%;
 }
@@ -1137,7 +1142,6 @@ body {
   border-radius: 50px;
   padding: 40px;
   height: 100%;
-  min-height: calc(100vh - 110px);
 }
 
 .page-header {
@@ -1151,7 +1155,7 @@ body {
 
 .rules-description {
   background-color: #1F292C;
-  <%# height: 330px; %>
+  height: 450px;
   width: 100%;
   padding: 30px;
   border-radius: 20px;
@@ -1168,10 +1172,10 @@ body {
 #mainContainer {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  min-height: calc(100vh);
 }
 
 .body-onboarding {
-  background-color: #1F292C;
   <%# height: 100vh; %>
 }
 
@@ -1227,6 +1231,10 @@ body {
   outline: none;
   border: none;
   padding: 15px;
+}
+
+.button-type:hover {
+
 }
 
 #button-project {
@@ -1460,6 +1468,7 @@ span {
 .reset-deadline {
   width: 15%;
   height: 45px;
+  margin-top: - 5px;
 }
 
 #button-spuzzle {
@@ -1617,7 +1626,7 @@ span {
 #vote {
   width: 90px;
   margin-left: 10px;
-  margin-top: 5px;
+  margin-top: -5px;
 }
 
 .directory {
@@ -1648,7 +1657,7 @@ span {
 #settings {
   font-size: 20px;
   color: #1F292C;
-  margin-top: 12px;
+  margin-left: 5px;
 }
 
 #settings:hover {
@@ -1690,4 +1699,50 @@ span {
 
 #custom:hover {
   background-color: white;
+}
+
+.button-type:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#getit {
+  margin-left: 72%;
+  margin-top: 250px;
+}
+
+#login-button {
+  width: 120px;
+  background: rgba(0, 0, 0, 0.5);
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.barre {
+  margin-top:-10px;
+}
+
+#navbarDropdown {
+  cursor: pointer;
+}
+
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.nav-item::maker {
+  display: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.rising-stars {
+  margin-left: 60px;
+  margin-top: 20px;
+}
+
+.rising-stars h4 {
+  margin-bottom: 20px;
 }

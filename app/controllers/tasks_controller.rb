@@ -11,7 +11,7 @@ class TasksController < ApplicationController
     @task = Task.new(project: @project)
     session[:project_uuid] = @project.uuid
 
-    @progress = @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum / 500 * 100
+    @progress = @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum
 
     @task.topic = Topic.find(params[:by_topic]) if params[:by_topic]
 
@@ -162,6 +162,7 @@ class TasksController < ApplicationController
       end
     end
   end
+
 
   private
 

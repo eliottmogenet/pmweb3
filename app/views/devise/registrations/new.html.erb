@@ -42,7 +42,9 @@
                   <% end %>
                 </div>
               <% end %>
-              <p class="mt-4"><%= link_to 'Log-in', new_user_session_path %></p>
+              <% if @project.present? == false %>
+                 <p class="mt-4"><%= link_to 'Log-in', new_user_session_path %></p>
+              <% end %>
             </div>
             <div class="tab-pane fade" id="pills-email" role="tabpanel" aria-labelledby="pills-home-tab">
                 <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -79,9 +81,6 @@
                     <%= f.button :submit, "Create account", class: "button-type", style: "background-color: #B45CD2;", id: "onboarding-button" %>
                   </div>
                 <% end %>
-              <% end %>
-              <% if @project.present? %>
-                <p class="mt-4"><%= link_to 'Log-in', new_user_session_path %></p>
               <% end %>
             </div>
           </div>

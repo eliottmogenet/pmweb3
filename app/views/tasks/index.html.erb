@@ -6,21 +6,28 @@
       <% if user_signed_in? %>
         <div id="token_box">
           <p>
+            <li class="nav-item dropdown">
+              <a class="avatar dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= image_tag("logo2.png", :width => 50, style: "margin-bottom: 5px;") %>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <% if current_user == @project.user %>
+                  <%= link_to "Edit Puzzle", edit_project_path(@project), class: "dropdown-item" %>
+                <% end %>
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+              </div>
+            </li>
             <% if current_user.photo.attached? %>
-              <%= cl_image_tag current_user.photo.key, width: 30, style: "border-radius: 100%; margin-bottom: 10px;" %>
+            <div>
+              <%= cl_image_tag current_user.photo.key, width: 30, height: "auto", style: "border-radius: 100%;" %>
+            </div>
             <% else %>
-              <i id="user_blank-small-40" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
+              <i id="user_blank-small-40-1" class="far fa-user" style="margin-left: 10px" data-toggle="modal" data-target="#photo-modal"></i>
             <% end %>
               <span id="tokenUserTotal" data-id="<%= current_user.id %>">
                 <%= current_user.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>
               </span>
           </p>
-            <div class="nav-item dropdown">
-              <i class="fas fa-chevron-down dropdown-toggle"id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
-              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
-            </div>
-          </div>
           |
           <p>
             <button class="enableEthereumButton">Connect Wallet</button>
@@ -28,7 +35,11 @@
           </p>
       </div>
       <% else %>
-        Login
+      <%= link_to new_user_session_path do %>
+        <div class="button-type" id="login-button">
+          Login
+        </div>
+      <% end %>
       <% end %>
     </div>
     <div id="request" class="col-5">
@@ -37,7 +48,7 @@
             Share <%= @project.name %> Puzzle 🔗
         </button>
       <% else %>
-        <button class="button-type" style="background-color: <%= @project.txt_color %>;">
+        <button onclick="location.href='https://d0hwrssohkg.typeform.com/to/I4hWhGCd'" class="button-type" style="background-color: <%= @project.txt_color %>;">
           Request access to my Puzzle
         </button>
       <% end %>
@@ -70,8 +81,10 @@
   </div>
 </div>
 
-  <!-- End of the list of tasks-->
+<!-- End of the list of tasks-->
 <!-- End of container -->
+
+  <!-- Modal for creating topic -->
 
 <div class="modal fade" id="topic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document" id="subpuzzle-dialog">
@@ -95,23 +108,31 @@
               <div class="tab-pane fade show active" id="pills-templates" role="tabpanel" aria-labelledby="pills-home-tab">
 
                     <div class="projects-cards">
-                      <div class="project-card">
-                        <h5>Feedbacks 👍</h5>
+                      <%= link_to feedback_template_project_path(@project), method: :post do %>
+                        <div class="project-card">
+                          <h5>Feedbacks 👍</h5>
                           <p>Ask you community to give you feature ideas and vote for the best</p>
-                      </div>
+                        </div>
+                      <% end %>
+                      <%= link_to twitter_template_project_path(@project), method: :post do %>
                       <div class="project-card">
                         <h5>Twitter 🐦</h5>
                           <p>Ask your community to tweet about <%= @project.name %></p>
                       </div>
+                      <% end %>
+                      <%= link_to moderator_template_project_path(@project), method: :post do %>
                       <div class="project-card">
                         <h5>Moderators 👀</h5>
                           <p>Create, assign & follow the tasks of your community moderators</p>
                       </div>
+                      <% end %>
+                      <%= link_to referral_template_project_path(@project), method: :post do %>
                       <div class="project-card">
                         <h5>Referrals 🚀</h5>
                           <p>Ask your community to refer their friends to join <%= @project.name %></p>
                       </div>
-                      <div class="project-card" id="custom">
+                      <% end %>
+                      <div class="project-card" id="custom" data-toggle="pill" href="#pills-custom" aria-controls="pills-custom">
                         <h5>Custom +</h5>
                           <p>Build what you want</p>
                       </div>
@@ -174,17 +195,6 @@
     </div>
   </div>
 </div>
-  <!-- Modal for creating topic -->
-
-
-
-
-
-
-
-
-
-<!-- Modal for creating topic -->
 
 
 <script>

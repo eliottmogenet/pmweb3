@@ -15,11 +15,11 @@ class ProjectsController < ApplicationController
 
     authorize @project
   end
-  
+
   def create
     @project = Project.new(project_params)
     authorize @project
-    
+
     @project.user = current_user
     @project_user = ProjectUser.new
     @project_user.project = @project
@@ -38,12 +38,12 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
   end
-  
+
   def show
     @employer = current_user.employer
     @project = current_user.projects.first
     authorize @project
-    
+
     @task = Task.new
       if @project.tasks != nil
         @assigned_tasks = @project.tasks.where.not('user_id' => nil)
@@ -70,9 +70,12 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find(params[:id])
     authorize @project
-    
-    @project.update(project_params)
-    redirect_to project_tasks_path(@project, puzzle: true)
+
+    if @project.update(project_params)
+      redirect_to project_tasks_path(@project, puzzle: true)
+    else
+      redirect_to edit_project_path(@project)
+    end
   end
 
 
@@ -97,6 +100,93 @@ class ProjectsController < ApplicationController
       flash[:alert] = "You cannot join two projects (yet)..."
       redirect_to project_tasks_path(current_user.projects.first, puzzle: true)
     end
+  end
+
+  #topic template creation
+
+ def feedback_template
+    @project = Project.find(params[:id])
+    authorize @project
+
+    @topic = Topic.new(name: "Feedbacks", description: "Give any feedback.", rules: "1. <br> 2. <br> 3")
+    authorize @topic
+    @topic.project = @project
+    @topic.can_create_task = true
+    @topic.can_vote = true
+    @topic.save!
+
+    redirect_to project_tasks_path(@project, by_topic: @topic.id)
+  end
+
+  def twitter_template
+    @project = Project.find(params[:id])
+    authorize @project
+
+    @topic = Topic.new(name: "Twitter", description: "Help kickoff #{@project.name} community on Twitter by posting.", rules: "1. <br> 2. <br> 3")
+    authorize @topic
+    @topic.project = @project
+    @topic.save!
+
+
+    @task1 = Task.new(title: "3/3 Post on twitter about #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task1.project = @project
+    authorize @task1
+    @task1.save!
+
+    @task2 = Task.new(title: "2/3 Post on twitter about #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task2.project = @project
+    authorize @task2
+    @task2.save!
+
+    @task3 = Task.new(title: "1/3 Post on twitter about #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task3.project = @project
+    authorize @task3
+    @task3.save!
+
+    redirect_to project_tasks_path(@project, by_topic: @topic.id)
+  end
+
+
+  def moderator_template
+    @project = Project.find(params[:id])
+    authorize @project
+
+    @topic = Topic.new(name: "Moderators", description: "Here the space for organizing #{@project.name} moderators", rules: "1. <br> 2. <br> 3")
+    authorize @topic
+    @topic.project = @project
+    @topic.can_create_task = true
+    @topic.save!
+
+    redirect_to project_tasks_path(@project, by_topic: @topic.id)
+  end
+
+
+  def referral_template
+    @project = Project.find(params[:id])
+    authorize @project
+
+    @topic = Topic.new(name: "Referrals", description: "Refer your friends to #{@project.name} and win puzzle pieces", rules: "1. <br> 2. <br> 3")
+    authorize @topic
+    @topic.project = @project
+    @topic.save!
+
+
+    @task1 = Task.new(title: "3/3 Refer to #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task1.project = @project
+    authorize @task1
+    @task1.save!
+
+    @task2 = Task.new(title: "2/3 Refer to #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task2.project = @project
+    authorize @task2
+    @task2.save!
+
+    @task3 = Task.new(title: "1/3 Refer to #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
+    @task3.project = @project
+    authorize @task3
+    @task3.save!
+
+    redirect_to project_tasks_path(@project, by_topic: @topic.id)
   end
 
   private

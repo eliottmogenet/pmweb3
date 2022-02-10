@@ -1,7 +1,16 @@
-<p>Hello <%= @user.first_name.present? ? @user.first_name : @user.pseudo %>,</p> 
+<p>Hello @<%= @user.first_name.present? ? @user.first_name : @user.pseudo %>,</p>
 
-<p><%= @assigner.first_name.present? ? @assigner.first_name : @assigner.pseudo %> has assigned you to a new task in <%= @task.project.name %> Puzzle :</p> 
+<p>You have been assigned to a new task in <%= @task.project.name %> Puzzle :</p>
 
 <p><%= link_to @task.title, project_tasks_url(@task.project, anchor: "task-#{@task.id}") %></p>
 
-<p>The Puzzle Team</p>
+<p>The Puzzle community</p>
+
+<style>
+
+p {
+  font-family: "Poppins"
+}
+
+
+</style>
