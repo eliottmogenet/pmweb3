@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   resources :projects do
     member do
       post 'join_puzzle', to: "projects#join_puzzle"
+      post 'feedback_template', to: "projects#feedback_template"
+      post 'moderator_template', to: "projects#moderator_template"
+      post 'referral_template', to: "projects#referral_template"
+      post 'twitter_template', to: "projects#twitter_template"
     end
     resources :tasks
     resources :topics

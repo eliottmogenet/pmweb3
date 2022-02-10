@@ -93,9 +93,9 @@
 
 
       <div class="comment">
-        <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
-          <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
-        </a>
+          <a href="#description-<%= task.id %>" data-toggle="modal" data-target="#description-<%= task.id %>">
+            <i class="far fa-comment <%= 'comment_active' if task.description.present? %>"></i>
+          </a>
       </div>
 
       <!-- Task time -->
@@ -129,6 +129,7 @@
         <% end %>
         <!--<p><%= time_ago_in_words(task.created_at)%></p>-->
       </div>
+
     </div>
 
     <!-- Notification -->
@@ -139,6 +140,7 @@
 
     <%= f.submit class: "d-none" %>
   <% end %>
+</div>
 
   <!-- Modal task description : modal should not be here but it was easy and quick inside the iteration -->
   <div id="description-<%= task.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -186,4 +188,3 @@
       </div>
     <% end %>
   </div>
-</div>

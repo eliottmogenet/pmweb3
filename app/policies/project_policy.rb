@@ -32,4 +32,22 @@ class ProjectPolicy < ApplicationPolicy
   def show?
     true
   end
+
+  def feedback_template?
+    true
+  end
+
+  def twitter_template?
+    true
+  end
+
+
+  def moderator_template?
+    true
+  end
+
+
+  def referral_template?
+    true
+  end
 end

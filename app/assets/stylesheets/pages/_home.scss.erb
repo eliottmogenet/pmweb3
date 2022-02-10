@@ -3,6 +3,10 @@ hr {
   background-color: #687086;
 }
 
+p {
+  font-weight: 200;
+}
+
 /* CSS */
 
 .d-none { display: none !important; }
@@ -474,6 +478,8 @@ hr {
 .topic_title {
   width: 85%;
   margin-left: 10px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 #timer {
@@ -714,7 +720,11 @@ hr {
 
 #user_blank-small-40 {
   margin-left: 0px;
+}
 
+#user_blank-small-40-1 {
+  margin-left: 0px;
+  margin-top: 23px;
 }
 
 #onbord-puzzle {
@@ -741,7 +751,6 @@ hr {
 .header1 {
   display: flex;
   justify-content: space-between;
-  margin-bottom: -15px;
 }
 
 /* Filter design */
@@ -1018,12 +1027,22 @@ hr {
 
 .project-card {
   border-radius: 20px;
-  height: 220px;
-  background-color: #1F292C;
+  height: 200px;
+  width: 200px;
+  background-color: black;
   text-align: center;
   padding-top: 30px;
-  display: flex;
-  justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  cursor: pointer;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.project-card p {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #687086;
+
 }
 
 .project-card-create {
@@ -1110,6 +1129,8 @@ a:hover {
 
 body {
   background-image: url(background.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background-size: 100%;
   height: 100%;
 }
@@ -1121,7 +1142,6 @@ body {
   border-radius: 50px;
   padding: 40px;
   height: 100%;
-  min-height: calc(100vh - 110px);
 }
 
 .page-header {
@@ -1135,7 +1155,7 @@ body {
 
 .rules-description {
   background-color: #1F292C;
-  <%# height: 330px; %>
+  height: 450px;
   width: 100%;
   padding: 30px;
   border-radius: 20px;
@@ -1152,10 +1172,10 @@ body {
 #mainContainer {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  min-height: calc(100vh);
 }
 
 .body-onboarding {
-  background-color: #1F292C;
   <%# height: 100vh; %>
 }
 
@@ -1211,6 +1231,10 @@ body {
   outline: none;
   border: none;
   padding: 15px;
+}
+
+.button-type:hover {
+
 }
 
 #button-project {
@@ -1309,7 +1333,7 @@ body {
   height: 40px;
   width: 200px;
   padding: 10px;
-  margin-left: 50%;
+  margin-left: 80%;
 }
 
 .nav {
@@ -1444,6 +1468,7 @@ span {
 .reset-deadline {
   width: 15%;
   height: 45px;
+  margin-top: - 5px;
 }
 
 #button-spuzzle {
@@ -1583,9 +1608,6 @@ span {
   margin-bottom: 20px;
 }
 
-  .grow { transition: all .2s ease-in-out; }
-  .grow:hover { transform: scale(1.1); }
-
 .progress {
   background-color: #1F292C;
   border-radius: 50px;
@@ -1603,6 +1625,8 @@ span {
 
 #vote {
   width: 90px;
+  margin-left: 10px;
+  margin-top: -5px;
 }
 
 .directory {
@@ -1613,7 +1637,6 @@ span {
 .directory h4 {
   margin-top: 20px;
   margin-bottom: 20px;
-  font-weight: 500;
 }
 
 #count {
@@ -1629,4 +1652,97 @@ span {
 
 #level-2 {
   margin-left: 100px;
+}
+
+#settings {
+  font-size: 20px;
+  color: #1F292C;
+  margin-left: 5px;
+}
+
+#settings:hover {
+  color: white;
+  cursor: pointer;
+}
+
+#topic-modal {
+  width: 1000px;
+  height: 750px;
+  margin-left: 230px;
+
+}
+
+#subpuzzle-create {
+  width: 1000px;
+  height: 750px;
+}
+
+#subpuzzle-dialog {
+    max-width: 1000px;
+    height: 750px;
+}
+
+#subpuzzle-modal-body {
+  padding: 40px;
+}
+
+.project-card:hover {
+  background-color: white;
+  color: black;
+
+}
+
+#custom {
+  background-color:rgba(0, 0, 0, 0.5);
+  border-shadow: none;
+}
+
+#custom:hover {
+  background-color: white;
+}
+
+.button-type:hover {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#getit {
+  margin-left: 72%;
+  margin-top: 250px;
+}
+
+#login-button {
+  width: 120px;
+  background: rgba(0, 0, 0, 0.5);
+  line-height: 30px;
+  cursor: pointer;
+}
+
+.barre {
+  margin-top:-10px;
+}
+
+#navbarDropdown {
+  cursor: pointer;
+}
+
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.nav-item::maker {
+  display: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.rising-stars {
+  margin-left: 60px;
+  margin-top: 20px;
+}
+
+.rising-stars h4 {
+  margin-bottom: 20px;
 }

@@ -18,10 +18,10 @@
       </div>
       <div>
       <% if params[:puzzle].present? %>
-        <div>
+        <div class="barre">
           <p class="text-level"><%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>/ 500 <%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %><span style="margin-left: 280px; color: grey"><b>Level 2 </p></span></p>
         <div class="progress">
-            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 70%; background-color: <%= project.txt_color %>;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: <%= @progress.to_f/500*100 %>%; background-color: <%= project.txt_color %>;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
       </div>
       <% else %>
@@ -47,12 +47,15 @@
 <div id="header2">
 	<div class="topic_title">
 		<% if topic_selected  %>
-			<p><%= topic_selected.description %>
+			<p><%= topic_selected.description %></p>
 			<% if topic_selected.can_vote == true %>
 				<div class="filter" id="vote">
           <p>On vote 🗳</p>
         </div>
-			<% end %></p>
+			<% end %>
+      <% if current_user == project.user  %>
+        <i class="fas fa-cog" id="settings" data-toggle="modal" data-target="#topic-edit-modal"></i>
+      <% end %>
 		<% else %>
 			<p id="description-p"><%= project.description %></p>
 		<% end  %>
@@ -71,3 +74,53 @@
 		</div>
 	<% end %>
 </div>
+
+<!-- Modal for updating a topic -->
+<% if @topic_selected.present?  %>
+
+  <div class="modal fade" id="topic-edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document" id="subpuzzle-dialog">
+        <div class="modal-content" id="subpuzzle-create">
+          <div class="modal-header">
+            <p>Edit Subpuzzle </p>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body" id="subpuzzle-modal-body">
+
+                <div class="create_topic">
+                  <%= simple_form_for([@project, @topic_selected]) do |f| %>
+                   <%= f.input :name,  label: false, placeholder: 'Name*', input_html: { autocomplete: 'off' }, required: true %>
+                   <%= f.input :description, label: false, placeholder: 'Describe the goal of the subpuzzle in one sentance*', input_html: { autocomplete: 'off' }, required: true %>
+                   <div>
+                    <%= f.input :rules, label: false, placeholder: 'Describe the rules step by step*', input_html: { autocomplete: 'off' }, required: true %>
+                   </div>
+                  <hr>
+                  <p>⚙️ Authorize everyone to :</p>
+                    <div class="custom-control custom-switch">
+                       <%= f.check_box :can_create_task, class: "custom-control-input", id: "customSwitch1"  %>
+                        <label class="custom-control-label" for="customSwitch1">Create new tasks</label>
+                    </div>
+                    <div class="custom-control custom-switch">
+                       <%= f.check_box :can_assign_task, class: "custom-control-input", id: "customSwitch2"  %>
+                        <label class="custom-control-label" for="customSwitch2">Assign someone to a task</label>
+                     </div>
+                  <hr>
+                  <p>💰 Rewards</p>
+                   <div class="custom-control custom-switch">
+                      <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
+                      <label class="custom-control-label" for="customSwitch3">By vote only</label>
+                   </div>
+                    <%= f.button :submit, "Add changes", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}" %>
+                <%end%>
+                <button>Delete Subpuzzle</button>
+              </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% end %>
+

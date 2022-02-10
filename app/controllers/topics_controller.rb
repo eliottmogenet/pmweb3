@@ -29,17 +29,23 @@ class TopicsController < ApplicationController
   def update
     @topic_selected = Topic.find(params[:id])
     @project = Project.find(params[:project_id])
-    
+    @previous_date = @topic_selected.date
+
     authorize @topic_selected
-    
-    if @topic_selected.update(topic_params)
-      @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
-      respond_to do |format|
-        format.html
-        format.text { render partial: "tasks/timer", locals: {project: @project, topic_selected: @topic_selected, date: @date}, formats: [:html] }
+
+    @topic_selected.update(topic_params)
+
+        if @previous_date == @topic_selected.date
+          redirect_to project_tasks_path(@project, by_topic: @topic_selected.id)
+        else
+          @date = TimeDifference.between(@topic_selected.date, Time.now).in_general
+
+          respond_to do |format|
+          format.html
+          format.text { render partial: "tasks/timer", locals: {project: @project, topic_selected: @topic_selected, date: @date}, formats: [:html] }
+        end
       end
     end
-  end
 
   private
 
