@@ -33,7 +33,7 @@ class Task < ApplicationRecord
   end
 
   def archived?
-    status == "archive"
+    archived
   end
 
   def was_upvoted_by(user)

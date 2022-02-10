@@ -2,19 +2,22 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!, except: [:index]
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  def after_sign_in_path_for(resource)
-    @project = Project.find_by(uuid: session[:project_uuid])
+  def after_sign_up_path_for(resource)
+    @project = Project.find(params[:id])
 
-    if @project
+    if @project.present?
       resource.project_users.create(project: @project)
       project_tasks_path(@project, puzzle: true)
-    elsif session[:redirect_url]
-      url = session[:redirect_url]
-      session[:redirect_url] = nil
-      url
     else
-      new_project_path
+      redirect_to new_project_path
     end
+  end
+
+  def after_sign_in_path_for(resource)
+    @project = current_user.projects.first
+    #@project = Project.find_by(uuid: session[:project_uuid])
+
+    project_tasks_path(@project, puzzle: true)
   end
 
   include Pundit
