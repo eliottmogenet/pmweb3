@@ -24,6 +24,7 @@ class ApplicationController < ActionController::Base
       session[:redirect_url] = nil
       url
     end
+  end
 
   #def after_sign_in_path_for(resource)
     #@project = current_user.projects.first
