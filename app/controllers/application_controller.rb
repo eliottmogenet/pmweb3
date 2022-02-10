@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
       url = session[:redirect_url]
       session[:redirect_url] = nil
       url
+    else
+      new_project_path
     end
   end
 
