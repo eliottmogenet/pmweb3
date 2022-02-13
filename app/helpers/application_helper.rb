@@ -10,4 +10,8 @@ module ApplicationHelper
   def devise_mapping
    @devise_mapping ||= Devise.mappings[:user]
   end
+
+  def device
+    return "mobile" if agent =~ /Mobile/
+  end
 end

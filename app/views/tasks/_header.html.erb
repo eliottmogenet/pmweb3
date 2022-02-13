@@ -62,16 +62,19 @@
 	</div>
 	<% if topic_selected.nil? %>
 	<% elsif  topic_selected.date.nil? && project.user != current_user %>
-		<p>No time limit here</p>
-	<% else %>
+		<p style="color: grey">No time limit here</p>
+	<% elsif topic_selected.date.nil? == false && project.user == current_user%>
 		<div class="reset-deadline">
-			<p>Before deadline
+			<p>Time left
 			<% if current_user == project.user %>
 				<a href="#" id="reset-button" data-action="click->timer#reset" data-id="<%= topic_selected.id %>">
-					<i class="fas fa-undo"></i></p>
+					Reset <i class="fas fa-undo"></i></p>
 				</a>
 			<% end %>
 		</div>
+  <% else %>
+   <div class="reset-deadline">
+      <p style="color: grey">Time left for #<%= @topic_selected.name %></p>
 	<% end %>
 </div>
 

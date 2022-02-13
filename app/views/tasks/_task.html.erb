@@ -16,9 +16,8 @@
             <p id="token-number">
               <span id="tokenContainer"><%= task.token_number %></span>
               <span id="vote-button" class="button-postfix" data-action="click->task#vote">
-                <i class="fas fa-sort-up"></i>
+                Add +1
               </span>
-              <%= image_tag("piece.png", :width => 25, style: "margin-left: 10px; padding-bottom: 5px") %>
             <p>
           <% elsif task.token_number.positive? %>
             <p id="token-number">

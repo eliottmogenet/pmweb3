@@ -6,7 +6,7 @@
     <% end %>
   </div>
 <% elsif topic_selected.date.nil? && project.user != current_user %>
-  <h1 id="timer" style="margin-left: 170px"><i class="fas fa-infinity"></i></h1>
+  <h1 id="timer"><i class="fas fa-infinity"></i></h1>
 <% else %>
   <h1 id="timer">
   <% if date[:weeks] == 0 %>

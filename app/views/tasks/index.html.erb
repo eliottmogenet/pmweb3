@@ -1,6 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
+
 <div class="page-header"><!-- Header above the container %>-->
     <div id="firs-separation" class="col-7">
       <% if user_signed_in? %>
@@ -110,7 +111,7 @@
                       <%= link_to feedback_template_project_path(@project), method: :post do %>
                         <div class="project-card">
                           <h5>Feedbacks 👍</h5>
-                          <p>Ask you community to give you feature ideas and vote for the best</p>
+                          <p>Ask you community to give feature ideas and vote by adding puzzle pieces.</p>
                         </div>
                       <% end %>
                       <%= link_to twitter_template_project_path(@project), method: :post do %>
@@ -146,7 +147,7 @@
                    <%= f.input :description, label: "Goal:", placeholder: "Post on Twitter about #{@project.name} and win Puzzle pieces", input_html: { autocomplete: 'off' }, required: true %>
                    <%= f.input :rules, label: "Rules:", placeholder: "1. Assign yourself to a Twitter post.
 2. Publish the post and send the link to @#{@project.user.pseudo} on Discord.
-3. Mark as done and win the Puzzle pieces!", input_html: { autocomplete: 'off' }, required: true %>
+3. Mark as done and win the Puzzle pieces!", input_html: { autocomplete: 'off', style: "white-space: pre-wrap;"}, required: true %>
                   <hr>
                   <p>⚙️ Authorize everyone to :</p>
                     <div class="custom-control custom-switch">
@@ -211,6 +212,7 @@ async function getAccount() {
   const account = accounts[0];
   showAccount.innerHTML = account;
 }
+
 </script>
 
 <!-- End of container -->

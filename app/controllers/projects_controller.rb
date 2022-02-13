@@ -108,7 +108,12 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
 
-    @topic = Topic.new(name: "Feedbacks", description: "Give any feedback.", rules: "1. <br> 2. <br> 3")
+    @topic = Topic.new(name: "Feedbacks", description: "Give any feedback about #{@project.name} and vote by adding Puzzle pieces.", rules:"
+1. Submit an idea/feedback.
+
+2. Vote by adding +1 on your favorite ideas/feedbacks
+
+3. #{@project.name} team will implement the ideas with the most votes.")
     authorize @topic
     @topic.project = @project
     @topic.can_create_task = true
@@ -122,7 +127,12 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
 
-    @topic = Topic.new(name: "Twitter", description: "Help kickoff #{@project.name} community on Twitter by posting.", rules: "1. <br> 2. <br> 3")
+    @topic = Topic.new(name: "Twitter", description: "Help kickoff #{@project.name} community on Twitter by posting.", rules: "
+1. Assign yourself to a Twitter post.
+
+2. Publish the post and send the link to @#{@project.user.pseudo} on Discord.
+
+3. Mark as done and win the Puzzle pieces!")
     authorize @topic
     @topic.project = @project
     @topic.save!
@@ -151,7 +161,12 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
 
-    @topic = Topic.new(name: "Moderators", description: "Here the space for organizing #{@project.name} moderators", rules: "1. <br> 2. <br> 3")
+    @topic = Topic.new(name: "Moderators", description: "Here the space for organizing #{@project.name} moderators", rules: "
+1. Assign yourself to the tasks you want to do.
+
+2. Make the tasks before the time ends.
+
+3. Once done, mark as done to claim the rewards.")
     authorize @topic
     @topic.project = @project
     @topic.can_create_task = true
@@ -165,11 +180,15 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
 
-    @topic = Topic.new(name: "Referrals", description: "Refer your friends to #{@project.name} and win puzzle pieces", rules: "1. <br> 2. <br> 3")
+    @topic = Topic.new(name: "Referrals", description: "Refer your friends to #{@project.name} and win puzzle pieces", rules: "
+1. Assign yourself to a referral task.
+
+2. Ask your friend to mention your name when subscribing to #{@project.name}.
+
+3. Once your friend entered, you will win the Puzzle pieces!")
     authorize @topic
     @topic.project = @project
     @topic.save!
-
 
     @task1 = Task.new(title: "3/3 Refer to #{@project.name}", token_number: "2", creator_id: current_user.id, confidentiality: "Public", topic_id: @topic.id)
     @task1.project = @project
