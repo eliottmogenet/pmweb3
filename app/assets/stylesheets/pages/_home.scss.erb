@@ -590,9 +590,9 @@ p {
   resize: none;
   outline: none;
   border-radius: 10px;
-  padding: 7px;
+  padding: 10px;
   height: 36px;
-  line-height: 25px;
+  line-height: 5px;
   margin-left: 5px;
 }
 
@@ -1131,7 +1131,7 @@ body {
   background-image: url(background.png);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 100%;
+  background-size: cover;
   height: 100%;
 }
 
@@ -1302,6 +1302,7 @@ body {
  border-radius: 30px;
  resize: none;
  outline: none;
+ margin-top: 10px;
 }
 
 
@@ -1322,6 +1323,8 @@ body {
  border-radius: 30px;
  resize: none;
  outline: none;
+ height: 70%;
+ margin-left: -10px;
 }
 
 .topic_rules {
@@ -1746,3 +1749,36 @@ li {
 .rising-stars h4 {
   margin-bottom: 20px;
 }
+
+
+#name-topic {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+}
+
+
+
+.topic_name {
+  display: flex;
+  justify-content: start;
+}
+
+.topic_description {
+  display: flex;
+  justify-content: start;
+}
+
+
+
+.topic_name label {
+
+  width: 60px;
+}
+
+
+.topic_description label {
+
+  width: 60px;
+}
+

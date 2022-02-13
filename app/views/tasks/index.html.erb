@@ -142,9 +142,9 @@
               <div class="tab-pane fade" id="pills-custom" role="tabpanel" aria-labelledby="pills-home-tab">
                 <div class="create_topic">
                   <%= simple_form_for([@project, @topic]) do |f| %>
-                   <%= f.input :name,  label: false, placeholder: 'Twitter', input_html: { autocomplete: 'off'}, required: true %>
-                   <%= f.input :description, label: false, placeholder: "Post on Twitter about #{@project.name} and win Puzzle pieces", input_html: { autocomplete: 'off' }, required: true %>
-                   <%= f.input :rules, label: false, placeholder: "1. Assign yourself to a Twitter post.
+                   <%= f.input :name,  label: "Name:", placeholder: 'Twitter', input_html: { autocomplete: 'off'}, required: true %>
+                   <%= f.input :description, label: "Goal:", placeholder: "Post on Twitter about #{@project.name} and win Puzzle pieces", input_html: { autocomplete: 'off' }, required: true %>
+                   <%= f.input :rules, label: "Rules:", placeholder: "1. Assign yourself to a Twitter post.
 2. Publish the post and send the link to @#{@project.user.pseudo} on Discord.
 3. Mark as done and win the Puzzle pieces!", input_html: { autocomplete: 'off' }, required: true %>
                   <hr>
@@ -161,7 +161,7 @@
                   <p>🗳 Let the community prioritize the tasks</p>
                    <div class="custom-control custom-switch">
                       <%= f.check_box :can_vote, class: "custom-control-input", id: "customSwitch3"  %>
-                      <label class="custom-control-label" for="customSwitch3">Allow community voting</label>
+                      <label class="custom-control-label" for="customSwitch3">Allow community to vote by adding pieces</label>
                    </div>
                    <%= f.button :submit, "Add Subpuzzle", class: "button-type", id: "button-subpuzzle", style: "background-color: #{@project.txt_color}" %>
                 <%end%>
