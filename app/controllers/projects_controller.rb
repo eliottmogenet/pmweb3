@@ -183,7 +183,7 @@ class ProjectsController < ApplicationController
     @topic = Topic.new(name: "Referrals", description: "Refer your friends to #{@project.name} and win puzzle pieces", rules: "
 1. Assign yourself to a referral task.
 
-2. Ask your friend to mention your name when subscribing to #{@project.name}.
+2. Ask your friend to mention your name to the Discord moderator when subscribing to #{@project.name}.
 
 3. Once your friend entered, you will win the Puzzle pieces!")
     authorize @topic
