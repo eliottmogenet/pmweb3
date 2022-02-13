@@ -39,7 +39,7 @@
 
       <% if task.confidentiality == "Private" && task.user.nil? %> <!-- "Status" pastille of the task -->
         <div class="confidentiality-private">
-          <p>Private</p>
+          <p>Draft</p>
         </div>
       <% elsif task.confidentiality == "Public" && task.user.nil?%>
         <div class="status-unassigned">
@@ -101,7 +101,7 @@
       <% if policy(task).mark_as_public? %>
         <div class="task-edit" id="task-user-align">
           <span class="button-postfix" data-action="click->task#makePublic">
-            <p>Make public <i class="fas fa-eye"></i></p>
+            <p>Publish <i class="fas fa-eye"></i></p>
           </span>
         </div>
       <% elsif policy(task).assign? %>
