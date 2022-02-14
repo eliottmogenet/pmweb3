@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
       session[:redirect_url] = nil
       url
     else
-      new_project_path
+      project_tasks_path(current_user.projects.first)
     end
   end
 
