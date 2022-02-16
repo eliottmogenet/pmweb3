@@ -24,7 +24,7 @@
         </b></h1>
       </div>
       <div>
-      <% if params[:puzzle].present? && user_signed_in? %>
+      <% if params[:puzzle].present? && user_signed_in? && project.users.include?(current_user) %>
         <div class="barre">
           <p class="text-level"><%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>/ 500 <%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %><span style="margin-left: 280px; color: grey"><b>Level 2 </p></span></p>
         <div class="progress">
@@ -39,7 +39,7 @@
   <% if topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
     <% if user_signed_in? && project.users.include?(current_user) %>
     <% elsif user_signed_in? && project.users.exclude?(current_user) %>
-      <%= link_to "Join #{project.name} Puzzle", join_puzzle_project_path(project), method: :post, class: "button-type", style: "background-color: #{project.txt_color}" %>
+      <%= link_to "Join Puzzle", join_puzzle_project_path(project), method: :post, class: "button-type", style: "background-color: #{project.txt_color}" %>
     <% else %>
       <button type="button" class="button-type" style="background-color: <%= project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
         Join Puzzle
