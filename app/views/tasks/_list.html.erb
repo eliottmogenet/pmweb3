@@ -3,8 +3,10 @@
       <div style="margin-left: 50px;">
 
 
-        <% if @project.txt_color == "#B45CD2" %>
+        <% if @project.txt_color == "#B45CD2" && @project.user.email != "tridog@pleasr.org" %>
             <%= image_tag("Puzzle-purple1.png", :width => 500) %>
+        <% elsif @project.user.email == "tridog@pleasr.org" && @project.txt_color == "#FDC045" %>
+            <%= image_tag("dog.png", :width => 500) %>
         <% elsif @project.txt_color == "#186152" %>
             <%= image_tag("Puzzle-green1.png", :width => 500) %>
         <% elsif @project.txt_color == "#456BDE" %>

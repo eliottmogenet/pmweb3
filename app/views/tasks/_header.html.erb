@@ -1,30 +1,30 @@
 <div class="header1">
   <div style="display: flex; justify-content: start">
     <div>
-    	<h1 id="project-header-title">
+      <h1 id="project-header-title">
         <% if @project.logo.attached? %>
           <%= cl_image_tag @project.logo.key, width: 40, height: "auto", style: "border-radius: 100%; margin-right: 10px;" %>
         <% else %>
         <% end %>
-    		<b id="text-low">
-    			<% if topic_selected %>
-    				<%= project.name %>
-    					<span style="color: <%= project.txt_color %>">
-    						#<%= topic_selected.name %>
-    					</span>
-    			<% else %>
-    				<%= project.name %>
-    				<span style="color: <%= project.txt_color %>">
-    					#Puzzle
-    				</span>
-    			<% end  %>
+        <b id="text-low">
+          <% if topic_selected %>
+            <%= project.name %>
+              <span style="color: <%= project.txt_color %>">
+                #<%= topic_selected.name %>
+              </span>
+          <% else %>
+            <%= project.name %>
+            <span style="color: <%= project.txt_color %>">
+              #Puzzle
+            </span>
+          <% end  %>
             <% if current_user == project.user  %>
                 <i class="fas fa-pen" id="settings" data-toggle="modal" data-target="#project-edit-modal"></i>
             <% end %>
-    		</b></h1>
+        </b></h1>
       </div>
       <div>
-      <% if params[:puzzle].present? %>
+      <% if params[:puzzle].present? && user_signed_in? %>
         <div class="barre">
           <p class="text-level"><%= @project.tasks.where(status: "claimed").pluck(:token_number).map(&:to_i).sum %>/ 500 <%= image_tag("piece.png", :width => 16, style: "margin-left: 5px; padding-bottom: 5px") %><span style="margin-left: 280px; color: grey"><b>Level 2 </p></span></p>
         <div class="progress">
@@ -33,7 +33,7 @@
       </div>
       <% else %>
     <% end %>
-  	</h1>
+    </h1>
     </div>
   </div>
   <% if topic_selected.nil? %> <!-- Condition on the button to join the project %>-->
@@ -42,7 +42,7 @@
       <%= link_to "Join #{project.name} Puzzle", join_puzzle_project_path(project), method: :post, class: "button-type", style: "background-color: #{project.txt_color}" %>
     <% else %>
       <button type="button" class="button-type" style="background-color: <%= project.txt_color %>;" data-toggle="modal" data-target="#login-modal">
-        Join <%= project.name %> Puzzle
+        Join Puzzle
       </button>
     <% end %>
   <% else %>
